@@ -1,31 +1,18 @@
-import { useState } from 'react'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { ClerkProvider } from "@clerk/clerk-react";
+import { AppRouter } from "./shared/AppRouter";
 
-function App() {
-  const [count, setCount] = useState(0)
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+if (!PUBLISHABLE_KEY) {
+	throw new Error('Add your Clerk Publishable Key to the .env file')
 }
 
-export default App
+function App() {
+	return (
+		<ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
+			<AppRouter />
+		</ClerkProvider>
+	);
+}
+
+export default App;
