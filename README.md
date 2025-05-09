@@ -1,71 +1,151 @@
-# 🛡️ AnonFeed Light - Feedback Técnico Ético para Devs
+# 🛡️ AnonFeed Light — Feedback Rápido y Ético para Devs
 
-**Obtén críticas útiles sin comprometer la privacidad ni perder tiempo en configuraciones complejas**  
+Bienvenido al repositorio de **AnonFeed Light**, un prototipo funcional creado para brindar **feedback técnico anónimo, confiable y accesible** a desarrolladores. Diseñado para la hackatón, pero con una visión clara de crecimiento.
 
-## 🌟 **¿Qué es AnonGuard Light?**  
-Una versión simplificada donde desarrolladores reciben feedback técnico manteniendo:  
-- ✅ **Anonimato público** para comentarios  
-- 🔍 **Trazabilidad ética** (solo admins verifican identidades)  
+## 🌟 Visión
 
----
-
-## 🚀 **Features Principales (MVP)**  
-
-### 🧑💻 **Para Desarrolladores**  
-- **Sube proyectos en 30 segundos:**  
-  - Solo necesitas URL + 3 tags técnicos (ej: React, UI, Performance)  
-<!--   - *Magic Trick:* Usamos Clerk Organizations para almacenar cada proyecto   -->
-
-- **Dashboard esencial:**  
-  - 📋 Listado de comentarios con filtros básicos  
-  - 🏷️ Tags de categoría automáticos (detecta palabras clave como "bug" o "mejora")  
-
-<!-- - **Respuesta rápida:**  
-  - Botón "Copiar como issue de GitHub" (texto preformateado)   -->
-
-### 🕶️ **Para Revisores**  
-- **2 modos de feedback:**  
-  | Tipo | Requisitos | Beneficio |  
-  |------|------------|-----------|  
-  | Anónimo | Ninguno | Rápido y simple |  
-  | Verificado | Login GitHub | Etiqueta "Dev Confiable" |  
-
-- **Herramientas low-code:**  
-  - 📸 Sube capturas via enlace (Imgur/Drive)  
-  - 🎨 Plantilla markdown para reportes técnicos  
-
-<!-- ### ⚙️ **Para Admins**  
-- **Panel de control mínimo:**  
-  - 🔍 Buscar usuarios por ID de Clerk  
-  - 🚩 Reportes automáticos de spam (integración básica con Perspective API)   -->
+> "Hacer que recibir y dar feedback técnico sea tan accesible, confiable y rápido como enviar un mensaje en Slack."
 
 ---
 
-## 🎯 **Casos de Uso**  
+## 🧩 ¿Qué problema resuelve?
 
-### Caso 1: **Feedback Express para MVP**  
-_"Tengo 2 horas para mejorar mi landing page antes de una reunión importante"_  
-- Subes tu URL con tags "UI" y "Copy"  
-- Recibes:  
-  - 3 comentarios anónimos señalando errores de ortografía  
-  - 1 feedback verificado sugiriendo cambio de colores  
+Recibir comentarios útiles sobre un proyecto puede ser lento, sesgado o poco confiable. **AnonFeed Light** aborda esto con una plataforma donde:
 
-### Caso 2: **Validación Técnica Rápida**  
-_"¿Funciona mi API en todos los países?"_  
-- Pides feedback específico sobre rendimiento  
-- Un usuario verificado con GitHub sube:  
-  - Captura de Postman con tiempos de respuesta  
-  - Sugerencia para mejorar los headers CORS  
+* ✅ Puedes recibir **feedback público anónimo**, pero con trazabilidad ética.
+* 🧠 Sabrás si quien comenta tiene una cuenta verificada (GitHub).
+* 🚀 Todo esto sin perder tiempo en configuraciones complejas.
 
 ---
 
-## 📦 **¿Qué incluye esta versión?**  
+## 🏗️ Estructura del Proyecto
 
-| Feature | Estado |  
-|---------|--------|  
-| Subida proyectos | ✅ Funcional |   
-| Feedback anónimo | ✅ Completo |   
-| Dashboard | 🟡 Básico |   
-| Verificación GitHub | 🟡 Mock |   
+```
+anonfeed-light/
+├── public/
+│   └── vite.svg
+├── src/
+│   ├── features/               # Funcionalidades agrupadas por dominio
+│   │   ├── home/
+│   │   ├── projects/
+│   │   └── submit/
+│   ├── shared/
+│   │   ├── components/         # Componentes reutilizables
+│   │   │   └── ui/             # Componentes de shadcn/ui
+│   │   ├── lib/
+│   │   │   └── utils.ts        # Utilidades generales
+│   │   └── AppRouter.tsx       # Rutas con React Router v7
+│   ├── App.tsx
+│   ├── main.tsx
+│   └── index.css
+├── index.html
+├── vite.config.ts
+├── tsconfig*.json
+├── bun.lock
+├── biome.json
+└── README.md
+```
 
+---
 
+## 🚀 Tecnologías Clave
+
+### 🧑‍💻 Frontend
+
+* **React** + **React Router v7** — Navegación moderna y declarativa
+* **TailwindCSS** — Estilo utilitario rápido
+* **shadcn/ui** — Componentes accesibles y componibles
+* **Zustand** — Estado global simplificado
+* **TanStack Query** — Gestión de datos y caché
+* **react-hook-form** + **zod** — Validación robusta de formularios
+
+### ☁️ Servicios
+
+* **Supabase (JS SDK)** — Base de datos y autenticación serverless desde el frontend
+* **Clerk (Auth)** — Identidades verificadas sin backend complejo
+
+---
+
+## 📌 Roadmap Técnico
+
+> ⚠️ Este proyecto es un prototipo funcional creado para una hackatón. Su evolución dependerá del interés y resultados obtenidos.
+
+### ✅ MVP actual (Hackatón)
+
+* Subida de proyectos con URL + tags técnicos
+* Comentarios anónimos y verificados (GitHub)
+* Filtrado básico en dashboard
+* Subida de capturas vía enlaces (Imgur, Drive)
+* Validación de formularios con Zod + RHF
+
+### 🧪 Posible evolución (post-hackatón)
+
+* Persistencia real con Supabase (feedback, proyectos, usuarios)
+* Moderación ética y detección de toxicidad (Perspective API)
+* Reputación de revisores y métricas de confiabilidad
+* Organización de proyectos por categorías, equipos o regiones
+* Dashboard avanzado con insights y métricas
+
+---
+
+## 🎯 Casos de Uso
+
+### ⚡ Feedback Express
+
+*"Tengo 2 horas antes del demo, necesito 3 opiniones sobre el landing."*
+
+* Subes tu proyecto con tags como `UI`, `Copy`
+* Recibes:
+
+  * Comentarios anónimos rápidos
+  * Revisor verificado te sugiere mejoras técnicas
+
+### 🔍 Validación Técnica
+
+*"¿Mi API funciona fuera de mi país?"*
+
+* Solicitas feedback sobre rendimiento
+* Recibes:
+
+  * Captura de Postman
+  * Sugerencias concretas sobre CORS y latencia
+
+---
+
+## 🧪 Cómo Ejecutar el Proyecto
+
+> 🔧 **Instalación y pasos de ejecución estarán disponibles próximamente.**
+
+```bash
+# coming soon...
+git clone https://github.com/JDCodeWork/anon-feed.git
+cd anon-feed
+
+# 2. Instala las dependencias
+bun install
+
+# 3. Configura tus variables de entorno
+cp .env.example .env
+# → Rellena .env con tus claves de Supabase y Clerk
+
+# 4. Inicia el servidor de desarrollo
+bun run dev
+```
+
+---
+
+## 🤝 Contribuciones
+
+Por el momento, este proyecto no está abierto a contribuciones externas. Sin embargo, si tienes feedback o ideas, puedes abrir un issue.
+
+---
+
+## 🔗 Deploy
+
+> Se planea un deploy en Vercel o Netlify para pruebas públicas. Link se anunciará aquí pronto.
+
+---
+
+## 🧠 Lema del Proyecto
+
+**"Feedback rápido y ético para desarrolladores reales."**
