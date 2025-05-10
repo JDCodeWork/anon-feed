@@ -66,5 +66,39 @@ export const featuredProjects = [
 		commentCount: 22,
 		rating: 4.8,
 		views: 1104,
-	}
+	},
+	{
+		id: "8",
+		title: "OpenResume - AI Resume Builder",
+		category: "Productivity",
+		description:
+			"An AI-powered resume builder that tailors your resume for different job roles with smart suggestions.",
+		image: "/placeholder.svg?height=400&width=600",
+		featured: true,
+		author: {
+			name: "Nina López",
+			avatar: "/placeholder.svg?height=40&width=40",
+			verified: true,
+		},
+		commentCount: 14,
+		rating: 4.6,
+		views: 790,
+	},
+	{
+		id: "9",
+		title: "LangSync - Real-Time Translator",
+		category: "AI Tool",
+		description:
+			"A real-time voice and text translator supporting over 100 languages, built with advanced NLP models.",
+		image: "/placeholder.svg?height=400&width=600",
+		featured: true,
+		author: {
+			name: "Tomás Rivera",
+			avatar: "/placeholder.svg?height=40&width=40",
+			verified: true,
+		},
+		commentCount: 19,
+		rating: 4.7,
+		views: 902,
+	},
 ];

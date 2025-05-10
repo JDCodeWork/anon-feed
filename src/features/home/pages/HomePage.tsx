@@ -1,4 +1,3 @@
-import { Footer, Header } from "../components/layout";
 import {
 	FeaturedProjects,
 	HeroSection,
@@ -7,14 +6,10 @@ import {
 
 export const HomePage = () => {
 	return (
-		<div className="flex flex-col min-h-screen">
-			<Header />
-			<main className="flex-1">
-				<HeroSection />
-				<FeaturedProjects />
-				<VerificationProcess />
-			</main>
-			<Footer />
-		</div>
+		<>
+			<HeroSection />
+			<FeaturedProjects />
+			<VerificationProcess />
+		</>
 	);
 };
