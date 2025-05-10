@@ -30,12 +30,12 @@ type Project = {
 };
 
 export const ProjectCard = ({ project }: { project: Project }) => (
-	<Card className="overflow-hidden">
-		<CardHeader className="p-4">
+	<Card>
+		<CardHeader className="pt-2 px-6">
 			<div className="flex justify-between items-start">
-				<div>
-					<CardTitle className="line-clamp-1">{project.title}</CardTitle>
-					<CardDescription className="line-clamp-1">
+				<div className="space-y-2">
+					<CardTitle>{project.title}</CardTitle>
+					<CardDescription className="text-start">
 						{project.category}
 					</CardDescription>
 				</div>
@@ -44,22 +44,22 @@ export const ProjectCard = ({ project }: { project: Project }) => (
 				</Badge>
 			</div>
 		</CardHeader>
-		<CardContent className="p-4 pt-0">
+		<CardContent className="pb-2 px-4 pt-0">
 			<div className="aspect-video overflow-hidden rounded-md bg-muted mb-4">
 				<img
-					src={project.image || "/placeholder.svg"}
+					src={project.image}
 					alt={project.title}
 					className="object-cover w-full h-full"
 				/>
 			</div>
-			<p className="text-sm line-clamp-2">{project.description}</p>
+			<p className="px-1 text-sm text-start">{project.description}</p>
 		</CardContent>
-		<CardFooter className="p-4 flex flex-col gap-4">
+		<CardFooter className="py-2 px-4 flex flex-col gap-4">
 			<div className="flex items-center justify-between w-full">
 				<div className="flex items-center gap-2">
-					<Avatar className="h-6 w-6">
+					<Avatar className="size-6">
 						<AvatarImage
-							src={project.author.avatar || "/placeholder.svg"}
+							src={project.author.avatar}
 							alt={project.author.name}
 						/>
 						<AvatarFallback>{project.author.name.charAt(0)}</AvatarFallback>
@@ -85,7 +85,7 @@ export const ProjectCard = ({ project }: { project: Project }) => (
 				</div>
 			</div>
 			<Link to={`/projects/${project.id}`} className="w-full">
-				<Button variant="outline" className="w-full">
+				<Button variant="outline" className="w-full cursor-pointer">
 					View Project
 				</Button>
 			</Link>

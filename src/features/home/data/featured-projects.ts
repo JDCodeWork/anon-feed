@@ -5,7 +5,7 @@ export const featuredProjects = [
 		category: "Web Application",
 		description:
 			"A modern project management tool with real-time collaboration features and customizable workflows.",
-		image: "/placeholder.svg?height=400&width=600",
+		image: "https://placehold.co/600x400?font=roboto&text=TaskFlow",
 		featured: true,
 		author: {
 			name: "Alex Johnson",
@@ -22,7 +22,7 @@ export const featuredProjects = [
 		category: "DevOps Tool",
 		description:
 			"A comprehensive bug tracking system integrated with CI/CD pipelines and team collaboration tools.",
-		image: "/placeholder.svg?height=400&width=600",
+		image: "https://placehold.co/600x400?font=roboto&text=BugTracker",
 		featured: true,
 		author: {
 			name: "Laura Martínez",
@@ -39,7 +39,7 @@ export const featuredProjects = [
 		category: "UI Library",
 		description:
 			"A modern, accessible, and customizable component library built with Tailwind and React.",
-		image: "/placeholder.svg?height=400&width=600",
+		image: "https://placehold.co/600x400?font=roboto&text=UIVerse",
 		featured: true,
 		author: {
 			name: "Daniel O'Neill",
@@ -56,7 +56,7 @@ export const featuredProjects = [
 		category: "Education",
 		description:
 			"An interactive platform offering quizzes and coding challenges for frontend and backend developers.",
-		image: "/placeholder.svg?height=400&width=600",
+		image: "https://placehold.co/600x400?font=roboto&text=DevQuiz",
 		featured: true,
 		author: {
 			name: "Priya Desai",
@@ -73,7 +73,7 @@ export const featuredProjects = [
 		category: "Productivity",
 		description:
 			"An AI-powered resume builder that tailors your resume for different job roles with smart suggestions.",
-		image: "/placeholder.svg?height=400&width=600",
+		image: "https://placehold.co/600x400?font=roboto&text=OpenResume",
 		featured: true,
 		author: {
 			name: "Nina López",
@@ -90,7 +90,7 @@ export const featuredProjects = [
 		category: "AI Tool",
 		description:
 			"A real-time voice and text translator supporting over 100 languages, built with advanced NLP models.",
-		image: "/placeholder.svg?height=400&width=600",
+		image: "https://placehold.co/600x400?font=roboto&text=LangSync",
 		featured: true,
 		author: {
 			name: "Tomás Rivera",
