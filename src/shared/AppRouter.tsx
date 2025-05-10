@@ -1,6 +1,6 @@
-import { HomePage } from "@/features/home";
-import { ProjectListPage, ProjectPage } from "@/features/projects";
-import { SubmitPage } from "@/features/submit";
+import { HomePage } from "@features/home";
+import { ProjectListPage, ProjectPage } from "@features/projects";
+import { SubmitPage } from "@features/submit";
 import { BrowserRouter, Route, Routes } from "react-router";
 
 export const AppRouter = () => {

@@ -1,14 +1,20 @@
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
+import { Footer, Header } from "../components/layout";
+import {
+	FeaturedProjects,
+	HeroSection,
+	VerificationProcess,
+} from "../components/sections/";
 
 export const HomePage = () => {
 	return (
-		<header>
-			<SignedOut>
-				<SignInButton />
-			</SignedOut>
-			<SignedIn>
-				<UserButton />
-			</SignedIn>
-		</header>
+		<div className="flex flex-col min-h-screen">
+			<Header />
+			<main className="flex-1">
+				<HeroSection />
+				<FeaturedProjects />
+				<VerificationProcess />
+			</main>
+			<Footer />
+		</div>
 	);
 };

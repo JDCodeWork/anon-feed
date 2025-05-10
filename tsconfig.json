@@ -2,10 +2,18 @@
 	"compilerOptions": {
 		"baseUrl": ".",
 		"paths": {
-			"@/*": ["./src/*"],
-			"@components/*": ["./src/shared/components/*"],
-			"@lib/*": ["./src/shared/lib/*"],
-			"@hooks/*": ["./src/shared/hooks/*"]
+      "@features/*": [
+        "./src/features/*"
+      ],
+			"@components/*": [
+				"./src/shared/components/*"
+			],
+			"@lib/*": [
+				"./src/shared/lib/*"
+			],
+			"@hooks/*": [
+				"./src/shared/hooks/*"
+			]
 		}
 	},
 	"files": [],
