@@ -1,29 +1,76 @@
-import { Button, Input, Label, TabsContent } from "@components/ui";
+import clsx from "clsx";
 import { Github, Globe, Upload } from "lucide-react";
+import { useEffect, useState } from "react";
+import { type DropzoneOptions, useDropzone } from "react-dropzone";
+
+import { Button, Input, Label, TabsContent } from "@components/ui";
+
+const dropzoneOptions: DropzoneOptions = {
+	accept: { "image/png": [], "image/jpg": [], "image/webp": [] },
+	maxFiles: 5,
+	maxSize: 1048576, // 1 mb
+};
 
 interface Props {
 	onPrev: () => void;
 	onNext: () => void;
 }
 export const TabMedia = ({ onPrev, onNext }: Props) => {
+	const [screenshots, setScreenshots] = useState<string[]>([]);
+
+	const { getRootProps, getInputProps, isDragActive, acceptedFiles } =
+		useDropzone(dropzoneOptions);
+
+	useEffect(() => {
+		if (acceptedFiles.length > 0) {
+			for (const file of acceptedFiles) {
+				file.path &&
+					!screenshots.includes(file.path) &&
+					screenshots.length < 5 &&
+					setScreenshots((p) => [...p, file.path!]);
+			}
+		}
+	}, [acceptedFiles]);
+
 	return (
 		<TabsContent value="media" className="mt-6 space-y-6">
 			<div className="grid gap-3">
 				<Label>Project Screenshots</Label>
-				<div className="border-2 border-dashed rounded-lg p-8 text-center">
-					<div className="flex flex-col items-center gap-2">
-						<Upload className="h-8 w-8 text-muted-foreground" />
+				<div
+					className={clsx(
+						"border-2 border-dashed rounded-lg p-8 text-center transition-colors",
+						isDragActive
+							? "border-sky-400 bg-sky-50"
+							: "hover:border-gray-300 hover:bg-gray-50",
+					)}
+				>
+					<div
+						className="flex flex-col items-center gap-2 cursor-pointer"
+						{...getRootProps()}
+					>
+						<Upload
+							className={clsx(
+								"size-8",
+								isDragActive ? "text-sky-500" : "text-muted-foreground",
+							)}
+						/>
 						<h3 className="font-medium">
-							Drag & drop files or click to upload
+							{isDragActive
+								? "Drop the files here..."
+								: "Drag & drop files or click to upload"}
 						</h3>
 						<p className="text-sm text-muted-foreground">
 							Upload up to 5 images (PNG, JPG, WebP)
 						</p>
-						<Button variant="outline" size="sm" className="mt-2">
-							Select Files
-						</Button>
+						<Input type="file" {...getInputProps()} />
 					</div>
 				</div>
+
+				<ul>
+					{screenshots.map((url) => (
+						<li>{url}</li>
+					))}
+				</ul>
 			</div>
 
 			<div className="grid gap-3">

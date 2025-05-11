@@ -1,11 +1,13 @@
 import { Tabs, TabsList, TabsTrigger } from "@components/ui";
 import type { ProjectForm } from "@features/submit/interfaces/project-feed-info.interface";
 import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router";
 import { TabDetails } from "./TabDetails";
 import { TabFeedback } from "./TabFeedback";
 import { TabMedia } from "./TabMedia";
 
-type Tabs = "details" | "media" | "feedback";
+const validTabs = ["details", "media", "feedback"] as const;
+type Tabs = (typeof validTabs)[number];
 
 const defaultFormValues: ProjectForm = {
 	category: "",
@@ -21,8 +23,17 @@ const defaultFormValues: ProjectForm = {
 	title: "",
 };
 
+type Params = { tab: Tabs };
+
 export const TabsForm = () => {
-	const [activeTab, setActiveTab] = useState<Tabs>("details");
+	const navigate = useNavigate();
+	const { tab } = useParams<Params>();
+
+	if (!validTabs.includes(tab as Tabs)) {
+		navigate("/submit/details");
+	}
+
+	const [activeTab, setActiveTab] = useState<Tabs>(tab!);
 	const [form, setForm] = useState<ProjectForm>(defaultFormValues);
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,8 +41,8 @@ export const TabsForm = () => {
 	};
 
 	useEffect(() => {
-		console.log("form", form);
-	}, [form]);
+		if (tab != activeTab) navigate(`/submit/${activeTab}`);
+	}, [activeTab]);
 
 	return (
 		<Tabs
