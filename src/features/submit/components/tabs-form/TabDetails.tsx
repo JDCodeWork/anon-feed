@@ -12,12 +12,13 @@ import {
 import { TabsContent } from "@components/ui/tabs";
 import { Textarea } from "@components/ui/textarea";
 import { useTags } from "@features/submit/hooks/useTags";
+import type { ProjectForm } from "@features/submit/interfaces/project-feed-info.interface";
 import { X } from "lucide-react";
 
 type ProjectCategories = {
-	value: string
-	label: string
-}
+	value: string;
+	label: string;
+};
 
 const categories: ProjectCategories[] = [
 	{ value: "web", label: "Web Application" },
@@ -25,8 +26,8 @@ const categories: ProjectCategories[] = [
 	{ value: "desktop", label: "Desktop App" },
 	{ value: "library", label: "Library/Package" },
 	{ value: "tool", label: "Developer Tool" },
-	{ value: "other", label: "Other" }
-]
+	{ value: "other", label: "Other" },
+];
 
 const tags = [
 	"React",
@@ -37,13 +38,17 @@ const tags = [
 	"GraphQL",
 	"MongoDB",
 	"PostgreSQL",
-]
+];
 
 interface Props {
+	formValues: ProjectForm;
+	onChange: (e: any) => void;
 	onNext: () => void;
 }
-export const TabDetails = ({ onNext }: Props) => {
-	const { addTag, removeTag, selectedTags } = useTags();
+export const TabDetails = ({ onNext, onChange, formValues }: Props) => {
+	const { addTag, removeTag, selectedTags } = useTags({
+		handleChange: (tags) => onChange({ target: { name: "tags", value: tags } }),
+	});
 
 	return (
 		<TabsContent value="details" className="mt-6 space-y-6">
@@ -52,12 +57,21 @@ export const TabDetails = ({ onNext }: Props) => {
 				<Input
 					id="project-title"
 					placeholder="e.g., TaskFlow - Project Management App"
+					name="title"
+					value={formValues.title}
+					onChange={onChange}
 				/>
 			</div>
 
 			<div className="grid gap-3">
 				<Label htmlFor="project-category">Category</Label>
-				<Select>
+				<Select
+					name="category"
+					value={formValues.category}
+					onValueChange={(value) =>
+						onChange({ target: { name: "category", value } })
+					}
+				>
 					<SelectTrigger id="project-category">
 						<SelectValue placeholder="Select a category" />
 					</SelectTrigger>
@@ -75,6 +89,9 @@ export const TabDetails = ({ onNext }: Props) => {
 					id="project-description"
 					placeholder="Provide a brief overview of your project..."
 					className="min-h-[120px]"
+					name="description"
+					value={formValues.description}
+					onChange={onChange}
 				/>
 			</div>
 
@@ -97,16 +114,18 @@ export const TabDetails = ({ onNext }: Props) => {
 					))}
 				</div>
 				<div className="flex flex-wrap gap-2">
-					{tags.map((tag) => (
-						<Badge
-							key={tag}
-							variant="outline"
-							className="cursor-pointer hover:bg-secondary"
-							onClick={() => addTag(tag)}
-						>
-							{tag}
-						</Badge>
-					))}
+					{tags
+						.filter((t) => !selectedTags.includes(t))
+						.map((tag) => (
+							<Badge
+								key={tag}
+								variant="outline"
+								className="cursor-pointer hover:bg-secondary"
+								onClick={() => addTag(tag)}
+							>
+								{tag}
+							</Badge>
+						))}
 				</div>
 			</div>
 

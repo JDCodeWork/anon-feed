@@ -1,6 +1,9 @@
-import type { Project } from "@features/projects/interfaces/project.interface";
+import type {
+	BaseInfoProject,
+	DatabaseProject,
+} from "@features/projects/interfaces/project.interface";
 
-export interface ProjectFeedInfo extends Project {
+export interface ProjectForm extends BaseInfoProject {
 	tags: string[];
 	screenshots: string[];
 	githubRepo: string;
@@ -9,3 +12,5 @@ export interface ProjectFeedInfo extends Project {
 	specificQuestions: string;
 	experienceLevel: string;
 }
+
+export interface ProjectFeedInfo extends DatabaseProject {}

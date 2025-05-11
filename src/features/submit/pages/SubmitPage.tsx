@@ -11,7 +11,6 @@ import { Guidelines } from "../components/Guidelines";
 import { TabsForm } from "../components/tabs-form/TabsForm";
 
 export const SubmitPage = () => {
-
 	return (
 		<div className="container py-8">
 			<div className="max-w-3xl mx-auto">

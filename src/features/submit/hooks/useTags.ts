@@ -1,6 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export function useTags(maxTags = 5) {
+interface Props {
+	maxTags?: number;
+	handleChange: (tags: string[]) => void;
+}
+
+export function useTags({ handleChange, maxTags = 5 }: Props) {
 	const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
 	const addTag = (tag: string) => {
@@ -12,6 +17,10 @@ export function useTags(maxTags = 5) {
 	const removeTag = (tag: string) => {
 		setSelectedTags(selectedTags.filter((t) => t !== tag));
 	};
+
+	useEffect(() => {
+		handleChange(selectedTags);
+	}, [selectedTags]);
 
 	return { selectedTags, addTag, removeTag };
 }
