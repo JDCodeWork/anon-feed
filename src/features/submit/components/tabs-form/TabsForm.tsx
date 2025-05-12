@@ -2,9 +2,9 @@ import { Tabs, TabsList, TabsTrigger } from "@components/ui";
 import type { ProjectForm } from "@features/submit/interfaces/project-feed-info.interface";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { TabDetails } from "./TabDetails";
 import { TabFeedback } from "./TabFeedback";
 import { TabMedia } from "./TabMedia";
+import { TabDetails } from "./tab-details/TabDetails";
 
 const validTabs = ["details", "media", "feedback"] as const;
 type Tabs = (typeof validTabs)[number];

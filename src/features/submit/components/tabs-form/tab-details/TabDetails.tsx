@@ -66,7 +66,6 @@ export const TabDetails = ({ onNext, onChange, formValues }: Props) => {
 			<div className="grid gap-3">
 				<Label htmlFor="project-category">Category</Label>
 				<Select
-					name="category"
 					value={formValues.category}
 					onValueChange={(value) =>
 						onChange({ target: { name: "category", value } })
