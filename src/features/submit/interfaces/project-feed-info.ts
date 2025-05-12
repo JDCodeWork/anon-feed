@@ -3,7 +3,7 @@ import type {
 	DatabaseProject,
 } from "@features/projects/interfaces/project.interface";
 
-export interface ProjectForm extends BaseInfoProject {
+export interface ProjectFormInputs extends BaseInfoProject {
 	tags: string[];
 	screenshots: string[];
 	githubRepo: string;

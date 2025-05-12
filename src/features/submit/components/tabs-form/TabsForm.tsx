@@ -1,55 +1,24 @@
+import React, { useState } from "react";
+
 import { Tabs, TabsList, TabsTrigger } from "@components/ui";
-import type { ProjectForm } from "@features/submit/interfaces/project-feed-info.interface";
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { initialTabFormValues } from "@features/submit/constants/tab-form";
+
+import { useTabs } from "@features/submit/hooks/useTabs";
+import type { ProjectFormInputs } from "@features/submit/interfaces/project-feed-info";
 import { TabFeedback } from "./TabFeedback";
 import { TabMedia } from "./TabMedia";
 import { TabDetails } from "./tab-details/TabDetails";
 
-const validTabs = ["details", "media", "feedback"] as const;
-type Tabs = (typeof validTabs)[number];
-
-const defaultFormValues: ProjectForm = {
-	category: "",
-	description: "",
-	experienceLevel: "",
-	feedbackArea: "",
-	githubRepo: "",
-	image: "",
-	liveDemo: "",
-	screenshots: [],
-	specificQuestions: "",
-	tags: [""],
-	title: "",
-};
-
-type Params = { tab: Tabs };
-
 export const TabsForm = () => {
-	const navigate = useNavigate();
-	const { tab } = useParams<Params>();
-
-	if (!validTabs.includes(tab as Tabs)) {
-		navigate("/submit/details");
-	}
-
-	const [activeTab, setActiveTab] = useState<Tabs>(tab!);
-	const [form, setForm] = useState<ProjectForm>(defaultFormValues);
+	const { handleTabs, handleNavigateTabs } = useTabs();
+	const [form, setForm] = useState<ProjectFormInputs>(initialTabFormValues);
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 	};
 
-	useEffect(() => {
-		if (tab != activeTab) navigate(`/submit/${activeTab}`);
-	}, [activeTab]);
-
 	return (
-		<Tabs
-			value={activeTab}
-			onValueChange={(v) => setActiveTab(v as Tabs)}
-			className="w-full"
-		>
+		<Tabs {...handleTabs()} className="w-full">
 			<TabsList className="grid w-full grid-cols-3">
 				<TabsTrigger value="details">Project Details</TabsTrigger>
 				<TabsTrigger value="media">Media & Links</TabsTrigger>
@@ -57,16 +26,13 @@ export const TabsForm = () => {
 			</TabsList>
 
 			<TabDetails
-				onNext={() => setActiveTab("media")}
+				{...handleNavigateTabs({ current: "details" })}
 				onChange={handleChange}
 				formValues={form}
 			/>
-			<TabMedia
-				onPrev={() => setActiveTab("details")}
-				onNext={() => setActiveTab("feedback")}
-			/>
+			<TabMedia {...handleNavigateTabs({ current: "media" })} />
 			<TabFeedback
-				onPrev={() => setActiveTab("media")}
+				{...handleNavigateTabs({ current: "feedback" })}
 				onSubmit={() => alert("uploading project")}
 			/>
 		</Tabs>

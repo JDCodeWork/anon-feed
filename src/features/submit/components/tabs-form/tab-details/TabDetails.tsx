@@ -12,7 +12,7 @@ import {
 import { TabsContent } from "@components/ui/tabs";
 import { Textarea } from "@components/ui/textarea";
 import { useTags } from "@features/submit/hooks/useTags";
-import type { ProjectForm } from "@features/submit/interfaces/project-feed-info.interface";
+import type { ProjectFormInputs } from "@features/submit/interfaces/project-feed-info";
 import { X } from "lucide-react";
 
 type ProjectCategories = {
@@ -41,7 +41,7 @@ const tags = [
 ];
 
 interface Props {
-	formValues: ProjectForm;
+	formValues: ProjectFormInputs;
 	onChange: (e: any) => void;
 	onNext: () => void;
 }
