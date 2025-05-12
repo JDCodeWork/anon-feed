@@ -2,7 +2,7 @@ import type { ProjectFormInputs } from "../interfaces/project-feed-info";
 
 export const validTabs = ["details", "media", "feedback"] as const;
 
-export const initialTabFormValues: ProjectFormInputs = {
+export const defaultTabFormInputs: ProjectFormInputs = {
 	category: "",
 	description: "",
 	experienceLevel: "",

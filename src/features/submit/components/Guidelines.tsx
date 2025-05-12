@@ -27,7 +27,10 @@ export const Guidelines = () => {
 			<CardContent>
 				<ul className="space-y-2 text-sm">
 					{guidelines.map((text) => (
-						<li className="flex items-start gap-2">
+						<li
+							className="flex items-start gap-2"
+							key={text.split(" ").slice(0, 2).join(" ")}
+						>
 							<div className="rounded-full bg-primary p-1 mt-0.5">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"

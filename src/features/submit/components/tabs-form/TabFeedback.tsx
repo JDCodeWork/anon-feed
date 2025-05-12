@@ -9,12 +9,14 @@ import {
 	TabsContent,
 	Textarea,
 } from "@components/ui";
+import { useFormContext } from "@features/submit/context/FormContext";
 
 interface Props {
 	onPrev: () => void;
-	onSubmit: () => void;
 }
-export const TabFeedback = ({ onPrev, onSubmit }: Props) => {
+export const TabFeedback = ({ onPrev }: Props) => {
+	const { handleSubmit } = useFormContext();
+
 	return (
 		<TabsContent value="feedback" className="mt-6 space-y-6">
 			<div className="grid gap-3">
@@ -68,7 +70,7 @@ export const TabFeedback = ({ onPrev, onSubmit }: Props) => {
 				<Button variant="outline" onClick={onPrev}>
 					Previous: Media & Links
 				</Button>
-				<Button onClick={onSubmit}>Submit Project</Button>
+				<Button onClick={handleSubmit}>Submit Project</Button>
 			</div>
 		</TabsContent>
 	);

@@ -80,7 +80,12 @@ export const ImageDropzone = () => {
 
 			<ul>
 				{screenshots.map((url) => (
-					<img src={url} alt={url} onLoad={() => URL.revokeObjectURL(url)} />
+					<img
+						key={url}
+						src={url}
+						alt={url}
+						onLoad={() => URL.revokeObjectURL(url)}
+					/>
 				))}
 			</ul>
 		</div>
