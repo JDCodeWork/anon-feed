@@ -2,7 +2,7 @@ import { Github, Globe } from "lucide-react";
 
 import { Button, Input, Label, TabsContent } from "@components/ui";
 import { useFormContext } from "@features/submit/context/FormContext";
-import { ProjectScreenshots } from "./tab-details/project-screenshots/ProjectScreenshots";
+import { ProjectScreenshots } from "./project-screenshots/ProjectScreenshots";
 
 interface Props {
 	onPrev: () => void;

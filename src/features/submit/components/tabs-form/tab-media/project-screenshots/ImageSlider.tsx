@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import { useFormContext } from "@features/submit/context/FormContext";
@@ -10,21 +10,28 @@ import "swiper/css";
 export const ImageSlider = () => {
 	const {
 		formValues: { screenshots },
+		setFormValue,
 	} = useFormContext();
+
+	const onDeleteImage = (id: string) => {
+		const filteredImages = screenshots.filter((img) => img.id !== id);
+
+		setFormValue("screenshots", filteredImages);
+	};
 
 	if (screenshots.length > 0)
 		return (
-			<div className="relative rounded-lg overflow-hidden">
-				{/* Botones personalizados */}
+			<div className="relative rounded-lg overflow-hidden group/slider">
+				{/* Custom buttons */}
 				<button
 					id="swiper-button-prev-custom"
-					className="absolute size-12 top-1/2 left-4 z-20 -translate-y-3 bg-gray-600/75 hover:bg-gray-600 rounded-full pr-1 cursor-pointer"
+					className="absolute size-12 top-1/2 left-4 z-20 -translate-y-3 transition-opacity opacity-25 group-hover/slider:opacity-50 hover:opacity-100 bg-gray-600 rounded-full pr-1 cursor-pointer"
 				>
 					<ChevronLeft className="text-gray-200 size-full" />
 				</button>
 				<button
 					id="swiper-button-next-custom"
-					className="absolute size-12 top-1/2 right-4 z-20 -translate-y-3 bg-gray-600/75 hover:bg-gray-600 rounded-full pl-0.5 cursor-pointer"
+					className="absolute size-12 top-1/2 right-4 z-20 -translate-y-3 transition-opacity opacity-25 group-hover/slider:opacity-50 hover:opacity-100 bg-gray-600 rounded-full pl-0.5 cursor-pointer"
 				>
 					<ChevronRight className="text-gray-200 size-full" />
 				</button>
@@ -39,12 +46,18 @@ export const ImageSlider = () => {
 					slidesPerView={2}
 					className="w-full h-[280px] relative"
 				>
-					{screenshots.map((url, i) => (
-						<SwiperSlide key={i} className="flex select-none">
+					{screenshots.map(({ id, url }) => (
+						<SwiperSlide key={id} className="flex group">
 							<img
 								src={url}
-								className="block size-full object-cover rounded-lg object-left"
+								className="block size-full object-cover rounded-lg object-left select-none"
 							/>
+							<button
+								className="transition-opacity opacity-0 group-hover:opacity-75 hover:opacity-100 absolute top-4 right-4 bg-gray-600 cursor-pointer p-1 rounded-full"
+								onClick={() => onDeleteImage(id)}
+							>
+								<X className="text-gray-100 size-6" />
+							</button>
 						</SwiperSlide>
 					))}
 				</Swiper>

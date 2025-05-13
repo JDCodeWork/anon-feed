@@ -1,15 +1,16 @@
-import { Button } from "@components/ui/button";
-import { Input } from "@components/ui/input";
-import { Label } from "@components/ui/label";
 import {
+	Button,
+	Input,
+	Label,
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "@components/ui/select";
-import { TabsContent } from "@components/ui/tabs";
-import { Textarea } from "@components/ui/textarea";
+	TabsContent,
+	Textarea,
+} from "@components/ui";
+
 import { useFormContext } from "@features/submit/context/FormContext";
 import { TagsSelect } from "./TagsSelect";
 

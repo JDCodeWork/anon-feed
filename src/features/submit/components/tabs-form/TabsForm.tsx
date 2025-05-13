@@ -3,8 +3,8 @@ import { Tabs, TabsList, TabsTrigger } from "@components/ui";
 import { FormProvider } from "@features/submit/context/FormContext";
 import { useTabs } from "@features/submit/hooks/useTabs";
 import { TabFeedback } from "./TabFeedback";
-import { TabMedia } from "./TabMedia";
 import { TabDetails } from "./tab-details/TabDetails";
+import { TabMedia } from "./tab-media/TabMedia";
 
 export const TabsForm = () => {
 	const { handleTabs, handleNavigateTabs } = useTabs();

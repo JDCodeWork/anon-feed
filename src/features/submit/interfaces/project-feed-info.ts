@@ -3,9 +3,14 @@ import type {
 	DatabaseProject,
 } from "@features/projects/interfaces/project.interface";
 
+type Image = {
+	id: string;
+	url: string;
+};
+
 export interface ProjectFormInputs extends BaseInfoProject {
 	tags: string[];
-	screenshots: string[];
+	screenshots: Image[];
 	githubRepo: string;
 	liveDemo: string;
 	feedbackArea: string;

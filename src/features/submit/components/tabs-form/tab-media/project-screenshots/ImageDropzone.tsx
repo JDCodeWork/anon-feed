@@ -28,12 +28,16 @@ export const ImageDropzone = () => {
 
 	useEffect(() => {
 		if (acceptedFiles.length > 0) {
-			let urls = [];
+			let images = [];
 
 			for (const file of acceptedFiles) {
-				if (urls.length + screenshots.length < 5)
-					urls.push(URL.createObjectURL(file));
-				else {
+				if (images.length + screenshots.length < 5) {
+					const image = {
+						id: `${file.name}-${Date.now()}`,
+						url: URL.createObjectURL(file),
+					};
+					images.push(image);
+				} else {
 					setIsErrorImages(true);
 					setTimeout(() => {
 						setIsErrorImages(false);
@@ -41,20 +45,26 @@ export const ImageDropzone = () => {
 				}
 			}
 
-			setFormValue("screenshots", [...screenshots, ...urls]);
+			setFormValue("screenshots", [...screenshots, ...images]);
 		}
 	}, [acceptedFiles]);
 
 	useEffect(() => {
+		if (screenshots.length > 0) {
+			setFormValue("image", screenshots[0].url);
+		}
+	}, [screenshots.length]);
+
+	useEffect(() => {
 		setIsErrorImages(fileRejections.length != 0);
 	}, [fileRejections.length]);
+
 	return (
 		<div
 			className={clsx(
 				"border-2 border-dashed rounded-lg p-8 text-center transition-colors ",
 				isDragActive && "border-sky-400 bg-sky-50",
-				fileRejections.length > 0 ||
-					(isErrorImages && "border-red-400 bg-red-50"),
+				isErrorImages && "border-red-400 bg-red-50",
 				!isDragActive &&
 					!isErrorImages &&
 					"hover:border-gray-300 hover:bg-gray-50",
