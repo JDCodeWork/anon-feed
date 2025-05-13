@@ -1,14 +1,14 @@
-import type { ProjectFormInputs } from "../interfaces/project-feed-info";
+import type { ProjectFeedType } from "../schemas/project-feed-schema";
 
 export const validTabs = ["details", "media", "feedback"] as const;
 
-export const defaultTabFormInputs: ProjectFormInputs = {
+export const defaultTabFormInputs: ProjectFeedType = {
 	category: "",
 	description: "",
+	featured: false,
 	experienceLevel: "",
 	feedbackArea: "",
 	githubRepo: "",
-	image: "",
 	liveDemo: "",
 	screenshots: [],
 	specificQuestions: "",

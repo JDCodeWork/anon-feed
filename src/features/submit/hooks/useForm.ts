@@ -1,28 +1,36 @@
 import { useState } from "react";
 import { defaultTabFormInputs } from "../constants/tab-form";
-import type { ProjectFormInputs as InputType } from "../interfaces/project-feed-info";
+
+import type { z } from "zod";
+import { type ProjectFeedType as InputsType } from "../schemas/project-feed-schema";
 
 type RegisterOptions = {
 	role: "input" | "select" | "check";
 };
 const defaultRegisterOptions: RegisterOptions = { role: "input" };
 
+type FormErrorsType = Partial<Record<keyof InputsType, string>>;
+
 interface Props {
-	initialValues?: InputType;
-	onSubmit: (data: InputType) => void;
+	initialValues?: InputsType;
+	onSubmit: (data: InputsType) => void;
+	validations?: z.ZodType<InputsType>;
 }
-export const useForm = ({ initialValues, onSubmit }: Props) => {
-	const [formValues, setFormValues] = useState<InputType>(
+export const useForm = ({ initialValues, onSubmit, validations }: Props) => {
+	const [formValues, setFormValues] = useState<InputsType>(
 		initialValues || defaultTabFormInputs,
 	);
+
+	const [formErrors, setFormErrors] = useState<FormErrorsType>({});
 
 	const onChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
 	) => {
+		setFormErrors((prev) => ({ ...prev, [e.target.name]: undefined }));
 		setFormValues((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 	};
 
-	const register = <K extends keyof InputType>(
+	const register = <K extends keyof InputsType>(
 		name: K,
 		options: RegisterOptions = defaultRegisterOptions,
 	) => {
@@ -36,21 +44,36 @@ export const useForm = ({ initialValues, onSubmit }: Props) => {
 		if (options.role == "select")
 			return {
 				value: formValues[name],
-				onValueChange: (v: string) => setFormValue(name, v as InputType[K]),
+				onValueChange: (v: string) => setFormValue(name, v as InputsType[K]),
 			};
 	};
 
-	const setFormValue = <K extends keyof InputType>(
+	const setFormValue = <K extends keyof InputsType>(
 		key: K,
-		value: InputType[K],
+		value: InputsType[K],
 	) => {
 		setFormValues((prev) => ({ ...prev, [key]: value }));
 	};
 
+	const handleSubmit = () => {
+		const validationResult = validations?.safeParse(formValues);
+
+		const errors: FormErrorsType = {};
+		if (!validationResult?.success && validationResult?.error) {
+			for (const issue of validationResult.error.issues) {
+				errors[issue.path[0] as keyof FormErrorsType] = issue.message;
+			}
+
+			setFormErrors(errors);
+		}
+
+		validationResult?.data && onSubmit(validationResult.data);
+	};
 	return {
 		register,
 		setFormValue,
 		formValues,
-		handleSubmit: () => onSubmit(formValues),
+		formErrors,
+		handleSubmit,
 	};
 };

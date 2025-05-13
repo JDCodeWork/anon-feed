@@ -2,6 +2,7 @@ import { Tabs, TabsList, TabsTrigger } from "@components/ui";
 
 import { FormProvider } from "@features/submit/context/FormContext";
 import { useTabs } from "@features/submit/hooks/useTabs";
+import { ProjectFeedSchema } from "@features/submit/schemas/project-feed-schema";
 import { TabFeedback } from "./TabFeedback";
 import { TabDetails } from "./tab-details/TabDetails";
 import { TabMedia } from "./tab-media/TabMedia";
@@ -10,7 +11,10 @@ export const TabsForm = () => {
 	const { handleTabs, handleNavigateTabs } = useTabs();
 
 	return (
-		<FormProvider onSubmit={(data) => console.log("data", data)}>
+		<FormProvider
+			onSubmit={(data) => console.log("data", data)}
+			validations={ProjectFeedSchema}
+		>
 			<Tabs {...handleTabs()} className="w-full">
 				<TabsList className="grid w-full grid-cols-3">
 					<TabsTrigger value="details">Project Details</TabsTrigger>

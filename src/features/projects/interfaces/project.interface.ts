@@ -2,12 +2,11 @@ export interface BaseInfoProject {
 	title: string;
 	category: string;
 	description: string;
-	image: string; // --
+	featured: boolean;
 }
 
 export interface DatabaseProject extends BaseInfoProject {
 	id: string;
-	featured: boolean;
 	author: Author;
 	commentCount: number;
 	rating: number;

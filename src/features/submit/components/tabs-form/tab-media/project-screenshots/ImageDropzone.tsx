@@ -50,12 +50,6 @@ export const ImageDropzone = () => {
 	}, [acceptedFiles]);
 
 	useEffect(() => {
-		if (screenshots.length > 0) {
-			setFormValue("image", screenshots[0].url);
-		}
-	}, [screenshots.length]);
-
-	useEffect(() => {
 		setIsErrorImages(fileRejections.length != 0);
 	}, [fileRejections.length]);
 

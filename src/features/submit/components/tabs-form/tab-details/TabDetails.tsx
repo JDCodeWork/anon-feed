@@ -12,6 +12,7 @@ import {
 } from "@components/ui";
 
 import { useFormContext } from "@features/submit/context/FormContext";
+import clsx from "clsx";
 import { TagsSelect } from "./TagsSelect";
 
 type ProjectCategories = {
@@ -32,17 +33,29 @@ interface Props {
 	onNext: () => void;
 }
 export const TabDetails = ({ onNext }: Props) => {
-	const { register } = useFormContext();
+	const { register, formErrors } = useFormContext();
 
 	return (
 		<TabsContent value="details" className="mt-6 space-y-6">
 			<div className="grid gap-3">
-				<Label htmlFor="project-title">Project Title</Label>
-				<Input
-					id="project-title"
-					placeholder="e.g., TaskFlow - Project Management App"
-					{...register("title")}
-				/>
+				<Label htmlFor="project-title">
+					Project Title
+					{formErrors.title && <span className="text-red-600">*</span>}
+				</Label>
+				<div className="">
+					<Input
+						id="project-title"
+						placeholder="e.g., TaskFlow - Project Management App"
+						className={
+							formErrors.title &&
+							"not-focus:border-red-400 not-focus:text-red-600 not-focus:placeholder:text-red-300"
+						}
+						{...register("title")}
+					/>
+					{formErrors.title && (
+						<p className="text-sm pl-2 text-red-400 mt-0">{formErrors.title}</p>
+					)}
+				</div>
 			</div>
 
 			<div className="grid gap-3">

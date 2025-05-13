@@ -7,6 +7,7 @@
 		"dev": "vite",
 		"build": "tsc -b && vite build",
 		"lint": "biome check --fix .",
+		"types": "tsc --project tsconfig.app.json",
 		"preview": "vite preview",
 		"prepare": "husky"
 	},
@@ -28,7 +29,8 @@
 		"react-router": "^7.6.0",
 		"swiper": "^11.2.6",
 		"tailwind-merge": "^3.2.0",
-		"tailwindcss": "^4.1.5"
+		"tailwindcss": "^4.1.5",
+		"zod": "^3.24.4"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",

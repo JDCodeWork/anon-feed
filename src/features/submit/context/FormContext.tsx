@@ -1,6 +1,8 @@
 import { type PropsWithChildren, createContext, useContext } from "react";
 import { useForm } from "../hooks/useForm";
-import type { ProjectFormInputs as InputsType } from "../interfaces/project-feed-info";
+
+import type { z } from "zod";
+import { type ProjectFeedType as InputsType } from "../schemas/project-feed-schema";
 
 interface FormContextType extends ReturnType<typeof useForm> {}
 
@@ -19,13 +21,15 @@ export const useFormContext = (): FormContextType => {
 interface FormProviderProps {
 	initialData?: InputsType;
 	onSubmit: (data: InputsType) => void;
+	validations?: z.ZodType<InputsType>;
 }
 export const FormProvider = ({
 	children,
 	initialData,
 	onSubmit,
+	validations,
 }: PropsWithChildren & FormProviderProps) => {
-	const value = useForm({ initialValues: initialData, onSubmit });
+	const value = useForm({ initialValues: initialData, onSubmit, validations });
 
 	return <FormContext.Provider value={value}> {children}</FormContext.Provider>;
 };
