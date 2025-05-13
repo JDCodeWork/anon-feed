@@ -15,13 +15,13 @@ interface Props {
 	onPrev: () => void;
 }
 export const TabFeedback = ({ onPrev }: Props) => {
-	const { handleSubmit } = useFormContext();
+	const { handleSubmit, register } = useFormContext();
 
 	return (
 		<TabsContent value="feedback" className="mt-6 space-y-6">
 			<div className="grid gap-3">
 				<Label htmlFor="feedback-areas">Areas for Feedback</Label>
-				<Select>
+				<Select {...register("feedbackArea", { role: "select" })}>
 					<SelectTrigger id="feedback-areas">
 						<SelectValue placeholder="Select primary area" />
 					</SelectTrigger>
@@ -42,6 +42,7 @@ export const TabFeedback = ({ onPrev }: Props) => {
 					id="specific-questions"
 					placeholder="What specific aspects of your project would you like feedback on?"
 					className="min-h-[120px]"
+					{...register("specificQuestions")}
 				/>
 				<p className="text-xs text-muted-foreground">
 					Providing specific questions will help reviewers give you more
@@ -51,7 +52,7 @@ export const TabFeedback = ({ onPrev }: Props) => {
 
 			<div className="grid gap-3">
 				<Label htmlFor="experience-level">Your Experience Level</Label>
-				<Select>
+				<Select {...register("experienceLevel", { role: "select" })}>
 					<SelectTrigger id="experience-level">
 						<SelectValue placeholder="Select your experience level" />
 					</SelectTrigger>
@@ -70,6 +71,7 @@ export const TabFeedback = ({ onPrev }: Props) => {
 				<Button variant="outline" onClick={onPrev}>
 					Previous: Media & Links
 				</Button>
+
 				<Button onClick={handleSubmit}>Submit Project</Button>
 			</div>
 		</TabsContent>

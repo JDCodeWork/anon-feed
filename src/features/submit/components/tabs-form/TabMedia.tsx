@@ -1,16 +1,20 @@
 import { Github, Globe } from "lucide-react";
 
 import { Button, Input, Label, TabsContent } from "@components/ui";
-import { ImageDropzone } from "./tab-details/ImageDropzone";
+import { useFormContext } from "@features/submit/context/FormContext";
+import { ProjectScreenshots } from "./tab-details/project-screenshots/ProjectScreenshots";
 
 interface Props {
 	onPrev: () => void;
 	onNext: () => void;
 }
 export const TabMedia = ({ onPrev, onNext }: Props) => {
+	const { register } = useFormContext();
+
 	return (
 		<TabsContent value="media" className="mt-6 space-y-6">
-			<ImageDropzone />
+			<ProjectScreenshots />
+
 			<div className="grid gap-3">
 				<Label htmlFor="github-repo">GitHub Repository</Label>
 				<div className="flex gap-2">
@@ -22,6 +26,7 @@ export const TabMedia = ({ onPrev, onNext }: Props) => {
 						id="github-repo"
 						placeholder="username/repository"
 						className="rounded-l-none"
+						{...register("githubRepo")}
 					/>
 				</div>
 			</div>
@@ -37,6 +42,7 @@ export const TabMedia = ({ onPrev, onNext }: Props) => {
 						id="live-demo"
 						placeholder="your-project-demo.com"
 						className="rounded-l-none"
+						{...register("liveDemo")}
 					/>
 				</div>
 			</div>
