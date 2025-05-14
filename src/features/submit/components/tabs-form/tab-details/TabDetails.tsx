@@ -111,7 +111,7 @@ export const TabDetails = ({ onNext }: Props) => {
 					/>
 					{formErrors.description && (
 						<p className="text-sm pl-2 text-red-400 mt-0">
-							{formErrors.description}
+							{formErrors.description.replace("String", "Description")}
 						</p>
 					)}
 				</div>

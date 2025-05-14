@@ -15,10 +15,17 @@ const tags = [
 ];
 
 export const TagsSelect = () => {
-	const { setFormValue, formErrors } = useFormContext();
+	const { formValues, setFormValue, formErrors, removeFormError } =
+		useFormContext();
+
+	const handleChange = (tags: string[]) => {
+		tags.length > 0 && formErrors.tags && removeFormError("tags");
+		setFormValue("tags", tags);
+	};
 
 	const { addTag, removeTag, selectedTags } = useTags({
-		handleChange: (tags) => setFormValue("tags", tags),
+		handleChange,
+		initialValues: formValues.tags,
 	});
 
 	return (

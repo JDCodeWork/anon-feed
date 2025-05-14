@@ -12,6 +12,6 @@ export const defaultTabFormInputs: ProjectFeedType = {
 	liveDemo: "",
 	screenshots: [],
 	specificQuestions: "",
-	tags: [""],
+	tags: [],
 	title: "",
 };

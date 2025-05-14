@@ -14,9 +14,15 @@ type FormErrorsType = Partial<Record<keyof InputsType, string>>;
 interface Props {
 	initialValues?: InputsType;
 	onSubmit: (data: InputsType) => void;
+	onError: () => void;
 	validations?: z.ZodType<InputsType>;
 }
-export const useForm = ({ initialValues, onSubmit, validations }: Props) => {
+export const useForm = ({
+	initialValues,
+	onSubmit,
+	onError,
+	validations,
+}: Props) => {
 	const [formValues, setFormValues] = useState<InputsType>(
 		initialValues || defaultTabFormInputs,
 	);
@@ -69,6 +75,7 @@ export const useForm = ({ initialValues, onSubmit, validations }: Props) => {
 			}
 
 			setFormErrors(errors);
+			onError();
 		}
 
 		validationResult?.data && onSubmit(validationResult.data);

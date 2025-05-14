@@ -1,5 +1,6 @@
 import { Footer } from "@components/Footer";
 import { Header } from "@components/Header";
+import { Toaster } from "@components/ui/sonner";
 import { Outlet } from "react-router";
 
 export const AppLayout = () => {
@@ -10,6 +11,7 @@ export const AppLayout = () => {
 				<Outlet />
 			</main>
 			<Footer />
+			<Toaster richColors />
 		</div>
 	);
 };

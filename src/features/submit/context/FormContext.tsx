@@ -21,15 +21,22 @@ export const useFormContext = (): FormContextType => {
 interface FormProviderProps {
 	initialData?: InputsType;
 	onSubmit: (data: InputsType) => void;
+	onError: () => void;
 	validations?: z.ZodType<InputsType>;
 }
 export const FormProvider = ({
 	children,
 	initialData,
 	onSubmit,
+	onError,
 	validations,
 }: PropsWithChildren & FormProviderProps) => {
-	const value = useForm({ initialValues: initialData, onSubmit, validations });
+	const value = useForm({
+		initialValues: initialData,
+		onSubmit,
+		onError,
+		validations,
+	});
 
 	return <FormContext.Provider value={value}> {children}</FormContext.Provider>;
 };

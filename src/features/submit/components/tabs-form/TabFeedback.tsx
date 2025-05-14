@@ -125,7 +125,7 @@ export const TabFeedback = ({ onPrev }: Props) => {
 					Previous: Media & Links
 				</Button>
 
-				<Button onClick={handleSubmit} >Submit Project</Button>
+				<Button onClick={handleSubmit}>Submit Project</Button>
 			</div>
 		</TabsContent>
 	);
