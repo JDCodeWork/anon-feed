@@ -15,7 +15,7 @@ const tags = [
 ];
 
 export const TagsSelect = () => {
-	const { setFormValue } = useFormContext();
+	const { setFormValue, formErrors } = useFormContext();
 
 	const { addTag, removeTag, selectedTags } = useTags({
 		handleChange: (tags) => setFormValue("tags", tags),
@@ -24,7 +24,10 @@ export const TagsSelect = () => {
 	return (
 		<div className="grid gap-3">
 			<div className="flex items-center justify-between">
-				<Label>Tags</Label>
+				<Label>
+					Tags
+					{formErrors.tags && <span className="text-red-600">*</span>}
+				</Label>
 				<span className="text-xs text-muted-foreground">
 					{selectedTags.length}/5
 				</span>
@@ -54,6 +57,11 @@ export const TagsSelect = () => {
 						</Badge>
 					))}
 			</div>
+			{formErrors.tags && (
+				<p className="text-sm pl-2 text-red-400 mt-0">
+					{formErrors.tags.replace("Array", "Tags")}
+				</p>
+			)}
 		</div>
 	);
 };

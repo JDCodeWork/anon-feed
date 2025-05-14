@@ -15,6 +15,8 @@ export const ImageDropzone = () => {
 	const {
 		setFormValue,
 		formValues: { screenshots },
+		formErrors,
+		removeFormError,
 	} = useFormContext();
 	const [isErrorImages, setIsErrorImages] = useState(false);
 
@@ -46,12 +48,18 @@ export const ImageDropzone = () => {
 			}
 
 			setFormValue("screenshots", [...screenshots, ...images]);
+			removeFormError("screenshots");
 		}
 	}, [acceptedFiles]);
 
 	useEffect(() => {
 		setIsErrorImages(fileRejections.length != 0);
 	}, [fileRejections.length]);
+
+	useEffect(() => {
+		if (formErrors.screenshots) setIsErrorImages(true);
+		else if (fileRejections.length == 0) setIsErrorImages(false);
+	}, [formErrors.screenshots]);
 
 	return (
 		<div

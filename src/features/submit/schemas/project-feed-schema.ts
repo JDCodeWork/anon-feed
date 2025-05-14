@@ -18,7 +18,7 @@ export const ScreenshotSchema = z.object({
 
 export const ProjectFeedSchema = z.object({
 	title: z.string().min(6).max(36),
-	category: z.string(),
+	category: z.string().nonempty({ message: "You must select a category" }),
 	description: z.string().min(24).max(480),
 	featured: z.boolean(),
 	tags: z.array(z.string()).min(1).max(5),
@@ -26,10 +26,14 @@ export const ProjectFeedSchema = z.object({
 	githubRepo: z.string().refine(validateGithubRepo, {
 		message: "The format '<user>/<repository>' is not met.",
 	}),
-	liveDemo: z.string().url(),
-	feedbackArea: z.string(),
+	liveDemo: z.preprocess(v => 'https://' + v, z.string().url()),
+	feedbackArea: z
+		.string()
+		.nonempty({ message: "You must select a feedback area" }),
 	specificQuestions: z.string().min(24).max(480),
-	experienceLevel: z.string(),
+	experienceLevel: z
+		.string()
+		.nonempty({ message: "You must select experience level" }),
 });
 
 export type ProjectFeedType = z.infer<typeof ProjectFeedSchema>;

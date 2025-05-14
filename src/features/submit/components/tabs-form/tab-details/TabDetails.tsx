@@ -53,35 +53,68 @@ export const TabDetails = ({ onNext }: Props) => {
 						{...register("title")}
 					/>
 					{formErrors.title && (
-						<p className="text-sm pl-2 text-red-400 mt-0">{formErrors.title}</p>
+						<p className="text-sm pl-2 text-red-400 mt-0">
+							{formErrors.title.replace("String", "Title")}
+						</p>
 					)}
 				</div>
 			</div>
 
 			<div className="grid gap-3">
-				<Label htmlFor="project-category">Category</Label>
-				<Select {...register("category", { role: "select" })}>
-					<SelectTrigger id="project-category">
-						<SelectValue placeholder="Select a category" />
-					</SelectTrigger>
-					<SelectContent>
-						{categories.map(({ value, label }) => (
-							<SelectItem key={value} value={value}>
-								{label}
-							</SelectItem>
-						))}
-					</SelectContent>
-				</Select>
+				<Label htmlFor="project-category">
+					Category
+					{formErrors.category && <span className="text-red-600">*</span>}
+				</Label>
+				<div className="">
+					<Select {...register("category", { role: "select" })}>
+						<SelectTrigger
+							id="project-category"
+							className={
+								formErrors.category &&
+								"not-focus:border-red-400 not-focus:*:text-red-400"
+							}
+						>
+							<SelectValue placeholder="Select a category" />
+						</SelectTrigger>
+						<SelectContent>
+							{categories.map(({ value, label }) => (
+								<SelectItem key={value} value={value}>
+									{label}
+								</SelectItem>
+							))}
+						</SelectContent>
+					</Select>
+
+					{formErrors.category && (
+						<p className="text-sm pl-2 text-red-400 mt-0">
+							{formErrors.category}
+						</p>
+					)}
+				</div>
 			</div>
 
 			<div className="grid gap-3">
-				<Label htmlFor="project-description">Description</Label>
-				<Textarea
-					id="project-description"
-					placeholder="Provide a brief overview of your project..."
-					className="min-h-[120px]"
-					{...register("description")}
-				/>
+				<Label htmlFor="project-description">
+					Description
+					{formErrors.description && <span className="text-red-600">*</span>}
+				</Label>
+				<div className="">
+					<Textarea
+						id="project-description"
+						placeholder="Provide a brief overview of your project..."
+						className={clsx(
+							"min-h-[120px]",
+							formErrors.description &&
+								"not-focus:border-red-400 not-focus:text-red-600 not-focus:placeholder:text-red-300",
+						)}
+						{...register("description")}
+					/>
+					{formErrors.description && (
+						<p className="text-sm pl-2 text-red-400 mt-0">
+							{formErrors.description}
+						</p>
+					)}
+				</div>
 			</div>
 
 			<TagsSelect />

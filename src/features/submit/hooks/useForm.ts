@@ -26,7 +26,7 @@ export const useForm = ({ initialValues, onSubmit, validations }: Props) => {
 	const onChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
 	) => {
-		setFormErrors((prev) => ({ ...prev, [e.target.name]: undefined }));
+		removeFormError(e.target.name as keyof FormErrorsType);
 		setFormValues((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 	};
 
@@ -43,8 +43,12 @@ export const useForm = ({ initialValues, onSubmit, validations }: Props) => {
 
 		if (options.role == "select")
 			return {
+				name,
 				value: formValues[name],
-				onValueChange: (v: string) => setFormValue(name, v as InputsType[K]),
+				onValueChange: (v: string) => {
+					setFormValue(name, v as InputsType[K]);
+					removeFormError(name);
+				},
 			};
 	};
 
@@ -69,11 +73,17 @@ export const useForm = ({ initialValues, onSubmit, validations }: Props) => {
 
 		validationResult?.data && onSubmit(validationResult.data);
 	};
+
+	const removeFormError = (key: keyof FormErrorsType) => {
+		setFormErrors((prev) => ({ ...prev, [key]: undefined }));
+	};
+
 	return {
 		register,
 		setFormValue,
 		formValues,
 		formErrors,
+		removeFormError,
 		handleSubmit,
 	};
 };
