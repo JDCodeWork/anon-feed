@@ -5,6 +5,9 @@
       "@features/*": [
         "./src/features/*"
       ],
+      "@shared/*": [
+        "./src/shared/*"
+      ],
       "@components/*": [
         "./src/shared/components/*"
       ],

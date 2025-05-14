@@ -25,7 +25,7 @@ const liveDemoSchema = z.preprocess((val) => {
 	return val;
 }, z.string().url()) as z.ZodEffects<z.ZodString, string>;
 
-export const ProjectFeedSchema = z.object({
+export const ProjectSchema = z.object({
 	title: z.string().min(6).max(36),
 	category: z.string().nonempty({ message: "You must select a category" }),
 	description: z.string().min(24).max(480),
@@ -36,13 +36,14 @@ export const ProjectFeedSchema = z.object({
 		message: "The format '<user>/<repository>' is not met.",
 	}),
 	liveDemo: liveDemoSchema,
-	feedbackArea: z
-		.string()
-		.nonempty({ message: "You must select a feedback area" }),
+	feedbackArea: z.enum([
+		"ui-ux",
+		"code-quality",
+		"performance",
+		"architecture",
+		"accessibility",
+		"security",
+	]),
 	specificQuestions: z.string().min(24).max(480),
-	experienceLevel: z
-		.string()
-		.nonempty({ message: "You must select experience level" }),
+	experienceLevel: z.enum(["beginner", "intermediate", "advanced", "expert"]),
 });
-
-export type ProjectFeedType = z.infer<typeof ProjectFeedSchema>;

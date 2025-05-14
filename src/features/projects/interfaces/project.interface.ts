@@ -1,20 +1,21 @@
-export interface BaseInfoProject {
-	title: string;
-	category: string;
-	description: string;
-	featured: boolean;
-}
+import type { z } from "zod";
+import type { ProjectSchema } from "../schemas/project.schema";
 
-export interface DatabaseProject extends BaseInfoProject {
+type Author = { name: string; verified: boolean };
+
+export type IProject = z.infer<typeof ProjectSchema>;
+
+export interface IProjectDb extends IProject {
 	id: string;
+	needsFeedback: boolean;
 	author: Author;
 	commentCount: number;
 	rating: number;
 	views: number;
 }
 
-export interface Author {
-	name: string;
-	avatar: string;
-	verified: boolean;
+export interface IPartialProject
+	extends Omit<IProject, "experienceLevel" | "feedbackArea"> {
+	experienceLevel: IProject["experienceLevel"] | undefined;
+	feedbackArea: IProject["feedbackArea"] | undefined;
 }

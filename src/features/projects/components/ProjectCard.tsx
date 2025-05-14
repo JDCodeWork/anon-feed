@@ -11,26 +11,13 @@ import {
 } from "@components/ui/card";
 import { CheckCircle, MessageSquare, Star, TrendingUp } from "lucide-react";
 import { Link } from "react-router";
+import type { IProjectDb } from "../interfaces/project.interface";
 
-type Project = {
-	id: string;
-	title: string;
-	category: string;
-	description: string;
-	image: string;
-	featured: boolean;
-	author: {
-		name: string;
-		avatar: string;
-		verified: boolean;
-	};
-	commentCount: number;
-	rating: number;
-	views: number;
-};
-
-export const ProjectCard = ({ project }: { project: Project }) => (
-	<Card>
+interface Props {
+	project: IProjectDb;
+}
+export const ProjectCard = ({ project }: Props) => (
+	<Card className="shadow-xs">
 		<CardHeader className="pt-2 px-6">
 			<div className="flex justify-between items-start">
 				<div className="space-y-2">
@@ -47,7 +34,7 @@ export const ProjectCard = ({ project }: { project: Project }) => (
 		<CardContent className="pb-2 px-4 pt-0">
 			<div className="aspect-video overflow-hidden rounded-md bg-muted mb-4">
 				<img
-					src={project.image}
+					src={project.screenshots[0].url}
 					alt={project.title}
 					className="object-cover w-full h-full"
 				/>
@@ -58,10 +45,7 @@ export const ProjectCard = ({ project }: { project: Project }) => (
 			<div className="flex items-center justify-between w-full">
 				<div className="flex items-center gap-2">
 					<Avatar className="size-6">
-						<AvatarImage
-							src={project.author.avatar}
-							alt={project.author.name}
-						/>
+						<AvatarImage src={undefined} alt={project.author.name} />
 						<AvatarFallback>{project.author.name.charAt(0)}</AvatarFallback>
 					</Avatar>
 					<span className="text-sm font-medium">{project.author.name}</span>

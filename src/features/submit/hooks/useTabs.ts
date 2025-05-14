@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { validTabs } from "../constants/tab-form";
+import { validTabs } from "../constants/valid-tabs.constant";
 
 export type TabType = (typeof validTabs)[number];
 

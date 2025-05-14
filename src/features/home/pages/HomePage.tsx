@@ -1,4 +1,5 @@
-import { FeaturedProjects, HeroSection } from "../components/sections/";
+import { FeaturedProjects } from "../components/FeaturedProjects";
+import { HeroSection } from "../components/HeroSection";
 
 export const HomePage = () => {
 	return (

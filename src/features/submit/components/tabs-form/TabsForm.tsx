@@ -1,13 +1,12 @@
-import { Tabs, TabsList, TabsTrigger } from "@components/ui";
-
-import { FormProvider } from "@features/submit/context/FormContext";
-import { useTabs } from "@features/submit/hooks/useTabs";
-import {
-	ProjectFeedSchema,
-	type ProjectFeedType,
-} from "@features/submit/schemas/project-feed-schema";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
+
+import { Tabs, TabsList, TabsTrigger } from "@components/ui";
+
+import { type IProject, ProjectSchema } from "@features/projects";
+import { FormProvider } from "@features/submit/context/FormContext";
+import { useTabs } from "@features/submit/hooks/useTabs";
+
 import { TabFeedback } from "./TabFeedback";
 import { TabDetails } from "./tab-details/TabDetails";
 import { TabMedia } from "./tab-media/TabMedia";
@@ -16,7 +15,7 @@ export const TabsForm = () => {
 	const navigate = useNavigate();
 	const { handleTabs, handleNavigateTabs } = useTabs();
 
-	const onSubmit = (data: ProjectFeedType) => {
+	const onSubmit = (data: IProject) => {
 		toast.success("Uploading project");
 
 		navigate("/projects");
@@ -31,7 +30,7 @@ export const TabsForm = () => {
 		<FormProvider
 			onSubmit={onSubmit}
 			onError={onError}
-			validations={ProjectFeedSchema}
+			validations={ProjectSchema}
 		>
 			<Tabs {...handleTabs()} className="w-full">
 				<TabsList className="grid w-full grid-cols-3">

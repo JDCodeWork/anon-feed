@@ -1,30 +1,30 @@
+import type { IPartialProject, IProject } from "@features/projects";
 import { useState } from "react";
-import { defaultTabFormInputs } from "../constants/tab-form";
-
 import type { z } from "zod";
-import { type ProjectFeedType as InputsType } from "../schemas/project-feed-schema";
+import { defaultFormValues } from "../constants/default-form-values.constant";
 
 type RegisterOptions = {
 	role: "input" | "select" | "check";
 };
 const defaultRegisterOptions: RegisterOptions = { role: "input" };
 
-type FormErrorsType = Partial<Record<keyof InputsType, string>>;
+type FormErrorsType = Partial<Record<keyof IProject, string>>;
 
 interface Props {
-	initialValues?: InputsType;
-	onSubmit: (data: InputsType) => void;
+	initialValues?: IPartialProject;
+	onSubmit: (data: IProject) => void;
 	onError: () => void;
-	validations?: z.ZodType<InputsType>;
+	validations?: z.ZodType<IProject>;
 }
+
 export const useForm = ({
 	initialValues,
 	onSubmit,
 	onError,
 	validations,
 }: Props) => {
-	const [formValues, setFormValues] = useState<InputsType>(
-		initialValues || defaultTabFormInputs,
+	const [formValues, setFormValues] = useState<IPartialProject>(
+		initialValues || defaultFormValues,
 	);
 
 	const [formErrors, setFormErrors] = useState<FormErrorsType>({});
@@ -36,14 +36,14 @@ export const useForm = ({
 		setFormValues((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 	};
 
-	const register = <K extends keyof InputsType>(
+	const register = <K extends keyof IProject>(
 		name: K,
 		options: RegisterOptions = defaultRegisterOptions,
 	) => {
 		if (options.role == "input")
 			return {
 				name,
-				value: formValues[name],
+				value: formValues[name] ?? "",
 				onChange,
 			};
 
@@ -52,15 +52,15 @@ export const useForm = ({
 				name,
 				value: formValues[name],
 				onValueChange: (v: string) => {
-					setFormValue(name, v as InputsType[K]);
+					setFormValue(name, v as IProject[K]);
 					removeFormError(name);
 				},
 			};
 	};
 
-	const setFormValue = <K extends keyof InputsType>(
+	const setFormValue = <K extends keyof IProject>(
 		key: K,
-		value: InputsType[K],
+		value: IProject[K] | undefined, // Permitimos undefined
 	) => {
 		setFormValues((prev) => ({ ...prev, [key]: value }));
 	};
@@ -78,7 +78,9 @@ export const useForm = ({
 			onError();
 		}
 
-		validationResult?.data && onSubmit(validationResult.data);
+		if (validationResult?.success) {
+			onSubmit(validationResult.data);
+		}
 	};
 
 	const removeFormError = (key: keyof FormErrorsType) => {
