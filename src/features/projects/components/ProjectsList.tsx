@@ -5,6 +5,7 @@ import {
 	TabsTrigger,
 } from "@shared/components/ui";
 import { PROJECTS } from "@shared/data/projects.data";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
 import type { IProjectDb } from "../interfaces/project.interface";
 import { ProjectCard } from "./ProjectCard";
@@ -15,15 +16,30 @@ function getDataForPage<D>(fullData: D[], page: number, limit: number): D[] {
 }
 
 export const ProjectsList = () => {
-	const [searchParams] = useSearchParams();
+	const [searchParams, setSearchParams] = useSearchParams();
+	const [filter, setFilter] = useState("all");
+
 	const page = parseInt(searchParams.get("page") || "1", 10);
 
-	const itemsPerPage = 6;
+	const onFilterChange = (val: string) => {
+		setSearchParams({ filter: val });
+		setFilter(val);
+	};
 
+	useEffect(() => {
+		setFilter(searchParams.get("filter") ?? "all");
+	}, []);
+
+	const itemsPerPage = 6;
 	const projects = getDataForPage<IProjectDb>(PROJECTS, page, itemsPerPage);
 
 	return (
-		<Tabs defaultValue="all" className="w-full">
+		<Tabs
+			defaultValue="all"
+			className="w-full"
+			onValueChange={onFilterChange}
+			value={filter}
+		>
 			<TabsList className="mb-4">
 				<TabsTrigger value="all">All Projects</TabsTrigger>
 				<TabsTrigger value="featured">Featured</TabsTrigger>
@@ -32,7 +48,7 @@ export const ProjectsList = () => {
 			<TabsContent value="all" className="mt-0">
 				<div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 ">
 					{projects.map((project) => (
-						<ProjectCard project={project} />
+						<ProjectCard project={project} key={project.id} />
 					))}
 				</div>
 			</TabsContent>
@@ -41,7 +57,7 @@ export const ProjectsList = () => {
 					{projects
 						.filter((p) => p.featured)
 						.map((project) => (
-							<ProjectCard project={project} />
+							<ProjectCard project={project} key={project.id} />
 						))}
 				</div>
 			</TabsContent>
@@ -50,7 +66,7 @@ export const ProjectsList = () => {
 					{projects
 						.filter((p) => !p.featured)
 						.map((project) => (
-							<ProjectCard project={project} />
+							<ProjectCard project={project} key={project.id} />
 						))}
 				</div>
 			</TabsContent>

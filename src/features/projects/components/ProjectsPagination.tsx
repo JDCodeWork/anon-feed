@@ -7,30 +7,60 @@ import {
 	PaginationNext,
 	PaginationPrevious,
 } from "@shared/components/ui";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router";
+import { generatePagination } from "../lib/generate-pagination";
 
-export const ProjectsPagination = () => {
+interface Props {
+	totalPages: number;
+}
+export const ProjectsPagination = ({ totalPages }: Props) => {
+	const [searchParams, setSearchParams] = useSearchParams();
+	const [paginationNumbers, setPaginationNumbers] = useState<number[]>([]);
+
+	const currenPage = Number(searchParams.get("page") ?? 1);
+
+	const updatePagination = (pageNumber: number) => {
+		if (pageNumber == 0) return setSearchParams({ page: "1" });
+
+		if (pageNumber < 0 || pageNumber > totalPages)
+			return setSearchParams({ page: "1" });
+
+		setSearchParams({ page: pageNumber.toString() });
+	};
+
+	useEffect(() => {
+		setPaginationNumbers(generatePagination(currenPage, totalPages));
+	}, [currenPage, totalPages]);
+
 	return (
 		<Pagination>
 			<PaginationContent>
 				<PaginationItem>
-					<PaginationPrevious href="#" />
+					<PaginationPrevious
+						onClick={() => updatePagination(currenPage - 1)}
+						disabled={totalPages == 1}
+					/>
 				</PaginationItem>
+				{paginationNumbers.map((page) => (
+					<PaginationItem key={page}>
+						{page === -1 ? (
+							<PaginationEllipsis />
+						) : (
+							<PaginationLink
+								onClick={() => updatePagination(page)}
+								isActive={page == currenPage}
+							>
+								{page}
+							</PaginationLink>
+						)}
+					</PaginationItem>
+				))}
 				<PaginationItem>
-					<PaginationLink href="#">1</PaginationLink>
-				</PaginationItem>
-				<PaginationItem>
-					<PaginationLink href="#" isActive>
-						2
-					</PaginationLink>
-				</PaginationItem>
-				<PaginationItem>
-					<PaginationLink href="#">3</PaginationLink>
-				</PaginationItem>
-				<PaginationItem>
-					<PaginationEllipsis />
-				</PaginationItem>
-				<PaginationItem>
-					<PaginationNext href="#" />
+					<PaginationNext
+						onClick={() => updatePagination(currenPage + 1)}
+						disabled={totalPages == 1}
+					/>
 				</PaginationItem>
 			</PaginationContent>
 		</Pagination>
