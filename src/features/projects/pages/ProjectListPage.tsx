@@ -1,31 +1,12 @@
-import { PROJECTS } from "@shared/data/projects.data";
-import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router";
 import { ProjectsList } from "../components/ProjectsList";
 import { ProjectsPagination } from "../components/ProjectsPagination";
 import { SearchBar } from "../components/SearchBar";
+import { useProjectData } from "../hooks/useProjectData";
+
+const perPage = 6;
 
 export const ProjectListPage = () => {
-	const [searchParams] = useSearchParams();
-	const [filter, setFilter] = useState("all");
-
-	const [totalPages, setTotalPages] = useState(1);
-
-	const getTotalPages = () => PROJECTS.length % 6;
-
-	useEffect(() => {
-		if (searchParams.get("filter") ?? "all" !== filter) {
-			setFilter(searchParams.get("filter")!);
-		}
-	}, [searchParams]);
-
-	useEffect(() => {
-		setTotalPages(getTotalPages());
-	}, [filter]);
-
-	useEffect(() => {
-		console.log("totalPages", totalPages);
-	}, [totalPages]);
+	const { totalPages } = useProjectData({ perPage });
 
 	return (
 		<div className="max-w-5xl w-full mx-auto my-8">
@@ -39,7 +20,7 @@ export const ProjectListPage = () => {
 
 				<SearchBar />
 
-				<ProjectsList />
+				<ProjectsList perPage={perPage} />
 
 				<ProjectsPagination totalPages={totalPages} />
 			</div>

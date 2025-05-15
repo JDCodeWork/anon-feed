@@ -7,38 +7,22 @@ import {
 	PaginationNext,
 	PaginationPrevious,
 } from "@shared/components/ui";
-import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router";
-import { generatePagination } from "../lib/generate-pagination";
+import { usePagination } from "../hooks/usePagination";
 
 interface Props {
 	totalPages: number;
 }
 export const ProjectsPagination = ({ totalPages }: Props) => {
-	const [searchParams, setSearchParams] = useSearchParams();
-	const [paginationNumbers, setPaginationNumbers] = useState<number[]>([]);
-
-	const currenPage = Number(searchParams.get("page") ?? 1);
-
-	const updatePagination = (pageNumber: number) => {
-		if (pageNumber == 0) return setSearchParams({ page: "1" });
-
-		if (pageNumber < 0 || pageNumber > totalPages)
-			return setSearchParams({ page: "1" });
-
-		setSearchParams({ page: pageNumber.toString() });
-	};
-
-	useEffect(() => {
-		setPaginationNumbers(generatePagination(currenPage, totalPages));
-	}, [currenPage, totalPages]);
+	const { updatePagination, currentPage, paginationNumbers } = usePagination({
+		totalPages,
+	});
 
 	return (
 		<Pagination>
 			<PaginationContent>
 				<PaginationItem>
 					<PaginationPrevious
-						onClick={() => updatePagination(currenPage - 1)}
+						onClick={() => updatePagination(currentPage - 1)}
 						disabled={totalPages == 1}
 					/>
 				</PaginationItem>
@@ -49,7 +33,7 @@ export const ProjectsPagination = ({ totalPages }: Props) => {
 						) : (
 							<PaginationLink
 								onClick={() => updatePagination(page)}
-								isActive={page == currenPage}
+								isActive={page == currentPage}
 							>
 								{page}
 							</PaginationLink>
@@ -58,7 +42,7 @@ export const ProjectsPagination = ({ totalPages }: Props) => {
 				))}
 				<PaginationItem>
 					<PaginationNext
-						onClick={() => updatePagination(currenPage + 1)}
+						onClick={() => updatePagination(currentPage + 1)}
 						disabled={totalPages == 1}
 					/>
 				</PaginationItem>
