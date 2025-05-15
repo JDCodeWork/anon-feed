@@ -68,7 +68,7 @@ export const ProjectCard = ({ project }: Props) => (
 					<span>{project.views}</span>
 				</div>
 			</div>
-			<Link to={`/projects/${project.id}`} className="w-full">
+			<Link to={`/project/${project.id}`} className="w-full">
 				<Button variant="outline" className="w-full cursor-pointer">
 					View Project
 				</Button>

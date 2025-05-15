@@ -2,7 +2,6 @@ import { Button } from "@shared/components/ui";
 import { ArrowUp } from "lucide-react";
 import { ProjectsList } from "../components/ProjectsList";
 import { ProjectsPagination } from "../components/ProjectsPagination";
-import { SearchBar } from "../components/SearchBar";
 import { useProjectData } from "../hooks/useProjectData";
 
 const perPage = 6;
@@ -24,7 +23,7 @@ export const ProjectListPage = () => {
 					</p>
 				</div>
 
-				<SearchBar />
+				{/*TODO: <SearchBar /> */}
 
 				<ProjectsList perPage={perPage} />
 

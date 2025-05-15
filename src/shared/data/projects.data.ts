@@ -345,7 +345,7 @@ export const PROJECTS = [
 		category: "Developer Tool",
 		description:
 			"A powerful REST API client to test, document, and monitor APIs.",
-		featured: false,
+		featured: true,
 		needsFeedback: false,
 		author: {
 			name: "Grace Moore",

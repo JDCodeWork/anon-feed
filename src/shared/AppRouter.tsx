@@ -1,7 +1,10 @@
-import { HomePage } from "@features/home";
-import { ProjectListPage, ProjectPage } from "@features/projects";
-import { SubmitPage } from "@features/submit";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
+
+import { HomePage } from "@features/home";
+import { ProjectDetailPage } from "@features/project";
+import { ProjectListPage } from "@features/projects";
+import { SubmitPage } from "@features/submit";
+
 import { AppLayout } from "./AppLayout";
 
 export const AppRouter = () => {
@@ -11,11 +14,8 @@ export const AppRouter = () => {
 				<Route path="/" element={<AppLayout />}>
 					<Route index element={<HomePage />} />
 
-					<Route path="projects">
-						<Route index element={<ProjectListPage />} />
-
-						<Route path=":projectId" element={<ProjectPage />} />
-					</Route>
+					<Route path="projects" element={<ProjectListPage />} />
+					<Route path="project/:id" element={<ProjectDetailPage />} />
 
 					<Route path="submit">
 						<Route index element={<Navigate to="details" />} />

@@ -7,6 +7,7 @@ import { type IProject, ProjectSchema } from "@features/projects";
 import { FormProvider } from "@features/submit/context/FormContext";
 import { useTabs } from "@features/submit/hooks/useTabs";
 
+import { RedirectToSignIn, useUser } from "@clerk/clerk-react";
 import { TabFeedback } from "./TabFeedback";
 import { TabDetails } from "./tab-details/TabDetails";
 import { TabMedia } from "./tab-media/TabMedia";
@@ -14,12 +15,15 @@ import { TabMedia } from "./tab-media/TabMedia";
 export const TabsForm = () => {
 	const navigate = useNavigate();
 	const { handleTabs, handleNavigateTabs } = useTabs();
+	const { isSignedIn, user } = useUser();
+
+	if (!isSignedIn) return <RedirectToSignIn />;
 
 	const onSubmit = (data: IProject) => {
 		toast.success("Uploading project");
 
+		console.log("user", user);
 		navigate("/projects");
-		console.log("data", data);
 	};
 
 	const onError = () => {
