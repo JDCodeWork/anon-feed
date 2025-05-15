@@ -23,7 +23,7 @@ export const ProjectsPagination = ({ totalPages }: Props) => {
 				<PaginationItem>
 					<PaginationPrevious
 						onClick={() => updatePagination(currentPage - 1)}
-						disabled={totalPages == 1}
+						disabled={currentPage - 1 < 1}
 					/>
 				</PaginationItem>
 				{paginationNumbers.map((page) => (
@@ -43,7 +43,7 @@ export const ProjectsPagination = ({ totalPages }: Props) => {
 				<PaginationItem>
 					<PaginationNext
 						onClick={() => updatePagination(currentPage + 1)}
-						disabled={totalPages == 1}
+						disabled={currentPage + 1 > totalPages}
 					/>
 				</PaginationItem>
 			</PaginationContent>
