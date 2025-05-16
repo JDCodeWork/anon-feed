@@ -1,6 +1,6 @@
 import { PROJECTS } from "@shared/data/projects.data";
 
-import { ProjectHead } from "../components/ProjectHead";
+import { ProjectHead } from "../components/project-head/ProjectHead";
 import { ProjectInfo } from "../components/project-info/ProjectInfo";
 import { ProjectTabs } from "../components/project-tabs/ProjectTabs";
 
@@ -8,7 +8,7 @@ export const ProjectDetailPage = () => {
 	const project = PROJECTS[0];
 
 	return (
-		<div className="container py-8">
+		<div className="max-w-5xl w-full mx-auto mt-8 mb-16">
 			<div className="grid gap-8 lg:grid-cols-3">
 				<div className="lg:col-span-2">
 					<div className="flex flex-col gap-6">

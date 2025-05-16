@@ -38,12 +38,12 @@ export const ProjectCreator = ({ author }: Props) => {
 							Full Stack Developer
 						</p>
 					</div>
-					<div className="flex gap-2">
+					{/* <div className="flex gap-2">
 						<Button variant="outline" size="sm">
 							View Profile
 						</Button>
 						<Button size="sm">Contact</Button>
-					</div>
+					</div> */}
 				</div>
 			</CardContent>
 		</Card>
