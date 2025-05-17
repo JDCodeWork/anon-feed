@@ -1,12 +1,8 @@
 import type { IProjectDb } from "@features/projects";
-import {
-	Tabs,
-	TabsList,
-	TabsTrigger,
-} from "@shared/components/ui";
+import { Tabs, TabsList, TabsTrigger } from "@shared/components/ui";
 import { useState } from "react";
-import { FeedbackTab } from "./feedback-tab/FeedbackTab";
 import { OverViewTab } from "./OverViewTab";
+import { FeedbackTab } from "./feedback-tab/FeedbackTab";
 
 interface Props {
 	project: IProjectDb;
@@ -22,7 +18,7 @@ export const ProjectTabs = ({ project }: Props) => {
 					Feedback ({project.commentCount})
 				</TabsTrigger>
 			</TabsList>
-			<OverViewTab project={project}/>
+			<OverViewTab project={project} />
 			<FeedbackTab project={project} />
 			{/*TODO <ActivityTab /> */}
 		</Tabs>

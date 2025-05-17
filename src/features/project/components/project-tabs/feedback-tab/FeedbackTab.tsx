@@ -1,17 +1,7 @@
 import type { IProjectDb } from "@features/projects";
-import {
-	Badge,
-	Button,
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-	TabsContent,
-	Textarea,
-} from "@shared/components/ui";
+import { TabsContent } from "@shared/components/ui";
 import { COMMENTS } from "@shared/data/comments.data";
+import { AddFeedbackCard } from "./AddFeedbackCard";
 import { CommentCard } from "./CommentCard";
 
 const comments = COMMENTS;
@@ -32,50 +22,7 @@ export const FeedbackTab = ({ project }: Props) => {
 					</p>
 				</div>
 
-				<Card>
-					<CardHeader>
-						<CardTitle className="text-base">Add Your Feedback</CardTitle>
-						<CardDescription>
-							Your feedback will be visible to the project creator and other
-							users
-						</CardDescription>
-					</CardHeader>
-					<CardContent>
-						<Textarea
-							placeholder="Share your thoughts, suggestions, or questions about this project..."
-							className="min-h-[120px]"
-						/>
-					</CardContent>
-					<CardFooter className="flex justify-between">
-						<div className="flex items-center gap-2">
-							<Badge
-								variant="outline"
-								className="cursor-pointer hover:bg-secondary"
-							>
-								UI/UX
-							</Badge>
-							<Badge
-								variant="outline"
-								className="cursor-pointer hover:bg-secondary"
-							>
-								Code Quality
-							</Badge>
-							<Badge
-								variant="outline"
-								className="cursor-pointer hover:bg-secondary"
-							>
-								Performance
-							</Badge>
-							<Badge
-								variant="outline"
-								className="cursor-pointer hover:bg-secondary"
-							>
-								+ Add Category
-							</Badge>
-						</div>
-						<Button>Submit Feedback</Button>
-					</CardFooter>
-				</Card>
+				<AddFeedbackCard />
 
 				<div className="space-y-6">
 					{comments.map((comment) => (

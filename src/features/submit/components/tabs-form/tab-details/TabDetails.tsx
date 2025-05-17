@@ -11,29 +11,18 @@ import {
 	Textarea,
 } from "@components/ui";
 
+import { CATEGORIES } from "@features/submit/constants/project-creation.constant";
 import { useFormContext } from "@features/submit/context/FormContext";
 import clsx from "clsx";
 import { TagsSelect } from "./TagsSelect";
-
-type ProjectCategories = {
-	value: string;
-	label: string;
-};
-
-const categories: ProjectCategories[] = [
-	{ value: "web", label: "Web Application" },
-	{ value: "mobile", label: "Mobile App" },
-	{ value: "desktop", label: "Desktop App" },
-	{ value: "library", label: "Library/Package" },
-	{ value: "tool", label: "Developer Tool" },
-	{ value: "other", label: "Other" },
-];
 
 interface Props {
 	onNext: () => void;
 }
 export const TabDetails = ({ onNext }: Props) => {
 	const { register, formErrors } = useFormContext();
+
+	const categories = CATEGORIES;
 
 	return (
 		<TabsContent value="details" className="mt-6 space-y-6">

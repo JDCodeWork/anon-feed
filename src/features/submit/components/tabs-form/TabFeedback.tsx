@@ -9,6 +9,7 @@ import {
 	TabsContent,
 	Textarea,
 } from "@components/ui";
+import { FEEDBACK_AREAS } from "@features/submit/constants/project-creation.constant";
 import { useFormContext } from "@features/submit/context/FormContext";
 import clsx from "clsx";
 
@@ -17,6 +18,8 @@ interface Props {
 }
 export const TabFeedback = ({ onPrev }: Props) => {
 	const { handleSubmit, register, formErrors } = useFormContext();
+
+	const feedbackAreas = FEEDBACK_AREAS;
 
 	return (
 		<TabsContent value="feedback" className="mt-6 space-y-6">
@@ -28,21 +31,19 @@ export const TabFeedback = ({ onPrev }: Props) => {
 				<div className="">
 					<Select {...register("feedbackArea", { role: "select" })}>
 						<SelectTrigger
-							id="feedback-areas"
 							className={
 								formErrors.feedbackArea &&
 								"not-focus:border-red-400 not-focus:*:text-red-400"
 							}
 						>
-							<SelectValue placeholder="Select primary area" />
+							<SelectValue placeholder="Select a category" />
 						</SelectTrigger>
 						<SelectContent>
-							<SelectItem value="ui-ux">UI/UX Design</SelectItem>
-							<SelectItem value="code-quality">Code Quality</SelectItem>
-							<SelectItem value="performance">Performance</SelectItem>
-							<SelectItem value="architecture">Architecture</SelectItem>
-							<SelectItem value="accessibility">Accessibility</SelectItem>
-							<SelectItem value="security">Security</SelectItem>
+							{feedbackAreas.map(({ value, label }) => (
+								<SelectItem key={value} value={value}>
+									{label}
+								</SelectItem>
+							))}
 						</SelectContent>
 					</Select>
 					{formErrors.feedbackArea && (
@@ -94,7 +95,6 @@ export const TabFeedback = ({ onPrev }: Props) => {
 				<div className="">
 					<Select {...register("experienceLevel", { role: "select" })}>
 						<SelectTrigger
-							id="experience-level"
 							className={
 								formErrors.experienceLevel &&
 								"not-focus:border-red-400 not-focus:*:text-red-400"

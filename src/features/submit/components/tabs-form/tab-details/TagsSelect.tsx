@@ -1,18 +1,8 @@
 import { Badge, Label } from "@components/ui";
+import { TAGS } from "@features/submit/constants/project-creation.constant";
 import { useFormContext } from "@features/submit/context/FormContext";
 import { useTags } from "@features/submit/hooks/useTags";
 import { X } from "lucide-react";
-
-const tags = [
-	"React",
-	"TypeScript",
-	"Node.js",
-	"Next.js",
-	"Tailwind CSS",
-	"GraphQL",
-	"MongoDB",
-	"PostgreSQL",
-];
 
 export const TagsSelect = () => {
 	const { formValues, setFormValue, formErrors, removeFormError } =
@@ -27,6 +17,8 @@ export const TagsSelect = () => {
 		handleChange,
 		initialValues: formValues.tags,
 	});
+
+	const tags = TAGS;
 
 	return (
 		<div className="grid gap-3">
