@@ -28,6 +28,7 @@ export const TabsForm = () => {
 
 		onSuccess: (result) => {
 			queryClient.setQueryData(["project", result.id], result);
+			queryClient.setQueryData(["project", "comments", result.id], []);
 
 			navigate(`/project/${result.id}`);
 		},

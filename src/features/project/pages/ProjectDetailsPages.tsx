@@ -1,30 +1,21 @@
-import type { ProjectResponse } from "@features/projects/services/get-paginated-projects";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router";
+import { getProject } from "../actions/get-project";
 import { ProjectHead } from "../components/project-head/ProjectHead";
 import { ProjectInfo } from "../components/project-info/ProjectInfo";
 import { ProjectTabs } from "../components/project-tabs/ProjectTabs";
-import { getProject } from "../services/get-project";
 
 export const ProjectDetailPage = () => {
 	const { id = "" } = useParams();
-	const [project, setProject] = useState<ProjectResponse | null>();
-
 	const navigate = useNavigate();
 
-	const fetchData = async () => {
-		const { ok, data } = await getProject(id);
+	const { data: project } = useQuery({
+		queryKey: ["project", id],
+		queryFn: () => getProject({ id }),
+		staleTime: 1000 * 60 * 2,
+	});
 
-		if (ok) {
-			setProject(data!);
-		} else {
-			navigate("/projects", { replace: true });
-		}
-	};
-
-	useEffect(() => {
-		fetchData();
-	}, [id]);
+	if (!project) navigate("/projects", { replace: true });
 
 	if (project)
 		return (
@@ -35,8 +26,8 @@ export const ProjectDetailPage = () => {
 							<ProjectHead project={project} />
 							<div className="aspect-video overflow-hidden rounded-lg bg-muted">
 								<img
-									src={project.screenshots[0] || "/placeholder.svg"}
-									alt={project.title}
+									src={project?.screenshots[0] || "/placeholder.svg"}
+									alt={project?.title}
 									className="object-cover w-full h-full"
 								/>
 							</div>

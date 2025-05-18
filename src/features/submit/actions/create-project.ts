@@ -64,6 +64,5 @@ export const createProject = async ({
 	return {
 		...data[0],
 		author: user,
-		comments: [],
 	};
 };

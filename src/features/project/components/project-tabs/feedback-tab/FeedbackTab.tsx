@@ -1,15 +1,19 @@
-import type { ProjectResponse } from "@features/projects/services/get-paginated-projects";
-import { COMMENTS } from "@features/seed/data/comments.data";
+import { getProjectComments } from "@features/project/actions/get-project-comments";
+import type { IProjectResponse } from "@features/projects";
 import { TabsContent } from "@shared/components/ui";
+import { useQuery } from "@tanstack/react-query";
 import { AddFeedbackCard } from "./AddFeedbackCard";
 import { CommentCard } from "./CommentCard";
 
-const comments = COMMENTS;
-
 interface Props {
-	project: ProjectResponse;
+	project: IProjectResponse;
 }
-export const FeedbackTab = ({ project: _ }: Props) => {
+export const FeedbackTab = ({ project }: Props) => {
+	const { data: comments } = useQuery({
+		queryKey: ["project", "comments", project.id],
+		queryFn: () => getProjectComments({ projectId: project.id }),
+	});
+
 	return (
 		<TabsContent value="feedback" className="mt-6">
 			<div className="flex flex-col gap-6">
@@ -23,9 +27,8 @@ export const FeedbackTab = ({ project: _ }: Props) => {
 				<AddFeedbackCard />
 
 				<div className="space-y-6">
-					{comments.map((comment) => (
-						<CommentCard comment={comment} />
-					))}
+					{comments &&
+						comments.map((comment) => <CommentCard comment={comment} />)}
 				</div>
 			</div>
 		</TabsContent>

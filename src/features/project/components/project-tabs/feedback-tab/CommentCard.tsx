@@ -1,4 +1,3 @@
-import type { IComment } from "@features/seed/data/comments.data";
 import {
 	Avatar,
 	AvatarFallback,
@@ -8,9 +7,10 @@ import {
 	CardContent,
 	CardHeader,
 } from "@shared/components/ui";
+import type { ICommentResponse } from "@shared/interfaces";
 
 interface Props {
-	comment: IComment;
+	comment: ICommentResponse;
 }
 export const CommentCard = ({ comment }: Props) => {
 	return (
@@ -20,14 +20,16 @@ export const CommentCard = ({ comment }: Props) => {
 					<div className="flex items-center gap-2">
 						<Avatar className="h-8 w-8">
 							<AvatarImage
-								src={comment.author.avatar || "/placeholder.svg"}
+								src={comment.author.image || "/placeholder.svg"}
 								alt={comment.author.name}
 							/>
 							<AvatarFallback>{comment.author.name.charAt(0)}</AvatarFallback>
 						</Avatar>
 						<div>
 							<span className="font-medium">{comment.author.name}</span>
-							<p className="text-xs text-muted-foreground">{comment.date}</p>
+							<p className="text-xs text-muted-foreground">
+								{comment.created_at}
+							</p>
 						</div>
 					</div>
 					<Badge variant="outline">{comment.category}</Badge>

@@ -1,7 +1,6 @@
 import type { z } from "zod";
 import type { ProjectSchema } from "../schemas/project.schema";
 
-import type { ISupabaseComment } from "@shared/interfaces";
 import type { ISupabaseProject } from "@shared/interfaces/projects-db.interface";
 import type { ISupabaseUser } from "@shared/interfaces/users-db.interface";
 
@@ -9,7 +8,6 @@ export type IProject = z.infer<typeof ProjectSchema>;
 
 export interface IProjectResponse extends ISupabaseProject {
 	author: ISupabaseUser;
-	comments: ISupabaseComment[];
 }
 
 export interface IPartialProject

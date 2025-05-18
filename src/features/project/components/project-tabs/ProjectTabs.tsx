@@ -1,11 +1,11 @@
-import type { ProjectResponse } from "@features/projects/services/get-paginated-projects";
+import type { IProjectResponse } from "@features/projects";
 import { Tabs, TabsList, TabsTrigger } from "@shared/components/ui";
 import { useState } from "react";
 import { OverViewTab } from "./OverViewTab";
 import { FeedbackTab } from "./feedback-tab/FeedbackTab";
 
 interface Props {
-	project: ProjectResponse;
+	project: IProjectResponse;
 }
 export const ProjectTabs = ({ project }: Props) => {
 	const [activeTab, setActiveTab] = useState("overview");
