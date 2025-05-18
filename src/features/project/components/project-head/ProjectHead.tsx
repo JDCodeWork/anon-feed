@@ -1,8 +1,8 @@
-import type { IProjectDb } from "@features/projects";
+import type { ProjectResponse } from "@features/projects/services/get-paginated-projects";
 import { Badge } from "@shared/components/ui";
 
 interface Props {
-	project: IProjectDb;
+	project: ProjectResponse;
 }
 export const ProjectHead = ({ project }: Props) => {
 	return (

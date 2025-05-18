@@ -19,7 +19,7 @@ export const TabsForm = () => {
 
 	if (!isSignedIn) return <RedirectToSignIn />;
 
-	const onSubmit = (data: IProject) => {
+	const onSubmit = (_: IProject) => {
 		toast.success("Uploading project");
 
 		console.log("user", user);

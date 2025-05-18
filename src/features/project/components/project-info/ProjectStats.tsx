@@ -7,8 +7,13 @@ import {
 } from "@shared/components/ui";
 import { Globe, Heart, MessageSquare, Star } from "lucide-react";
 
+type TodoProject = {
+	rating: number;
+	views: number;
+};
+
 interface Props {
-	project: IProjectDb;
+	project: IProjectDb & TodoProject;
 }
 export const ProjectStats = ({ project }: Props) => {
 	return (

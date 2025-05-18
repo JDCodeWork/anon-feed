@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
 
-const validFilters = ["all", "featured", "new"];
+const validFilters = ["all", "featured", "new"] as const;
+
+export type FilterType = (typeof validFilters)[number];
 
 export const useFilter = () => {
 	const [searchParams, setSearchParams] = useSearchParams();
@@ -10,7 +12,7 @@ export const useFilter = () => {
 	useEffect(() => {
 		const searchFilter = searchParams.get("filter") ?? "all";
 
-		if (!validFilters.includes(searchFilter))
+		if (!validFilters.includes(searchFilter as FilterType))
 			setSearchParams({ filter: "all" });
 		else if (searchFilter !== filter) setFilter(searchFilter);
 	}, [searchParams]);
@@ -29,6 +31,6 @@ export const useFilter = () => {
 
 	return {
 		handleFilterTab,
-		filter,
+		filter: filter as FilterType,
 	};
 };

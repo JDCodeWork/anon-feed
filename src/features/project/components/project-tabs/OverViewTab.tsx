@@ -1,9 +1,9 @@
-import type { IProjectDb } from "@features/projects";
+import type { ProjectResponse } from "@features/projects/services/get-paginated-projects";
 import { TabsContent } from "@shared/components/ui";
 import { ExternalLink, Github, Globe } from "lucide-react";
 
 interface Props {
-	project: IProjectDb;
+	project: ProjectResponse;
 }
 export const OverViewTab = ({ project }: Props) => {
 	return (

@@ -10,8 +10,6 @@ export interface IProjectDb extends IProject {
 	needsFeedback: boolean;
 	author: Author;
 	commentCount: number;
-	rating: number;
-	views: number;
 }
 
 export interface IPartialProject

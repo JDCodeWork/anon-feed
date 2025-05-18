@@ -1,3 +1,4 @@
+import type { IComment } from "@features/seed/data/comments.data";
 import {
 	Avatar,
 	AvatarFallback,
@@ -7,7 +8,6 @@ import {
 	CardContent,
 	CardHeader,
 } from "@shared/components/ui";
-import type { IComment } from "@shared/data/comments.data";
 
 interface Props {
 	comment: IComment;

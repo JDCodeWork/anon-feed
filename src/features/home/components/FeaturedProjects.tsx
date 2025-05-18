@@ -2,10 +2,33 @@ import { Button } from "@components/ui/button";
 import { ProjectCard } from "@features/projects/components/ProjectCard";
 import { Link } from "react-router";
 
-import { PROJECTS } from "@shared/data/projects.data";
+import {
+	type ProjectResponse,
+	getPaginatedProjects,
+} from "@features/projects/services/get-paginated-projects";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export const FeaturedProjects = () => {
-	const featuredProjects = PROJECTS.filter((p) => p.featured).slice(0, 3);
+	const [featuredProjects, setFeaturedProjects] = useState<ProjectResponse[]>(
+		[],
+	);
+
+	const fetchData = async () => {
+		const { ok, data } = await getPaginatedProjects({
+			filter: "featured",
+			limit: 3,
+			page: 1,
+		});
+
+		if (ok) {
+			setFeaturedProjects(data || []);
+		} else toast.error("An error has occurred");
+	};
+
+	useEffect(() => {
+		fetchData();
+	}, []);
 
 	return (
 		<section className="w-full py-12 md:py-24 lg:py-32">

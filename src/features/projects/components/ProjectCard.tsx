@@ -9,12 +9,12 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@components/ui/card";
-import { CheckCircle, MessageSquare, Star, TrendingUp } from "lucide-react";
+import { CheckCircle } from "lucide-react";
 import { Link } from "react-router";
-import type { IProjectDb } from "../interfaces/project.interface";
+import type { ProjectResponse } from "../services/get-paginated-projects";
 
 interface Props {
-	project: IProjectDb;
+	project: ProjectResponse;
 }
 export const ProjectCard = ({ project }: Props) => (
 	<Card className="shadow-xs">
@@ -34,7 +34,7 @@ export const ProjectCard = ({ project }: Props) => (
 		<CardContent className="pb-2 px-4 pt-0">
 			<div className="aspect-video overflow-hidden rounded-md bg-muted mb-4">
 				<img
-					src={project.screenshots[0].url}
+					src={project.screenshots[0]}
 					alt={project.title}
 					className="object-cover w-full h-full"
 				/>
@@ -45,28 +45,29 @@ export const ProjectCard = ({ project }: Props) => (
 			<div className="flex items-center justify-between w-full">
 				<div className="flex items-center gap-2">
 					<Avatar className="size-6">
-						<AvatarImage src={undefined} alt={project.author.name} />
+						<AvatarImage
+							src={project.author.image || ""}
+							alt={project.author.name}
+						/>
 						<AvatarFallback>{project.author.name.charAt(0)}</AvatarFallback>
 					</Avatar>
 					<span className="text-sm font-medium">{project.author.name}</span>
 				</div>
-				{project.author.verified && (
-					<CheckCircle className="h-4 w-4 text-green-500" />
-				)}
+				<CheckCircle className="h-4 w-4 text-green-500" />
 			</div>
 			<div className="flex items-center justify-between w-full text-sm text-muted-foreground">
-				<div className="flex items-center gap-1">
+				{/* 				<div className="flex items-center gap-1">
 					<MessageSquare className="h-4 w-4" />
 					<span>{project.commentCount}</span>
-				</div>
-				<div className="flex items-center gap-1">
+				</div> */}
+				{/* <div className="flex items-center gap-1">
 					<Star className="h-4 w-4" />
 					<span>{project.rating.toFixed(1)}</span>
 				</div>
 				<div className="flex items-center gap-1">
 					<TrendingUp className="h-4 w-4" />
 					<span>{project.views}</span>
-				</div>
+				</div> */}
 			</div>
 			<Link to={`/project/${project.id}`} className="w-full">
 				<Button variant="outline" className="w-full cursor-pointer">

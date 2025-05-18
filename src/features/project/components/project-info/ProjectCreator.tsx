@@ -2,15 +2,13 @@ import {
 	Avatar,
 	AvatarFallback,
 	AvatarImage,
-	Button,
 	Card,
 	CardContent,
 	CardHeader,
 	CardTitle,
 } from "@shared/components/ui";
-import { CheckCircle } from "lucide-react";
 
-type Author = { name: string; verified: boolean };
+type Author = { name: string };
 
 interface Props {
 	author: Author;
@@ -30,9 +28,6 @@ export const ProjectCreator = ({ author }: Props) => {
 					<div>
 						<div className="flex items-center justify-center gap-1">
 							<h3 className="font-semibold">{author.name}</h3>
-							{author.verified && (
-								<CheckCircle className="h-4 w-4 text-green-500" />
-							)}
 						</div>
 						<p className="text-sm text-muted-foreground">
 							Full Stack Developer
