@@ -7,7 +7,9 @@ import { type IProject, ProjectSchema } from "@features/projects";
 import { FormProvider } from "@features/submit/context/FormContext";
 import { useTabs } from "@features/submit/hooks/useTabs";
 
-import { RedirectToSignIn, useUser } from "@clerk/clerk-react";
+import { RedirectToSignIn, useSession } from "@clerk/clerk-react";
+import { createProject } from "@features/submit/services/create-project";
+import { transformClerkUser } from "@shared/lib/transform-clerk-user";
 import { TabFeedback } from "./TabFeedback";
 import { TabDetails } from "./tab-details/TabDetails";
 import { TabMedia } from "./tab-media/TabMedia";
@@ -15,15 +17,24 @@ import { TabMedia } from "./tab-media/TabMedia";
 export const TabsForm = () => {
 	const navigate = useNavigate();
 	const { handleTabs, handleNavigateTabs } = useTabs();
-	const { isSignedIn, user } = useUser();
+	const { session, isSignedIn } = useSession();
 
 	if (!isSignedIn) return <RedirectToSignIn />;
 
-	const onSubmit = (_: IProject) => {
-		toast.success("Uploading project");
+	const onSubmit = async (formData: IProject) => {
+		const formattedUser = transformClerkUser(
+			session.user,
+			await session.getToken(),
+		);
 
-		console.log("user", user);
-		navigate("/projects");
+		const { data, error } = await createProject(formattedUser!, formData);
+
+		if (!error) {
+			toast.success(
+				"The request for feedback on the project has been successfully completed",
+			);
+			navigate(`/project/${data?.id}`);
+		}
 	};
 
 	const onError = () => {

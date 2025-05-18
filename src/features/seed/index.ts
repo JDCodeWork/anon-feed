@@ -1,4 +1,4 @@
-import { supabase } from "@shared/lib/supabase";
+/* import { supabase } from "@shared/lib/supabase"; */
 import { PROJECTS } from "./data/projects.data";
 
 async function main() {

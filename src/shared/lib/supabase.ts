@@ -4,4 +4,9 @@ import { createClient } from "@supabase/supabase-js";
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
+export const createSupabase = (token: string | null) =>
+	createClient<Database>(supabaseUrl, supabaseAnonKey, {
+		async accessToken() {
+			return token;
+		},
+	});

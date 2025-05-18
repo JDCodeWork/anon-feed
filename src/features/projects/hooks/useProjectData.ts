@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { getPaginatedProjects, type ProjectResponse } from "../services/get-paginated-projects";
+import {
+	type ProjectResponse,
+	getPaginatedProjects,
+} from "../services/get-paginated-projects";
 import { useFilter } from "./useFilter";
 import { usePagination } from "./usePagination";
 

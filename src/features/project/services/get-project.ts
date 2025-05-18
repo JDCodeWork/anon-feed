@@ -11,25 +11,26 @@ export const getProject = async (id: string): Promise<ReturnType> => {
 		.from("projects")
 		.select(`
     *,
-    users (
+    comments (
       id,
-      name,
-      image 
+      content,
+      created_at,
+      userId,
+      users (
+        id,
+        name,
+        image
+      )
     )
-    `)
+		`)
 		.eq("id", id);
 
-	let formattedData: ProjectResponse;
-
-	if (data && data.length > 0) {
-		formattedData = {
-			...data[0],
-			author: data[0].users,
-		};
+	if (data) {
+		const user = await cler;
 
 		return {
 			ok: true,
-			data: formattedData,
+			data,
 		};
 	}
 

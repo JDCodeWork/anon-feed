@@ -1,6 +1,6 @@
 import type { ISupabaseProject } from "@shared/interfaces/projects-db.interface";
 import type { ISupabaseUser } from "@shared/interfaces/users-db.interface";
-import { supabase } from "@shared/lib/supabase";
+/* import { supabase } from "@shared/lib/supabase"; */
 import type { FilterType } from "../hooks/useFilter";
 
 export interface ProjectResponse extends ISupabaseProject {

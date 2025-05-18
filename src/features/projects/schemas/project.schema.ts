@@ -11,10 +11,11 @@ const validateGithubRepo = (val: string) => {
 	return githubRepoRegex.user.test(user) && githubRepoRegex.repo.test(repo);
 };
 
-export const ScreenshotSchema = z.object({
-	id: z.string(),
-	url: z.string(),
-});
+export const ScreenshotSchema = z
+	.instanceof(File)
+	.refine((file) => file.type.startsWith("image/"), {
+		message: "The file must be an image",
+	});
 
 const liveDemoSchema = z.preprocess((val) => {
 	if (typeof val === "string") {

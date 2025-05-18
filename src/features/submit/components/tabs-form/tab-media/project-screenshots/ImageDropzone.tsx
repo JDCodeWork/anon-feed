@@ -34,11 +34,11 @@ export const ImageDropzone = () => {
 
 			for (const file of acceptedFiles) {
 				if (images.length + screenshots.length < 5) {
-					const image = {
-						id: `${file.name}-${Date.now()}`,
-						url: URL.createObjectURL(file),
-					};
-					images.push(image);
+					(file as any).preview = URL.createObjectURL(file);
+
+					console.log("file", file);
+
+					images.push(file);
 				} else {
 					setIsErrorImages(true);
 					setTimeout(() => {

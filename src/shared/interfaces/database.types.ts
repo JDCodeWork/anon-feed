@@ -9,6 +9,48 @@ export type Json =
 export type Database = {
 	public: {
 		Tables: {
+			comments: {
+				Row: {
+					category: string;
+					content: string;
+					created_at: string;
+					id: number;
+					project_id: string;
+					user_id: string;
+				};
+				Insert: {
+					category: string;
+					content: string;
+					created_at?: string;
+					id?: number;
+					project_id: string;
+					user_id?: string;
+				};
+				Update: {
+					category?: string;
+					content?: string;
+					created_at?: string;
+					id?: number;
+					project_id?: string;
+					user_id?: string;
+				};
+				Relationships: [
+					{
+						foreignKeyName: "comments_project_id_fkey";
+						columns: ["project_id"];
+						isOneToOne: false;
+						referencedRelation: "projects";
+						referencedColumns: ["id"];
+					},
+					{
+						foreignKeyName: "comments_projectid_fkey";
+						columns: ["project_id"];
+						isOneToOne: false;
+						referencedRelation: "projects";
+						referencedColumns: ["id"];
+					},
+				];
+			};
 			projects: {
 				Row: {
 					category: string;
@@ -25,7 +67,7 @@ export type Database = {
 					specificQuestions: string;
 					tags: string[];
 					title: string;
-					userId: string;
+					user_id: string;
 				};
 				Insert: {
 					category: string;
@@ -42,7 +84,7 @@ export type Database = {
 					specificQuestions: string;
 					tags: string[];
 					title: string;
-					userId: string;
+					user_id?: string;
 				};
 				Update: {
 					category?: string;
@@ -59,17 +101,9 @@ export type Database = {
 					specificQuestions?: string;
 					tags?: string[];
 					title?: string;
-					userId?: string;
+					user_id?: string;
 				};
-				Relationships: [
-					{
-						foreignKeyName: "projects_userId_fkey";
-						columns: ["userId"];
-						isOneToOne: false;
-						referencedRelation: "users";
-						referencedColumns: ["id"];
-					},
-				];
+				Relationships: [];
 			};
 			users: {
 				Row: {
