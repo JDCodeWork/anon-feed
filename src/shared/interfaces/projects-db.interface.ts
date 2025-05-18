@@ -9,7 +9,7 @@ export interface ISupabaseCreateProject {
 	specificQuestions: string;
 	experienceLevel: string;
 	screenshots: string[];
-	userId: string;
+	user_id: string;
 }
 
 export interface ISupabaseProject extends ISupabaseCreateProject {
@@ -17,10 +17,4 @@ export interface ISupabaseProject extends ISupabaseCreateProject {
 	created_at: string;
 	featured: boolean;
 	needsFeedback: boolean;
-}
-
-export interface ISupabaseUser {
-	id: string;
-	name: string;
-	image: string;
 }

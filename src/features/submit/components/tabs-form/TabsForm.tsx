@@ -8,18 +8,33 @@ import { FormProvider } from "@features/submit/context/FormContext";
 import { useTabs } from "@features/submit/hooks/useTabs";
 
 import { RedirectToSignIn, useSession } from "@clerk/clerk-react";
-import { createProject } from "@features/submit/services/create-project";
+import { createProject } from "@features/submit/actions/create-project";
 import { transformClerkUser } from "@shared/lib/transform-clerk-user";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { TabFeedback } from "./TabFeedback";
 import { TabDetails } from "./tab-details/TabDetails";
 import { TabMedia } from "./tab-media/TabMedia";
 
 export const TabsForm = () => {
 	const navigate = useNavigate();
+	const queryClient = useQueryClient();
 	const { handleTabs, handleNavigateTabs } = useTabs();
 	const { session, isSignedIn } = useSession();
 
 	if (!isSignedIn) return <RedirectToSignIn />;
+
+	const createProjectMutation = useMutation({
+		mutationFn: createProject,
+
+		onSuccess: (result) => {
+			queryClient.setQueryData(["project", result.id], result);
+
+			navigate(`/project/${result.id}`);
+		},
+		onError: (error) => {
+			toast.error(error.message);
+		},
+	});
 
 	const onSubmit = async (formData: IProject) => {
 		const formattedUser = transformClerkUser(
@@ -27,14 +42,10 @@ export const TabsForm = () => {
 			await session.getToken(),
 		);
 
-		const { data, error } = await createProject(formattedUser!, formData);
-
-		if (!error) {
-			toast.success(
-				"The request for feedback on the project has been successfully completed",
-			);
-			navigate(`/project/${data?.id}`);
-		}
+		createProjectMutation.mutate({
+			projectData: formData,
+			user: formattedUser!,
+		});
 	};
 
 	const onError = () => {
