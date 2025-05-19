@@ -1,4 +1,4 @@
-import type { ProjectResponse } from "@features/projects/services/get-paginated-projects";
+import type { ProjectResponse } from "@features/projects/actions/get-paginated-projects";
 import { TabsContent } from "@shared/components/ui";
 import { ExternalLink, Github, Globe } from "lucide-react";
 

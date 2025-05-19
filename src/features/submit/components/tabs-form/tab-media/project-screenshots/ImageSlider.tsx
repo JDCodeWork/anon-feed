@@ -13,8 +13,8 @@ export const ImageSlider = () => {
 		setFormValue,
 	} = useFormContext();
 
-	const onDeleteImage = (id: string) => {
-		const filteredImages = screenshots.filter((img) => img.id !== id);
+	const onDeleteImage = (name: string) => {
+		const filteredImages = screenshots.filter((img) => img.name !== name);
 
 		setFormValue("screenshots", filteredImages);
 	};
@@ -46,15 +46,15 @@ export const ImageSlider = () => {
 					slidesPerView={2}
 					className="w-full h-[280px] relative"
 				>
-					{screenshots.map(({ id, url }) => (
-						<SwiperSlide key={id} className="flex group">
+					{screenshots.map(({ name, preview }: any) => (
+						<SwiperSlide key={name} className="flex group">
 							<img
-								src={url}
+								src={preview}
 								className="block size-full object-cover rounded-lg object-left select-none"
 							/>
 							<button
 								className="transition-opacity opacity-0 group-hover:opacity-75 hover:opacity-100 absolute top-4 right-4 bg-gray-600 cursor-pointer p-1 rounded-full"
-								onClick={() => onDeleteImage(id)}
+								onClick={() => onDeleteImage(name)}
 							>
 								<X className="text-gray-100 size-6" />
 							</button>

@@ -16,13 +16,12 @@ Construir un MVP funcional para la hackatón que permita subir proyectos y recib
 * [x] TailwindCSS + shadcn/ui
 * [x] React Router v7 (declarativo)
 * [x] Clerk (Auth frontend-only)
-* [ ] Supabase JS SDK (setup conexión)
-* [ ] TanStack Query + Zustand
+* [x] Supabase JS SDK (setup conexión)
+* [x] TanStack Query
 * [x] Estructura modular de features
 
 ✅ Setup de desarrollo:
 
-* [x] Git + ramas `main` y `develop`
 * [x] Convenciones: Conventional Commits
 * [x] Biome como formatter/linter
 
@@ -30,20 +29,19 @@ Construir un MVP funcional para la hackatón que permita subir proyectos y recib
 
 ### 🥈 Fase 2 — **Subida de Proyecto (submit/)**
 
-**Objetivo:** Permitir a usuarios logueados subir sus proyectos con metadata útil para recibir feedback.
+**Objetivo:** Permitir a usuarios autenticados subir sus proyectos con metadata útil para recibir feedback.
 
-* [ ] Formulario multisección con:
-
-  * [ ] Título, categoría, descripción
-  * [ ] Tags técnicos (input dinámico)
-  * [ ] Screenshots (upload a Supabase Storage)
-  * [ ] GitHub repo + demo URL
-  * [ ] Metas del feedback (UI/UX, code, performance)
-  * [ ] Preguntas específicas
-  * [ ] Nivel de experiencia
-* [ ] Validación con Zod + react-hook-form
-* [ ] Envío a Supabase (tabla `projects`)
-* [ ] Redirección a página del proyecto
+* [x] Formulario multi-sección con:
+  * [x] Título, categoría, descripción
+  * [x] Tags técnicos (input dinámico)
+  * [x] Screenshots (upload a Supabase Storage)
+  * [x] GitHub repo + demo URL
+  * [x] Metas del feedback (UI/UX, code, performance)
+  * [x] Preguntas específicas
+  * [x] Nivel de experiencia
+* [x] Validación con Zod
+* [x] Envío a Supabase (tabla `projects`)
+* [x] Redirección a página del proyecto
 
 ---
 
@@ -51,27 +49,23 @@ Construir un MVP funcional para la hackatón que permita subir proyectos y recib
 
 **Objetivo:** Mostrar el detalle de un proyecto, su info, feedback recibido y formulario para enviar nuevo comentario.
 
-* [ ] Página `/project/:id`
-
-  * [ ] Card con metadata del proyecto
-  * [ ] Listado de comentarios recibidos
+* [x] Página `/project/:id`
+  * [x] Card con metadata del proyecto
+  * [x] Listado de comentarios recibidos
   * [ ] Visualización condicional de etiquetas (anon vs verificado)
   * [ ] Botón “Editar feedback propio” si ya ha comentado
 
 ---
 
-### 🧑‍💬 Fase 4 — **Feedback (feedback/)**
+### 🧑‍💬 Fase 4 — **Feedback**
 
 **Objetivo:** Permitir a usuarios registrados dejar o editar feedback textual.
-
-* [ ] Formulario: texto + tags opcionales
-* [ ] Validación con Zod
-* [ ] Identificación de autor vía Clerk
+* [x] Formulario: texto + tags opcionales
+* [x] Identificación de autor vía Clerk
 * [ ] Detección si el usuario ya comentó:
-
   * [ ] Mostrar botón de editar si es su comentario
-* [ ] Almacenamiento en Supabase (tabla `feedback`)
-* [ ] Etiqueta “Dev confiable” si logueado con GitHub
+* [x] Almacenamiento en Supabase (tabla `comments`)
+* [ ] Etiqueta “Dev confiable” si se autentico con GitHub
 
 ---
 
@@ -80,25 +74,21 @@ Construir un MVP funcional para la hackatón que permita subir proyectos y recib
 **Objetivo:** Listar proyectos subidos con info básica y filtros mínimos.
 
 * [ ] Página `/`
-
   * [ ] Cards por proyecto
   * [ ] Filtro por tags / categoría (local)
   * [ ] Badge de “comentado por mí” si aplica
-
 ---
 
 ### 🎨 Fase 6 — **Pulido UI/UX**
-
 * [ ] Estados de carga con Skeletons o spinners
-* [ ] Manejo de errores global
+* [x] Manejo de errores global
 * [ ] Animaciones suaves (tailwind + framer-motion si hay tiempo)
 * [ ] Responsive full en móviles y desktop
 
 ---
 
 ## 🚀 Preparación para Deploy
-
-* [ ] Configurar entorno `.env` para Supabase y Clerk
+* [x] Configurar entorno `.env` para Supabase y Clerk
 * [ ] Configurar deploy en **Vercel**
 * [ ] Scripts de build y preview
 * [ ] Pruebas rápidas en mobile y desktop
@@ -122,6 +112,5 @@ Construir un MVP funcional para la hackatón que permita subir proyectos y recib
 ✔️ Subida de proyectos
 ✔️ Autenticación con Clerk
 ✔️ Feedback anónimo y verificado
-✔️ Dashboard básico
 ✔️ UI responsive con diseño base
 ✔️ Subida real a Supabase (proyectos y comentarios)

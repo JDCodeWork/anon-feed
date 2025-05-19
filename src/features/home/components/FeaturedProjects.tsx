@@ -2,33 +2,23 @@ import { Button } from "@components/ui/button";
 import { ProjectCard } from "@features/projects/components/ProjectCard";
 import { Link } from "react-router";
 
-import {
-	type ProjectResponse,
-	getPaginatedProjects,
-} from "@features/projects/services/get-paginated-projects";
-import { useEffect, useState } from "react";
+import { getPaginatedProjects } from "@features/projects";
+import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 export const FeaturedProjects = () => {
-	const [featuredProjects, setFeaturedProjects] = useState<ProjectResponse[]>(
-		[],
-	);
+	const { data: paginatedData, error } = useQuery({
+		queryKey: ["projects", "featured"],
+		queryFn: () =>
+			getPaginatedProjects({
+				filter: "featured",
+				page: 1,
+				limit: 3,
+			}),
+		staleTime: 1000 * 2,
+	});
 
-	const fetchData = async () => {
-		const { ok, data } = await getPaginatedProjects({
-			filter: "featured",
-			limit: 3,
-			page: 1,
-		});
-
-		if (ok) {
-			setFeaturedProjects(data || []);
-		} else toast.error("An error has occurred");
-	};
-
-	useEffect(() => {
-		fetchData();
-	}, []);
+	if (error) toast.error("An error has occurred");
 
 	return (
 		<section className="w-full py-12 md:py-24 lg:py-32">
@@ -44,7 +34,7 @@ export const FeaturedProjects = () => {
 						</p>
 					</div>
 					<div className="grid grid-cols-1 gap-8 lg:grid-cols-2 xl:grid-cols-3 w-full max-w-7xl">
-						{featuredProjects.map((project) => (
+						{paginatedData?.projects.map((project) => (
 							<ProjectCard key={project.id} project={project} />
 						))}
 					</div>

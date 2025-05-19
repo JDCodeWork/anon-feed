@@ -11,7 +11,7 @@ import {
 } from "@components/ui/card";
 import { CheckCircle } from "lucide-react";
 import { Link } from "react-router";
-import type { ProjectResponse } from "../services/get-paginated-projects";
+import type { ProjectResponse } from "../actions/get-paginated-projects";
 
 interface Props {
 	project: ProjectResponse;

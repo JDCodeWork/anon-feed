@@ -36,8 +36,6 @@ export const ImageDropzone = () => {
 				if (images.length + screenshots.length < 5) {
 					(file as any).preview = URL.createObjectURL(file);
 
-					console.log("file", file);
-
 					images.push(file);
 				} else {
 					setIsErrorImages(true);

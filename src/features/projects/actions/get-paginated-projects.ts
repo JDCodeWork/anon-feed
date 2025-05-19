@@ -1,11 +1,10 @@
-/* import { supabase } from "@shared/lib/supabase"; */
+import { createSupabase } from "@shared/lib/supabase";
 import type { FilterType } from "../hooks/useFilter";
+import type { IProjectResponse } from "../interfaces/project.interface";
 
 type ReturnType = {
-	ok: boolean;
-	data?: ProjectResponse[];
-	count?: number | null;
-	error?: any;
+	projects: IProjectResponse[];
+	totalPages: number;
 };
 
 interface Args {
@@ -20,14 +19,11 @@ export const getPaginatedProjects = async ({
 }: Args): Promise<ReturnType> => {
 	const offset = (page - 1) * limit;
 
+	const supabase = createSupabase(null);
 	const query = supabase.from("projects").select(
 		`
 		*,
-		users (
-			id,
-			name,
-			image
-		)
+		users (*)
 		`,
 		{ count: "exact" },
 	);
@@ -43,29 +39,20 @@ export const getPaginatedProjects = async ({
 
 	const totalPages = Math.ceil(dataCount! / limit);
 
-	let formattedData: ProjectResponse[] = [];
+	let formattedData: IProjectResponse[] = [];
 
-	if (data) {
-		formattedData = data.map((d) => {
-			const { users, ...rest } = d;
-			return {
-				...rest,
-				author: users,
-			};
-		});
-	}
+	if (!data && error) throw new Error(error.message);
 
-	if (error)
+	formattedData = data.map((d) => {
+		const { users, ...rest } = d;
 		return {
-			ok: false,
-			error,
+			...rest,
+			author: users,
 		};
+	});
 
 	return {
-		ok: true,
-		data: formattedData,
-		count: totalPages,
+		totalPages,
+		projects: formattedData,
 	};
 };
-
-getPaginatedProjects({ limit: 9, page: 1, filter: "all" });
