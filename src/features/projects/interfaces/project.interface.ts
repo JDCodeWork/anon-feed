@@ -1,5 +1,5 @@
 import type { z } from "zod";
-import type { ProjectSchema } from "../schemas/project.schema";
+import type { ProjectSchema } from "../../submit/schemas/project.schema";
 
 import type { ISupabaseProject } from "@shared/interfaces/projects-db.interface";
 import type { ISupabaseUser } from "@shared/interfaces/users-db.interface";

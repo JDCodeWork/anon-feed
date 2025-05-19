@@ -15,7 +15,8 @@ export const getProjectComments = async ({
     *,
     users (*)
     `)
-		.eq("project_id", projectId);
+		.eq("project_id", projectId)
+		.order("created_at", { ascending: false });
 
 	if (!data && error) throw new Error(error.message);
 

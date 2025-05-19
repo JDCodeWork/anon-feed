@@ -13,7 +13,7 @@ export const FeaturedProjects = () => {
 			getPaginatedProjects({
 				filter: "featured",
 				page: 1,
-				limit: 3,
+				limit: 6,
 			}),
 		staleTime: 1000 * 2,
 	});

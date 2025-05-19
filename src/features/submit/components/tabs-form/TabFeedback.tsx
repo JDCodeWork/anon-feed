@@ -9,7 +9,10 @@ import {
 	TabsContent,
 	Textarea,
 } from "@components/ui";
-import { FEEDBACK_AREAS } from "@features/submit/constants/project-creation.constant";
+import {
+	EXPERIENCE_LEVEL,
+	FEEDBACK_AREAS,
+} from "@features/submit/constants/project-creation.constant";
 import { useFormContext } from "@features/submit/context/FormContext";
 import clsx from "clsx";
 
@@ -103,12 +106,9 @@ export const TabFeedback = ({ onPrev }: Props) => {
 							<SelectValue placeholder="Select your experience level" />
 						</SelectTrigger>
 						<SelectContent>
-							<SelectItem value="beginner">Beginner (0-1 years)</SelectItem>
-							<SelectItem value="intermediate">
-								Intermediate (1-3 years)
-							</SelectItem>
-							<SelectItem value="advanced">Advanced (3-5 years)</SelectItem>
-							<SelectItem value="expert">Expert (5+ years)</SelectItem>
+							{EXPERIENCE_LEVEL.map(({ label, value }) => (
+								<SelectItem value={value}>{label}</SelectItem>
+							))}
 						</SelectContent>
 					</Select>
 

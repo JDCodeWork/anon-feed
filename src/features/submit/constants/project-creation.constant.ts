@@ -37,6 +37,13 @@ export const FEEDBACK_AREAS: LabeledSelect[] = [
 	{ value: "security", label: "Security" },
 ];
 
+export const EXPERIENCE_LEVEL: LabeledSelect[] = [
+	{ value: "beginner", label: "Beginner (0-1 years)" },
+	{ value: "intermediate", label: "Intermediate (1-3 years)" },
+	{ value: "advanced", label: "Advanced (3-5 years)" },
+	{ value: "expert", label: "Expert (5+ years)" },
+];
+
 export const TAGS = [
 	"React",
 	"TypeScript",

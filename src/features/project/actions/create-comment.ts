@@ -7,11 +7,14 @@ type CreateCommentType = {
 	projectId: string;
 };
 
-type Args = {
+export type CreateCommentArgs = {
 	user: UserWithToken;
 	comment: CreateCommentType;
 };
-export const createComment = async ({ comment, user }: Args): Promise<void> => {
+export const createComment = async ({
+	comment,
+	user,
+}: CreateCommentArgs): Promise<void> => {
 	const { token, ...userDetails } = user;
 
 	const supabase = createSupabase(token);

@@ -1,3 +1,4 @@
+import { EXPERIENCE_LEVEL } from "@features/submit/constants/project-creation.constant";
 import {
 	Avatar,
 	AvatarFallback,
@@ -12,8 +13,9 @@ type Author = { name: string };
 
 interface Props {
 	author: Author;
+	experience: string;
 }
-export const ProjectCreator = ({ author }: Props) => {
+export const ProjectCreator = ({ author, experience }: Props) => {
 	return (
 		<Card>
 			<CardHeader>
@@ -30,7 +32,9 @@ export const ProjectCreator = ({ author }: Props) => {
 							<h3 className="font-semibold">{author.name}</h3>
 						</div>
 						<p className="text-sm text-muted-foreground">
-							Full Stack Developer
+							{EXPERIENCE_LEVEL.find((e) => e.value == experience)?.label ||
+								experience}{" "}
+							developer
 						</p>
 					</div>
 					{/* <div className="flex gap-2">

@@ -1,5 +1,8 @@
 import { useSession } from "@clerk/clerk-react";
-import { createComment } from "@features/project/actions/create-comment";
+import {
+	type CreateCommentArgs,
+	createComment,
+} from "@features/project/actions/create-comment";
 import { FEEDBACK_AREAS } from "@features/submit/constants/project-creation.constant";
 import {
 	Button,
@@ -17,28 +20,22 @@ import {
 	Textarea,
 } from "@shared/components/ui";
 import { transformClerkUser } from "@shared/lib/transform-clerk-user";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { type UseMutationResult } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
 
 interface Props {
 	projectId: string;
+	createCommentMutation: UseMutationResult<void, unknown, CreateCommentArgs>;
 }
-export const AddFeedbackCard = ({ projectId }: Props) => {
+export const AddFeedbackCard = ({
+	projectId,
+	createCommentMutation,
+}: Props) => {
 	const { session, isSignedIn } = useSession();
-	const queryClient = useQueryClient();
 
 	const [message, setMessage] = useState("");
 	const [feedbackArea, setFeedbackArea] = useState<string | undefined>();
-
-	const createCommentMutation = useMutation({
-		mutationFn: createComment,
-		onSuccess: () => {
-			queryClient.invalidateQueries({
-				queryKey: ["project", "comments", projectId],
-			});
-		},
-	});
 
 	const onSubmit = async () => {
 		if (message.length < 6 || feedbackArea === undefined) {
@@ -54,7 +51,14 @@ export const AddFeedbackCard = ({ projectId }: Props) => {
 		const comment = { content: message, category: feedbackArea, projectId };
 		const user = transformClerkUser(session.user, await session.getToken())!;
 
-		createCommentMutation.mutate({ comment, user });
+		createCommentMutation.mutate(
+			{ comment, user },
+			{
+				onSuccess: () => {
+					setMessage("");
+				},
+			},
+		);
 	};
 
 	return (

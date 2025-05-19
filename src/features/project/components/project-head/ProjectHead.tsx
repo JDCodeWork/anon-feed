@@ -1,4 +1,5 @@
 import type { IProjectResponse } from "@features/projects";
+import { CATEGORIES } from "@features/submit/constants/project-creation.constant";
 import { Badge } from "@shared/components/ui";
 
 interface Props {
@@ -16,7 +17,10 @@ export const ProjectHead = ({ project }: Props) => {
 			</div>
 			<p className="text-muted-foreground">{project.description}</p>
 			<div className="grid grid-cols-2 flex-wrap gap-2">
-				<Badge variant="outline">{project.category}</Badge>
+				<Badge variant="outline">
+					{CATEGORIES.find((c) => c.value == project.category)?.label ||
+						project.category}
+				</Badge>
 			</div>
 		</div>
 	);

@@ -23,7 +23,7 @@ export const useProjectData = ({ perPage }: { perPage: number }) => {
 			getPaginatedProjects({
 				filter,
 				page: currentPage,
-				limit: perPage - 1,
+				limit: perPage,
 			}),
 		staleTime: 1000 * 2,
 	});

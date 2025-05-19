@@ -35,7 +35,7 @@ export const getPaginatedProjects = async ({
 		count: dataCount,
 		data,
 		error,
-	} = await query.range(offset, offset + limit);
+	} = await query.range(offset, offset + limit - 1);
 
 	const totalPages = Math.ceil(dataCount! / limit);
 
