@@ -19,23 +19,62 @@ import {
 	SelectValue,
 	Textarea,
 } from "@shared/components/ui";
+import type { ICommentResponse, ISupabaseComment } from "@shared/interfaces";
 import { transformClerkUser } from "@shared/lib/transform-clerk-user";
-import { type UseMutationResult } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
 
 interface Props {
 	projectId: string;
-	createCommentMutation: UseMutationResult<void, unknown, CreateCommentArgs>;
 }
-export const AddFeedbackCard = ({
-	projectId,
-	createCommentMutation,
-}: Props) => {
+export const AddFeedbackCard = ({ projectId }: Props) => {
+	const queryClient = useQueryClient();
 	const { session, isSignedIn } = useSession();
 
 	const [message, setMessage] = useState("");
 	const [feedbackArea, setFeedbackArea] = useState<string | undefined>();
+
+	const createCommentMutation = useMutation({
+		mutationFn: createComment,
+		onMutate: async ({ comment, user }) => {
+			await queryClient.cancelQueries({
+				queryKey: ["project", "comments", projectId],
+			});
+
+			const previousComments = queryClient.getQueriesData({
+				queryKey: ["project", "comments", projectId],
+			});
+
+			const newComment: Omit<ICommentResponse, "id"> = {
+				category: comment.category,
+				content: comment.content,
+				author: user,
+				created_at: new Date(Date.now()).toISOString(),
+				user_id: user.id,
+				project_id: projectId,
+			};
+
+			queryClient.setQueryData(
+				["project", "comments", projectId],
+				(old: ICommentResponse[] | undefined) => [newComment, ...(old ?? [])],
+			);
+
+			return { previousComments };
+		},
+		onError: (_err, _new, context) => {
+			queryClient.setQueryData(
+				["project", "comments", projectId],
+				context?.previousComments,
+			);
+
+			toast.error("An error occurred while creating the comment");
+		},
+		onSettled: () =>
+			queryClient.invalidateQueries({
+				queryKey: ["project", "comments", projectId],
+			}),
+	});
 
 	const onSubmit = async () => {
 		if (message.length < 6 || feedbackArea === undefined) {
@@ -90,7 +129,9 @@ export const AddFeedbackCard = ({
 						))}
 					</SelectContent>
 				</Select>
-				<Button onClick={onSubmit}>Submit Feedback</Button>
+				<Button onClick={onSubmit} disabled={createCommentMutation.isPending}>
+					Submit Feedback
+				</Button>
 			</CardFooter>
 		</Card>
 	);
