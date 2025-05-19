@@ -1,3 +1,4 @@
+import { FEEDBACK_AREAS } from "@features/submit/constants/project-creation.constant";
 import {
 	Avatar,
 	AvatarFallback,
@@ -32,7 +33,10 @@ export const CommentCard = ({ comment }: Props) => {
 							</p>
 						</div>
 					</div>
-					<Badge variant="outline">{comment.category}</Badge>
+					<Badge variant="outline">
+						{FEEDBACK_AREAS.find((f) => f.value == comment.category)?.label ||
+							comment.category}
+					</Badge>
 				</div>
 			</CardHeader>
 			<CardContent>

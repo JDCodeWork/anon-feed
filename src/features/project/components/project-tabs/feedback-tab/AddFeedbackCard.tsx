@@ -1,3 +1,5 @@
+import { useSession } from "@clerk/clerk-react";
+import { createComment } from "@features/project/actions/create-comment";
 import { FEEDBACK_AREAS } from "@features/submit/constants/project-creation.constant";
 import {
 	Button,
@@ -14,19 +16,45 @@ import {
 	SelectValue,
 	Textarea,
 } from "@shared/components/ui";
+import { transformClerkUser } from "@shared/lib/transform-clerk-user";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
 
-export const AddFeedbackCard = () => {
-	const feedbackAreas = FEEDBACK_AREAS;
+interface Props {
+	projectId: string;
+}
+export const AddFeedbackCard = ({ projectId }: Props) => {
+	const { session, isSignedIn } = useSession();
+	const queryClient = useQueryClient();
 
 	const [message, setMessage] = useState("");
 	const [feedbackArea, setFeedbackArea] = useState<string | undefined>();
 
-	const onSubmit = () => {
+	const createCommentMutation = useMutation({
+		mutationFn: createComment,
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ["project", "comments", projectId],
+			});
+		},
+	});
+
+	const onSubmit = async () => {
 		if (message.length < 6 || feedbackArea === undefined) {
-			toast.error("Some of the fields are incomplete or wrong");
+			return toast.error("Some of the fields are incomplete or wrong");
 		}
+
+		if (!isSignedIn) {
+			return toast.error(
+				"to make a comment it is necessary to be authenticated",
+			);
+		}
+
+		const comment = { content: message, category: feedbackArea, projectId };
+		const user = transformClerkUser(session.user, await session.getToken())!;
+
+		createCommentMutation.mutate({ comment, user });
 	};
 
 	return (
@@ -51,7 +79,7 @@ export const AddFeedbackCard = () => {
 						<SelectValue placeholder="Select a feedback area" />
 					</SelectTrigger>
 					<SelectContent>
-						{feedbackAreas.map(({ value, label }) => (
+						{FEEDBACK_AREAS.map(({ value, label }) => (
 							<SelectItem key={value} value={value}>
 								{label}
 							</SelectItem>

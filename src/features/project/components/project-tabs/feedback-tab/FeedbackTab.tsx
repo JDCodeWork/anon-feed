@@ -24,7 +24,7 @@ export const FeedbackTab = ({ project }: Props) => {
 					</p>
 				</div>
 
-				<AddFeedbackCard />
+				<AddFeedbackCard projectId={project.id} />
 
 				<div className="space-y-6">
 					{comments &&
