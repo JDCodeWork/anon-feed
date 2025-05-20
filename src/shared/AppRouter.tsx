@@ -1,6 +1,7 @@
 import { lazy } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 
+import { DashboardPage } from "@features/dashboard/pages/DashboardPage";
 import { AppLayout } from "./AppLayout";
 import ErrorBoundary from "./ErrorBoundary";
 
@@ -20,6 +21,8 @@ export const AppRouter = () => {
 				<Routes>
 					<Route path="/" element={<AppLayout />}>
 						<Route index element={<HomePage />} />
+
+						<Route path="dashboard" element={<DashboardPage />} />
 
 						<Route path="projects" element={<ProjectListPage />} />
 						<Route path="project/:id" element={<ProjectDetailPage />} />
