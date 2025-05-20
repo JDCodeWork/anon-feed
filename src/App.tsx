@@ -1,4 +1,5 @@
 import { ClerkProvider } from "@clerk/clerk-react";
+import ErrorBoundary from "@shared/ErrorBoundary";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { AppRouter } from "./shared/AppRouter";
@@ -15,7 +16,9 @@ function App() {
 	return (
 		<QueryClientProvider client={queryClient}>
 			<ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
-				<AppRouter />
+				<ErrorBoundary>
+					<AppRouter />
+				</ErrorBoundary>
 			</ClerkProvider>
 			<ReactQueryDevtools />
 		</QueryClientProvider>

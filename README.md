@@ -55,9 +55,8 @@ anonfeed-light/
 * **React** + **React Router v7** — Navegación moderna y declarativa
 * **TailwindCSS** — Estilo utilitario rápido
 * **shadcn/ui** — Componentes accesibles y componibles
-* **Zustand** — Estado global simplificado
 * **TanStack Query** — Gestión de datos y caché
-* **react-hook-form** + **zod** — Validación robusta de formularios
+* **zod** — Validación robusta de formularios
 
 ### ☁️ Servicios
 
@@ -73,14 +72,14 @@ anonfeed-light/
 ### ✅ MVP actual (Hackatón)
 
 * Subida de proyectos con URL + tags técnicos
-* Comentarios anónimos y verificados (GitHub)
+* Comentarios 
 * Filtrado básico en dashboard
-* Subida de capturas vía enlaces (Imgur, Drive)
-* Validación de formularios con Zod + RHF
+* Subida de capturas vía enlaces
+* Validación de formularios con Zod
+* Persistencia con Supabase (feedback, proyectos, usuarios)
 
 ### 🧪 Posible evolución (post-hackatón)
 
-* Persistencia real con Supabase (feedback, proyectos, usuarios)
 * Moderación ética y detección de toxicidad (Perspective API)
 * Reputación de revisores y métricas de confiabilidad
 * Organización de proyectos por categorías, equipos o regiones
@@ -142,7 +141,7 @@ Por el momento, este proyecto no está abierto a contribuciones externas. Sin em
 
 ## 🔗 Deploy
 
-> Se planea un deploy en Vercel o Netlify para pruebas públicas. Link se anunciará aquí pronto.
+> https://anon-feed.netlify.app
 
 ---
 
