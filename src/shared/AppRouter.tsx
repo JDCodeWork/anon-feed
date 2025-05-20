@@ -25,6 +25,8 @@ export const AppRouter = () => {
 						<Route path="project/:id" element={<ProjectDetailPage />} />
 
 						<Route path="submit">
+							<Route index element={<Navigate to="details" />} />
+
 							<Route path=":tab" element={<SubmitPage />} />
 						</Route>
 

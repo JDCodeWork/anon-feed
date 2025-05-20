@@ -21,12 +21,8 @@ const TabsForm = () => {
 	const queryClient = useQueryClient();
 	const { handleTabs, handleNavigateTabs } = useTabs();
 
-	const { session, isSignedIn } = useSession();
+	const { session } = useSession();
 	const clerk = useClerk();
-
-	useEffect(() => {
-		if (!isSignedIn) clerk.redirectToSignIn();
-	}, [isSignedIn]);
 
 	const createProjectMutation = useMutation({
 		mutationFn: createProject,
