@@ -7,11 +7,10 @@ import { type IProject, ProjectSchema } from "@features/projects";
 import { FormProvider } from "@features/submit/context/FormContext";
 import { useTabs } from "@features/submit/hooks/useTabs";
 
-import { useClerk, useSession } from "@clerk/clerk-react";
+import { useSession } from "@clerk/clerk-react";
 import { createProject } from "@features/submit/actions/create-project";
 import { transformClerkUser } from "@shared/lib/transform-clerk-user";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useEffect } from "react";
 import { TabFeedback } from "./TabFeedback";
 import { TabDetails } from "./tab-details/TabDetails";
 import { TabMedia } from "./tab-media/TabMedia";
@@ -22,7 +21,6 @@ const TabsForm = () => {
 	const { handleTabs, handleNavigateTabs } = useTabs();
 
 	const { session } = useSession();
-	const clerk = useClerk();
 
 	const createProjectMutation = useMutation({
 		mutationFn: createProject,
