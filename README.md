@@ -18,6 +18,22 @@ Recibir comentarios útiles sobre un proyecto puede ser lento, sesgado o poco co
 
 ---
 
+## Capturas 
+
+![Autenticación](https://github.com/user-attachments/assets/e9b0c767-ca9a-461e-b60a-a6a5513d9e54)
+![Proyectos](https://github.com/user-attachments/assets/fb7bc61b-0987-4ccd-a7a8-42ff6a84f45f)
+![Creación de comentarios](https://github.com/user-attachments/assets/a29725fe-fc41-40b5-9d7b-20c4e9c8e297)
+![Eliminación de comentarios](https://github.com/user-attachments/assets/a2b95a98-3dd4-419e-960f-645791dcac24)
+![Creación de proyecto](https://github.com/user-attachments/assets/ee1ce094-9352-4559-bf10-9830bd59739f)
+
+---
+
+## 🔗 Deploy
+
+> https://anon-feed.netlify.app
+
+---
+
 ## 🏗️ Estructura del Proyecto
 
 ```
@@ -139,11 +155,6 @@ Por el momento, este proyecto no está abierto a contribuciones externas. Sin em
 
 ---
 
-## 🔗 Deploy
-
-> https://anon-feed.netlify.app
-
----
 
 ## 🧠 Lema del Proyecto
 
