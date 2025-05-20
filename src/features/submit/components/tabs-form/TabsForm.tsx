@@ -7,10 +7,11 @@ import { type IProject, ProjectSchema } from "@features/projects";
 import { FormProvider } from "@features/submit/context/FormContext";
 import { useTabs } from "@features/submit/hooks/useTabs";
 
-import { RedirectToSignIn, useSession } from "@clerk/clerk-react";
+import { useClerk, useSession } from "@clerk/clerk-react";
 import { createProject } from "@features/submit/actions/create-project";
 import { transformClerkUser } from "@shared/lib/transform-clerk-user";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { TabFeedback } from "./TabFeedback";
 import { TabDetails } from "./tab-details/TabDetails";
 import { TabMedia } from "./tab-media/TabMedia";
@@ -19,9 +20,13 @@ const TabsForm = () => {
 	const navigate = useNavigate();
 	const queryClient = useQueryClient();
 	const { handleTabs, handleNavigateTabs } = useTabs();
-	const { session, isSignedIn } = useSession();
 
-	if (!isSignedIn) return <RedirectToSignIn />;
+	const { session, isSignedIn } = useSession();
+	const clerk = useClerk();
+
+	useEffect(() => {
+		if (!isSignedIn) clerk.redirectToSignIn();
+	}, [isSignedIn]);
 
 	const createProjectMutation = useMutation({
 		mutationFn: createProject,
@@ -38,6 +43,9 @@ const TabsForm = () => {
 	});
 
 	const onSubmit = async (formData: IProject) => {
+		if (!session?.user)
+			return toast.error("you need to login to upload a project");
+
 		const formattedUser = transformClerkUser(
 			session.user,
 			await session.getToken(),
