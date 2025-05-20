@@ -31,14 +31,19 @@ const TabsForm = () => {
 
 			navigate(`/project/${result.id}`);
 		},
-		onError: (error) => {
-			toast.error(error.message);
+		onError: () => {
+			toast.error("An error occurred while uploading the project", {
+				description: "Please check the data or try again later.",
+			});
 		},
 	});
 
 	const onSubmit = async (formData: IProject) => {
 		if (!session?.user)
 			return toast.error("you need to login to upload a project");
+
+		if (createProjectMutation.isPending)
+			return toast.info("Wait a moment, the project is being uploaded.");
 
 		const formattedUser = transformClerkUser(
 			session.user,

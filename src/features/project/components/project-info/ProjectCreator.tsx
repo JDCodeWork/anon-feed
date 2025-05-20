@@ -8,11 +8,10 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@shared/components/ui";
-
-type Author = { name: string };
+import type { ISupabaseUser } from "@shared/interfaces";
 
 interface Props {
-	author: Author;
+	author: ISupabaseUser;
 	experience: string;
 }
 export const ProjectCreator = ({ author, experience }: Props) => {
@@ -24,8 +23,10 @@ export const ProjectCreator = ({ author, experience }: Props) => {
 			<CardContent>
 				<div className="flex flex-col items-center gap-4 text-center">
 					<Avatar className="h-20 w-20">
-						<AvatarImage src={"/placeholder.svg"} alt={author.name} />
-						<AvatarFallback>{author.name.charAt(0)}</AvatarFallback>
+						<AvatarImage src={author.image || ""} alt={author.name} />
+						<AvatarFallback className="text-4xl">
+							{author.name.charAt(0)}
+						</AvatarFallback>
 					</Avatar>
 					<div>
 						<div className="flex items-center justify-center gap-1">

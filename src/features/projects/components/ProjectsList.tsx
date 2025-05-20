@@ -31,20 +31,16 @@ const ProjectsList = ({ perPage }: Props) => {
 			</TabsContent>
 			<TabsContent value="featured" className="mt-0">
 				<div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 ">
-					{projects
-						.filter((p) => p.featured)
-						.map((project) => (
-							<ProjectCard project={project} key={project.id} />
-						))}
+					{projects.map((project) => (
+						<ProjectCard project={project} key={project.id} />
+					))}
 				</div>
 			</TabsContent>
 			<TabsContent value="new" className="mt-0">
 				<div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-					{projects
-						.filter((p) => !p.featured)
-						.map((project) => (
-							<ProjectCard project={project} key={project.id} />
-						))}
+					{projects.map((project) => (
+						<ProjectCard project={project} key={project.id} />
+					))}
 				</div>
 			</TabsContent>
 		</Tabs>

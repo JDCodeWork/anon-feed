@@ -11,11 +11,13 @@ interface Args {
 	filter?: FilterType;
 	limit: number;
 	page: number;
+	orderBy?: "created_at";
 }
 export const getPaginatedProjects = async ({
 	filter = "all",
 	limit,
 	page,
+	orderBy,
 }: Args): Promise<ReturnType> => {
 	const offset = (page - 1) * limit;
 
@@ -30,6 +32,8 @@ export const getPaginatedProjects = async ({
 
 	if (filter == "featured") query.eq("featured", true);
 	else if (filter == "new") query.eq("featured", false);
+
+	if (orderBy == "created_at") query.order("created_at", { ascending: false });
 
 	const {
 		count: dataCount,

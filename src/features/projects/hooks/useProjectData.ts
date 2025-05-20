@@ -24,6 +24,7 @@ export const useProjectData = ({ perPage }: { perPage: number }) => {
 				filter,
 				page: currentPage,
 				limit: perPage,
+				orderBy: "created_at",
 			}),
 		staleTime: 1000 * 2,
 	});

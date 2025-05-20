@@ -13,6 +13,7 @@ export const OverViewTab = ({ project }: Props) => {
 					<h2 className="text-xl font-semibold mb-4">Project Description</h2>
 					<div className="prose max-w-none">
 						<p className="mb-2"> {project.description} </p>
+						<p className="mb-8">{project.specificQuestions}</p>
 						<h3 className="font-semibold">Areas Seeking Feedback</h3>
 						<p>
 							I'm particularly interested in feedback on the{" "}
@@ -35,7 +36,7 @@ export const OverViewTab = ({ project }: Props) => {
 							<ExternalLink className="h-3 w-3" />
 						</a>
 						<a
-							href={project.githubRepo}
+							href={"https://github.com/" + project.githubRepo}
 							target="_blank"
 							rel="noopener noreferrer"
 							className="flex items-center gap-2 text-sm text-primary hover:underline"

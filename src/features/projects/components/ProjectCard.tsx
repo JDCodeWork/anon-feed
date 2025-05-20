@@ -42,7 +42,7 @@ export const ProjectCard = ({ project }: Props) => {
 					</Badge>
 				</div>
 			</CardHeader>
-			<CardContent className="pb-2 px-4 pt-0">
+			<CardContent className="pb-2 px-4 pt-0 flex-1">
 				<div className="aspect-video overflow-hidden rounded-md bg-muted mb-4">
 					<img
 						src={project.screenshots[0]}
