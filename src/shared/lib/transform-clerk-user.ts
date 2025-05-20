@@ -11,6 +11,7 @@ export const transformClerkUser = (
 			image: clerkUser.imageUrl,
 			name: clerkUser.fullName || clerkUser.username || "",
 			token,
+			created_at: clerkUser.createdAt?.toString() || "",
 		};
 
 	return null;

@@ -1,12 +1,15 @@
-import { Button } from "@shared/components/ui";
 import { ArrowUp } from "lucide-react";
-import { ProjectsList } from "../components/ProjectsList";
+import { lazy } from "react";
+
+import { Button } from "@shared/components/ui";
 import { ProjectsPagination } from "../components/ProjectsPagination";
 import { useProjectData } from "../hooks/useProjectData";
 
+const ProjectsList = lazy(() => import("../components/ProjectsList"));
+
 const perPage = 6;
 
-export const ProjectListPage = () => {
+const ProjectListPage = () => {
 	const { totalPages } = useProjectData({ perPage });
 
 	const scrollToTop = () => {
@@ -39,3 +42,5 @@ export const ProjectListPage = () => {
 		</div>
 	);
 };
+
+export default ProjectListPage;

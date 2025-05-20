@@ -1,7 +1,7 @@
 import { FeaturedProjects } from "../components/FeaturedProjects";
 import { HeroSection } from "../components/HeroSection";
 
-export const HomePage = () => {
+const HomePage = () => {
 	return (
 		<>
 			<HeroSection />
@@ -9,3 +9,5 @@ export const HomePage = () => {
 		</>
 	);
 };
+
+export default HomePage;

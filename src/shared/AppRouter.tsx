@@ -1,11 +1,16 @@
+import { lazy } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 
-import { HomePage } from "@features/home";
-import { ProjectDetailPage } from "@features/project";
-import { ProjectListPage } from "@features/projects";
-import { SubmitPage } from "@features/submit";
-
 import { AppLayout } from "./AppLayout";
+
+const HomePage = lazy(() => import("@features/home/pages/HomePage"));
+const ProjectDetailPage = lazy(
+	() => import("@features/project/pages/ProjectDetailsPages"),
+);
+const ProjectListPage = lazy(
+	() => import("@features/projects/pages/ProjectListPage"),
+);
+const SubmitPage = lazy(() => import("@features/submit/pages/SubmitPage"));
 
 export const AppRouter = () => {
 	return (

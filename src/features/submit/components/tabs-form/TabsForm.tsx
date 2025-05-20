@@ -15,7 +15,7 @@ import { TabFeedback } from "./TabFeedback";
 import { TabDetails } from "./tab-details/TabDetails";
 import { TabMedia } from "./tab-media/TabMedia";
 
-export const TabsForm = () => {
+const TabsForm = () => {
 	const navigate = useNavigate();
 	const queryClient = useQueryClient();
 	const { handleTabs, handleNavigateTabs } = useTabs();
@@ -73,3 +73,5 @@ export const TabsForm = () => {
 		</FormProvider>
 	);
 };
+
+export default TabsForm;

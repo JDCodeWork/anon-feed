@@ -1,3 +1,6 @@
+import { lazy } from "react";
+import { Link } from "react-router";
+
 import {
 	Card,
 	CardContent,
@@ -6,11 +9,12 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@components/ui";
-import { Link } from "react-router";
-import { Guidelines } from "../components/Guidelines";
-import { TabsForm } from "../components/tabs-form/TabsForm";
 
-export const SubmitPage = () => {
+import { Guidelines } from "../components/Guidelines";
+
+const TabsForm = lazy(() => import("../components/tabs-form/TabsForm"));
+
+const SubmitPage = () => {
 	return (
 		<div className="max-w-5xl mx-auto my-8">
 			<div className="flex flex-col gap-6">
@@ -52,3 +56,5 @@ export const SubmitPage = () => {
 		</div>
 	);
 };
+
+export default SubmitPage;

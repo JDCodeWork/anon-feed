@@ -11,7 +11,7 @@ import { ProjectCard } from "./ProjectCard";
 interface Props {
 	perPage: number;
 }
-export const ProjectsList = ({ perPage }: Props) => {
+const ProjectsList = ({ perPage }: Props) => {
 	const { handleFilterTab } = useFilter();
 	const { projects } = useProjectData({ perPage });
 
@@ -50,3 +50,5 @@ export const ProjectsList = ({ perPage }: Props) => {
 		</Tabs>
 	);
 };
+
+export default ProjectsList;

@@ -1,19 +1,20 @@
-import type { IProjectDb } from "@features/projects";
 import {
 	Card,
 	CardContent,
 	CardHeader,
 	CardTitle,
 } from "@shared/components/ui";
+import type { ISupabaseProject } from "@shared/interfaces";
 import { Globe, Heart, MessageSquare, Star } from "lucide-react";
 
 type TodoProject = {
 	rating: number;
 	views: number;
+	commentCount: number;
 };
 
 interface Props {
-	project: IProjectDb & TodoProject;
+	project: ISupabaseProject & TodoProject;
 }
 export const ProjectStats = ({ project }: Props) => {
 	return (

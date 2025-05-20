@@ -1,4 +1,3 @@
-import type { DeleteCommentArgs } from "@features/project/actions/delete-comment";
 import { FEEDBACK_AREAS } from "@features/submit/constants/project-creation.constant";
 import {
 	Avatar,

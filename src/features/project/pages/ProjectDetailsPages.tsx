@@ -1,11 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
+import { lazy } from "react";
 import { useNavigate, useParams } from "react-router";
+
 import { getProject } from "../actions/get-project";
 import { ProjectHead } from "../components/project-head/ProjectHead";
 import { ProjectInfo } from "../components/project-info/ProjectInfo";
-import { ProjectTabs } from "../components/project-tabs/ProjectTabs";
 
-export const ProjectDetailPage = () => {
+const ProjectTabs = lazy(
+	() => import("../components/project-tabs/ProjectTabs"),
+);
+
+const ProjectDetailPage = () => {
 	const { id = "" } = useParams();
 	const navigate = useNavigate();
 
@@ -41,3 +46,5 @@ export const ProjectDetailPage = () => {
 			</div>
 		);
 };
+
+export default ProjectDetailPage;

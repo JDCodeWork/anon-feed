@@ -7,7 +7,7 @@ import { FeedbackTab } from "./feedback-tab/FeedbackTab";
 interface Props {
 	project: IProjectResponse;
 }
-export const ProjectTabs = ({ project }: Props) => {
+const ProjectTabs = ({ project }: Props) => {
 	const [activeTab, setActiveTab] = useState("overview");
 
 	return (
@@ -22,3 +22,5 @@ export const ProjectTabs = ({ project }: Props) => {
 		</Tabs>
 	);
 };
+
+export default ProjectTabs;

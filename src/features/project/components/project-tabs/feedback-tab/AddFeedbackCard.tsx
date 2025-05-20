@@ -1,8 +1,5 @@
 import { useSession } from "@clerk/clerk-react";
-import {
-	type CreateCommentArgs,
-	createComment,
-} from "@features/project/actions/create-comment";
+import { createComment } from "@features/project/actions/create-comment";
 import { FEEDBACK_AREAS } from "@features/submit/constants/project-creation.constant";
 import {
 	Button,
@@ -19,7 +16,7 @@ import {
 	SelectValue,
 	Textarea,
 } from "@shared/components/ui";
-import type { ICommentResponse, ISupabaseComment } from "@shared/interfaces";
+import type { ICommentResponse } from "@shared/interfaces";
 import { transformClerkUser } from "@shared/lib/transform-clerk-user";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
