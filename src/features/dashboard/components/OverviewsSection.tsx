@@ -5,8 +5,16 @@ import {
 	CardTitle,
 } from "@shared/components/ui";
 import { Code, MessageSquare } from "lucide-react";
+import { useEffect } from "react";
+import { useUserData } from "../hooks/useUserData";
 
 export const OverviewsSection = () => {
+	const { comments, projects, refreshData } = useUserData();
+
+	useEffect(() => {
+		refreshData();
+	}, []);
+
 	return (
 		<div className="grid gap-4 grid-cols-2">
 			<Card>
@@ -15,8 +23,7 @@ export const OverviewsSection = () => {
 					<Code className="h-4 w-4 text-muted-foreground" />
 				</CardHeader>
 				<CardContent>
-					<div className="text-2xl font-bold">4</div>
-					<p className="text-xs text-muted-foreground">+1 from last month</p>
+					<div className="text-2xl font-bold">{projects?.length || 0}</div>
 				</CardContent>
 			</Card>
 			<Card>
@@ -25,8 +32,7 @@ export const OverviewsSection = () => {
 					<MessageSquare className="h-4 w-4 text-muted-foreground" />
 				</CardHeader>
 				<CardContent>
-					<div className="text-2xl font-bold">24</div>
-					<p className="text-xs text-muted-foreground">+8 from last month</p>
+					<div className="text-2xl font-bold">{comments?.length || 0}</div>
 				</CardContent>
 			</Card>
 		</div>
