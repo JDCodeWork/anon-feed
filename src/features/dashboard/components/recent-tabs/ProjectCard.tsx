@@ -14,8 +14,9 @@ import { Link } from "react-router";
 interface Props {
 	project: ISupabaseProject;
 	commentsCount: Record<string, number>;
+	onDelete: (projectId: string) => void;
 }
-export const ProjectCard = ({ commentsCount, project }: Props) => {
+export const ProjectCard = ({ commentsCount, project, onDelete }: Props) => {
 	return (
 		<Card key={project.id} className="overflow-hidden">
 			<CardHeader>
@@ -56,6 +57,7 @@ export const ProjectCard = ({ commentsCount, project }: Props) => {
 				<Button
 					variant="outline"
 					className="flex-1 hover:text-red-600 hover:border-red-200 hover:bg-red-50"
+					onClick={() => onDelete(project.id)}
 				>
 					<Trash2 />
 				</Button>

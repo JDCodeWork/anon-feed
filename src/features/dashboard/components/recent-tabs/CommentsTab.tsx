@@ -1,14 +1,5 @@
 import { useUserData } from "@features/dashboard/hooks/useUserData";
-import { CATEGORIES } from "@features/submit/constants/project-creation.constant";
-import {
-	Avatar,
-	AvatarFallback,
-	AvatarImage,
-	Badge,
-	Button,
-	TabsContent,
-} from "@shared/components/ui";
-import { timeAgo } from "@shared/lib/time-ago";
+import { Button, TabsContent } from "@shared/components/ui";
 import { Link } from "react-router";
 import { CommentCard } from "./CommentCard";
 
