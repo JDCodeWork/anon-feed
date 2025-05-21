@@ -27,14 +27,14 @@ export const CommentCard = ({ comment, isOwned, onDelete }: Props) => {
 					<div className="flex items-center gap-2">
 						<Avatar className="h-8 w-8">
 							<AvatarImage
-								src={comment.author.image || "/placeholder.svg"}
-								alt={comment.author.name}
+								src={comment?.author.image || "/placeholder.svg"}
+								alt={comment?.author.name}
 							/>
-							<AvatarFallback>{comment.author.name.charAt(0)}</AvatarFallback>
+							<AvatarFallback>{comment?.author.name.charAt(0)}</AvatarFallback>
 						</Avatar>
 						<div>
 							<span className="font-medium">
-								{isOwned ? "Me" : comment.author.name}{" "}
+								{isOwned ? "Me" : comment?.author.name}{" "}
 							</span>
 							<p className="text-xs text-muted-foreground">
 								{timeAgo(comment.created_at)}

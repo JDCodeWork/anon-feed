@@ -16,6 +16,7 @@ export const CommentsList = ({ projectId }: Props) => {
 	const { data: comments } = useQuery({
 		queryKey: ["project", "comments", projectId],
 		queryFn: () => getProjectComments({ projectId }),
+		staleTime: 0,
 	});
 
 	const deleteCommentMutation = useMutation({
@@ -25,9 +26,11 @@ export const CommentsList = ({ projectId }: Props) => {
 				queryKey: ["project", "comments", projectId],
 			});
 
-			const previousComments = queryClient.getQueriesData({
-				queryKey: ["project", "comments", projectId],
-			});
+			const previousComments = queryClient.getQueryData([
+				"project",
+				"comments",
+				projectId,
+			]) as ICommentResponse[] | undefined;
 
 			queryClient.setQueryData(
 				["project", "comments", projectId],

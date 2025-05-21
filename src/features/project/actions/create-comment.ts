@@ -26,6 +26,8 @@ export const createComment = async ({
 		.eq("id", user.id);
 
 	if (userDb?.length == 0) {
+		delete (userDetails as any).created_at;
+
 		// creates the user if not already stored
 		const { error: createUserError } = await supabase
 			.from("users")
