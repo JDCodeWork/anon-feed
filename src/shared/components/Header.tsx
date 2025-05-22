@@ -27,14 +27,16 @@ export const Header = () => (
 				>
 					Projects
 				</NavLink>
-				<NavLink
-					to="/submit"
-					className={({ isActive }) =>
-						`text-sm ${isActive ? "font-semibold" : "font-medium"} hover:underline underline-offset-4`
-					}
-				>
-					Submit
-				</NavLink>
+				<SignedIn>
+					<NavLink
+						to="/submit"
+						className={({ isActive }) =>
+							`text-sm ${isActive ? "font-semibold" : "font-medium"} hover:underline underline-offset-4`
+						}
+					>
+						Submit
+					</NavLink>
+				</SignedIn>
 			</nav>
 			<div className="flex items-center gap-2">
 				<SignedOut>

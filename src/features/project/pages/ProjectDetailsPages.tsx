@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { lazy } from "react";
+import { lazy, useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 
 import { getProject } from "../actions/get-project";
@@ -22,6 +22,10 @@ const ProjectDetailPage = () => {
 	});
 
 	if (!project) navigate("/projects", { replace: true });
+
+	useEffect(() => {
+		if (project) document.title = project.title + " | AnonFeed";
+	}, [project]);
 
 	if (project)
 		return (
