@@ -10,7 +10,7 @@ import { ProjectCard } from "./ProjectCard";
 export const ProjectsTab = () => {
 	const queryClient = useQueryClient();
 	const { session } = useSession();
-	const { projects, commentsCount } = useUserData();
+	const { projects, commentsCount, isLoading } = useUserData();
 
 	const deleteProjectMutation = useMutation({
 		mutationFn: deleteProject,
@@ -72,14 +72,41 @@ export const ProjectsTab = () => {
 	return (
 		<TabsContent value="projects" className="space-y-4">
 			{projects.length > 0 ? (
-				<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-					{projects.map((project) => (
-						<ProjectCard
-							project={project}
-							commentsCount={commentsCount}
-							onDelete={handleDelete}
-						/>
-					))}
+				<div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+					{isLoading
+						? [...Array(3)].map((_, idx) => (
+								<div
+									key={idx}
+									className="animate-pulse rounded-xl border p-4 flex flex-col gap-4"
+								>
+									<div className="flex justify-between items-start">
+										<div>
+											<div className="h-6 w-32 bg-gray-200 rounded mb-2" />
+											<div className="h-4 w-20 bg-gray-200 rounded" />
+										</div>
+										<div className="h-6 w-16 bg-gray-200 rounded" />
+									</div>
+									<div className="aspect-video bg-gray-200 rounded-md mb-4" />
+									<div className="flex items-center justify-between w-full text-sm">
+										<div className="flex items-center gap-1">
+											<div className="h-4 w-4 bg-gray-200 rounded" />
+											<div className="h-4 w-8 bg-gray-200 rounded" />
+										</div>
+									</div>
+									<div className="flex gap-4 pt-0">
+										<div className="h-10 w-full bg-gray-200 rounded" />
+										<div className="h-10 w-full bg-gray-200 rounded" />
+										<div className="h-10 w-full bg-gray-200 rounded" />
+									</div>
+								</div>
+							))
+						: projects.map((project) => (
+								<ProjectCard
+									project={project}
+									commentsCount={commentsCount}
+									onDelete={handleDelete}
+								/>
+							))}
 				</div>
 			) : (
 				<div className="flex flex-col items-center justify-center py-16 text-gray-500 bg-gray-100 rounded-2xl">

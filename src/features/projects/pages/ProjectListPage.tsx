@@ -10,7 +10,9 @@ const ProjectsList = lazy(() => import("../components/ProjectsList"));
 const perPage = 6;
 
 const ProjectListPage = () => {
-	const { totalPages } = useProjectData({ perPage });
+	const {
+		data: { totalPages },
+	} = useProjectData({ perPage });
 
 	const scrollToTop = () => {
 		window.scrollTo({ top: 100, behavior: "smooth" });
