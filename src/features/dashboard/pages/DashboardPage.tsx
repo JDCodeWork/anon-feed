@@ -2,7 +2,7 @@ import { useSession } from "@clerk/clerk-react";
 import { Button } from "@shared/components/ui";
 import { Plus, RefreshCcw } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { OverviewsSection } from "../components/OverviewsSection";
 import { RecentTabs } from "../components/recent-tabs/RecentTabs";
 import { useUserData } from "../hooks/useUserData";
@@ -41,10 +41,12 @@ export const DashboardPage = () => {
 				{/*TODO: <SearchBar /> */}
 
 				<div className="flex gap-6">
-					<Button>
-						<Plus />
-						New Project
-					</Button>
+					<Link to="/submit">
+						<Button>
+							<Plus />
+							New Project
+						</Button>
+					</Link>
 					<Button
 						variant="outline"
 						size="icon"

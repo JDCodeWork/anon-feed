@@ -1,10 +1,9 @@
 import { useUserData } from "@features/dashboard/hooks/useUserData";
-import { Button, TabsContent } from "@shared/components/ui";
-import { Link } from "react-router";
+import { TabsContent } from "@shared/components/ui";
 import { CommentCard } from "./CommentCard";
 
 export const CommentsTab = () => {
-	const { comments } = useUserData();
+	const { comments, projects } = useUserData();
 
 	return (
 		<TabsContent value="feedback" className="space-y-4">
@@ -22,7 +21,13 @@ export const CommentsTab = () => {
 								key={comment.id}
 								className={`p-4 ${index !== comments.length - 1 ? "border-b" : ""}`}
 							>
-								<CommentCard comment={comment} />
+								<CommentCard
+									comment={comment}
+									projectName={
+										projects.find((p) => p.id == comment.project_id)?.title ||
+										""
+									}
+								/>
 							</div>
 						))
 					) : (
@@ -34,11 +39,6 @@ export const CommentsTab = () => {
 						</div>
 					)}
 				</div>
-			</div>
-			<div className="flex justify-center">
-				<Link to="/dashboard/feedback">
-					<Button variant="outline">View All Feedback</Button>
-				</Link>
 			</div>
 		</TabsContent>
 	);
