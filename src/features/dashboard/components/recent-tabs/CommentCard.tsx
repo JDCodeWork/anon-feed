@@ -10,8 +10,9 @@ import { timeAgo } from "@shared/lib/time-ago";
 
 interface Props {
 	comment: ICommentResponse;
+	projectName: string;
 }
-export const CommentCard = ({ comment }: Props) => {
+export const CommentCard = ({ comment, projectName }: Props) => {
 	return (
 		<div className="flex items-start gap-4">
 			<Avatar className="h-10 w-10">
@@ -29,7 +30,7 @@ export const CommentCard = ({ comment }: Props) => {
 							comment.category}
 					</Badge>
 				</div>
-				<p className="text-sm text-muted-foreground">on {"todo"}</p>
+				<p className="text-sm text-muted-foreground">on {projectName}</p>
 				<p className="text-sm">{comment.content}</p>
 				<div className="flex items-center gap-4 pt-1">
 					<p className="text-xs text-muted-foreground">

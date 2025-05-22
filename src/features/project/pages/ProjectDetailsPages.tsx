@@ -3,6 +3,7 @@ import { lazy } from "react";
 import { useNavigate, useParams } from "react-router";
 
 import { getProject } from "../actions/get-project";
+import { ScreenshotsSlider } from "../components/ScreenshotsSlider";
 import { ProjectHead } from "../components/project-head/ProjectHead";
 import { ProjectInfo } from "../components/project-info/ProjectInfo";
 
@@ -29,13 +30,7 @@ const ProjectDetailPage = () => {
 					<div className="lg:col-span-2">
 						<div className="flex flex-col gap-6">
 							<ProjectHead project={project} />
-							<div className="aspect-video overflow-hidden rounded-lg bg-muted">
-								<img
-									src={project?.screenshots[0] || "/placeholder.svg"}
-									alt={project?.title}
-									className="object-cover w-full h-full"
-								/>
-							</div>
+							<ScreenshotsSlider screenshots={project.screenshots} />
 
 							<ProjectTabs project={project} />
 						</div>

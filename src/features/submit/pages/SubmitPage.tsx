@@ -1,5 +1,5 @@
-import { lazy } from "react";
-import { Link } from "react-router";
+import { lazy, useEffect } from "react";
+import { Link, useNavigate } from "react-router";
 
 import {
 	Card,
@@ -10,11 +10,19 @@ import {
 	CardTitle,
 } from "@components/ui";
 
+import { useSession } from "@clerk/clerk-react";
 import { Guidelines } from "../components/Guidelines";
 
 const TabsForm = lazy(() => import("../components/tabs-form/TabsForm"));
 
 const SubmitPage = () => {
+	const navigate = useNavigate();
+	const { isSignedIn } = useSession();
+
+	useEffect(() => {
+		if (!isSignedIn) navigate("/");
+	}, [isSignedIn]);
+
 	return (
 		<div className="max-w-5xl mx-auto my-8">
 			<div className="flex flex-col gap-6">

@@ -1,8 +1,10 @@
-import { SignedIn, SignedOut } from "@clerk/clerk-react";
+import { SignedIn, SignedOut, useClerk } from "@clerk/clerk-react";
 import { Button } from "@components/ui/button";
 import { Link } from "react-router";
 
 export const HeroSection = () => {
+	const { openSignIn } = useClerk();
+
 	return (
 		<section className="w-full py-12 md:py-24 lg:py-32 bg-muted">
 			<div className="px-4 md:px-6 lg:px-8 xl:px-12">
@@ -23,9 +25,9 @@ export const HeroSection = () => {
 							</Link>
 						</SignedIn>
 						<SignedOut>
-							<Link to="/submit">
-								<Button size="lg">Submit Your Project</Button>
-							</Link>
+							<Button size="lg" onClick={() => openSignIn()}>
+								Submit Your Project
+							</Button>
 						</SignedOut>
 						<Link to="/projects">
 							<Button variant="outline" size="lg">
