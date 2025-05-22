@@ -8,7 +8,11 @@ export const useUserData = () => {
 
 	const { session } = useSession();
 
-	const { data: projects = [] } = useQuery({
+	const {
+		data: projects = [],
+		isLoading: isLoadingProjects,
+		isFetching: isFetchingProjects,
+	} = useQuery({
 		queryKey: ["projects", "user", session?.user.id],
 		queryFn: async () =>
 			getUserProjects({
@@ -19,7 +23,11 @@ export const useUserData = () => {
 
 	const projectsId = projects.map((project) => project.id);
 
-	const { data: comments = [] } = useQuery({
+	const {
+		data: comments = [],
+		isLoading: isLoadingComments,
+		isFetching: isFetchingComments,
+	} = useQuery({
 		queryKey: ["projects", "user", session?.user.id, "comments"],
 		queryFn: async () =>
 			getCommentsRelatedProjects({
@@ -51,5 +59,10 @@ export const useUserData = () => {
 		comments,
 		projects,
 		refreshData,
+		isLoading:
+			isLoadingProjects ||
+			isLoadingComments ||
+			isFetchingProjects ||
+			isFetchingComments,
 	};
 };

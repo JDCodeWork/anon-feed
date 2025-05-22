@@ -9,7 +9,7 @@ import { useEffect } from "react";
 import { useUserData } from "../hooks/useUserData";
 
 export const OverviewsSection = () => {
-	const { comments, projects, refreshData } = useUserData();
+	const { comments, projects, refreshData, isLoading } = useUserData();
 
 	useEffect(() => {
 		refreshData();
@@ -23,7 +23,13 @@ export const OverviewsSection = () => {
 					<Code className="h-4 w-4 text-muted-foreground" />
 				</CardHeader>
 				<CardContent>
-					<div className="text-2xl font-bold">{projects?.length || 0}</div>
+					<div className="text-2xl font-bold">
+						{isLoading ? (
+							<div className="h-8 w-6 bg-muted animate-pulse rounded-lg" />
+						) : (
+							projects?.length || 0
+						)}
+					</div>
 				</CardContent>
 			</Card>
 			<Card>
@@ -32,7 +38,13 @@ export const OverviewsSection = () => {
 					<MessageSquare className="h-4 w-4 text-muted-foreground" />
 				</CardHeader>
 				<CardContent>
-					<div className="text-2xl font-bold">{comments?.length || 0}</div>
+					<div className="text-2xl font-bold">
+						{isLoading ? (
+							<div className="h-8 w-6 bg-muted animate-pulse rounded-lg" />
+						) : (
+							comments?.length || 0
+						)}
+					</div>
 				</CardContent>
 			</Card>
 		</div>

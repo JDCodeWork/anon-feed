@@ -64,7 +64,11 @@ export const ProjectCard = ({ project }: Props) => {
 						</Avatar>
 						<span className="text-sm font-medium">{project.author.name}</span>
 					</div>
-					<CheckCircle className="h-4 w-4 text-green-500" />
+					{project.author.id.startsWith("user_") ? (
+						<CheckCircle className="h-4 w-4 text-green-500" />
+					) : (
+						""
+					)}
 				</div>
 				<div className="flex items-center justify-between w-full text-sm text-muted-foreground">
 					{/* 				<div className="flex items-center gap-1">

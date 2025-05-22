@@ -17,7 +17,11 @@ export const useProjectData = ({ perPage }: { perPage: number }) => {
 
 	const { currentPage } = usePagination({ totalPages });
 
-	const { data: paginatedData, error } = useQuery({
+	const {
+		data: paginatedData,
+		error,
+		isLoading,
+	} = useQuery({
 		queryKey: ["projects", { page: currentPage, filter }],
 		queryFn: () =>
 			getPaginatedProjects({
@@ -38,5 +42,5 @@ export const useProjectData = ({ perPage }: { perPage: number }) => {
 			setTotalPages(paginatedData?.totalPages || 0);
 	}, [paginatedData]);
 
-	return paginatedData ?? defaultData;
+	return { data: paginatedData ?? defaultData, isLoading };
 };
