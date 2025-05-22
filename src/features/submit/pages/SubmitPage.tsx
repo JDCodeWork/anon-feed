@@ -20,6 +20,10 @@ const SubmitPage = () => {
 	const { isSignedIn } = useSession();
 
 	useEffect(() => {
+		document.title = "Submit | AnonFeed";
+	}, []);
+
+	useEffect(() => {
 		if (!isSignedIn) navigate("/");
 	}, [isSignedIn]);
 

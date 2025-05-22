@@ -15,6 +15,10 @@ export const DashboardPage = () => {
 	const [isRefreshing, setIsRefreshing] = useState(false);
 
 	useEffect(() => {
+		document.title = "Dashboard | AnonFeed";
+	}, []);
+
+	useEffect(() => {
 		if (!isSignedIn) navigate("/");
 	}, [isSignedIn]);
 

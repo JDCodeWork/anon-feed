@@ -1,5 +1,5 @@
 import { ArrowUp } from "lucide-react";
-import { lazy } from "react";
+import { lazy, useEffect } from "react";
 
 import { Button } from "@shared/components/ui";
 import { ProjectsPagination } from "../components/ProjectsPagination";
@@ -13,6 +13,10 @@ const ProjectListPage = () => {
 	const {
 		data: { totalPages },
 	} = useProjectData({ perPage });
+
+	useEffect(() => {
+		document.title = "Projects | AnonFeed";
+	}, []);
 
 	const scrollToTop = () => {
 		window.scrollTo({ top: 100, behavior: "smooth" });
