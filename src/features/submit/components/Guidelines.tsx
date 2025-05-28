@@ -4,7 +4,7 @@ import {
 	CardDescription,
 	CardHeader,
 	CardTitle,
-} from "@components/ui/card";
+} from "@shared/components/ui/card";
 
 const guidelines = [
 	"Provide a clear and concise description of your project",

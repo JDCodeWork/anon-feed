@@ -8,7 +8,7 @@ import {
 	CardFooter,
 	CardHeader,
 	CardTitle,
-} from "@components/ui";
+} from "@shared/components/ui";
 
 import { useSession } from "@clerk/clerk-react";
 import { Guidelines } from "../components/Guidelines";

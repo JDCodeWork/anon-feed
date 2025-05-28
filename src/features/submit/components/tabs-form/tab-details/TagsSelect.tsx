@@ -1,7 +1,7 @@
-import { Badge, Label } from "@components/ui";
 import { TAGS } from "@features/submit/constants/project-creation.constant";
 import { useFormContext } from "@features/submit/context/FormContext";
 import { useTags } from "@features/submit/hooks/useTags";
+import { Badge, Label } from "@shared/components/ui";
 import { X } from "lucide-react";
 
 export const TagsSelect = () => {

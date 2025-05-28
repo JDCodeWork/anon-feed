@@ -1,5 +1,9 @@
 {
 	"compilerOptions": {
+    "rootDirs": [
+      ".",
+      "./.react-router/types"
+    ],
 		"baseUrl": ".",
 		"paths": {
       "@features/*": [
@@ -8,15 +12,9 @@
       "@shared/*": [
         "./src/shared/*"
       ],
-			"@components/*": [
-				"./src/shared/components/*"
+			"@app/*": [
+				"./src/app/*"
 			],
-			"@lib/*": [
-				"./src/shared/lib/*"
-			],
-			"@hooks/*": [
-				"./src/shared/hooks/*"
-			]
 		}
 	},
 	"files": [],

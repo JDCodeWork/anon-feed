@@ -9,7 +9,7 @@ import {
 	SelectValue,
 	TabsContent,
 	Textarea,
-} from "@components/ui";
+} from "@shared/components/ui";
 
 import { CATEGORIES } from "@features/submit/constants/project-creation.constant";
 import { useFormContext } from "@features/submit/context/FormContext";

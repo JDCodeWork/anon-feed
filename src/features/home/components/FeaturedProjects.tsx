@@ -1,5 +1,5 @@
-import { Button } from "@components/ui/button";
 import { ProjectCard } from "@features/projects/components/ProjectCard";
+import { Button } from "@shared/components/ui/button";
 import { Link } from "react-router";
 
 import { getPaginatedProjects } from "@features/projects";

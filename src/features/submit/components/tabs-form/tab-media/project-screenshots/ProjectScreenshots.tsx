@@ -1,5 +1,5 @@
-import { Label } from "@components/ui";
 import { useFormContext } from "@features/submit/context/FormContext";
+import { Label } from "@shared/components/ui";
 import { ImageDropzone } from "./ImageDropzone";
 import { ImageSlider } from "./ImageSlider";
 

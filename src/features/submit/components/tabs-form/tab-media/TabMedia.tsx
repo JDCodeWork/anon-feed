@@ -1,7 +1,7 @@
 import { Github, Globe } from "lucide-react";
 
-import { Button, Input, Label, TabsContent } from "@components/ui";
 import { useFormContext } from "@features/submit/context/FormContext";
+import { Button, Input, Label, TabsContent } from "@shared/components/ui";
 import clsx from "clsx";
 import { ProjectScreenshots } from "./project-screenshots/ProjectScreenshots";
 

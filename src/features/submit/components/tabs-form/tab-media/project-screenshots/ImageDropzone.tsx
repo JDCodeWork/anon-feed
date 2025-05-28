@@ -1,5 +1,5 @@
-import { Input } from "@components/ui";
 import { useFormContext } from "@features/submit/context/FormContext";
+import { Input } from "@shared/components/ui";
 import clsx from "clsx";
 import { Upload } from "lucide-react";
 import { useEffect, useState } from "react";
