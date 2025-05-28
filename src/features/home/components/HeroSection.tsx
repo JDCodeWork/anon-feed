@@ -1,5 +1,5 @@
 import { SignedIn, SignedOut, useClerk } from "@clerk/clerk-react";
-import { Button } from "@components/ui/button";
+import { Button } from "@shared/components/ui/button";
 import { Link } from "react-router";
 
 export const HeroSection = () => {

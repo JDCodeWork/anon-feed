@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    "rootDirs": [
+      ".",
+      "./.react-router/types"
+    ],
     "baseUrl": ".",
     "paths": {
       "@features/*": [
@@ -8,15 +12,9 @@
       "@shared/*": [
         "./src/shared/*"
       ],
-      "@components/*": [
-        "./src/shared/components/*"
-      ],
-      "@lib/*": [
-        "./src/shared/lib/*"
-      ],
-      "@hooks/*": [
-        "./src/shared/hooks/*"
-      ],
+			"@app/*": [
+				"./src/app/*"
+			],
     },
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
     "target": "ES2022",

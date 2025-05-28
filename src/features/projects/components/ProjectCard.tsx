@@ -1,15 +1,17 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@components/ui/avatar";
-import { Badge } from "@components/ui/badge";
-import { Button } from "@components/ui/button";
+import { CATEGORIES } from "@features/submit/constants/project-creation.constant";
 import {
+	Avatar,
+	AvatarFallback,
+	AvatarImage,
+	Badge,
+	Button,
 	Card,
 	CardContent,
 	CardDescription,
 	CardFooter,
 	CardHeader,
 	CardTitle,
-} from "@components/ui/card";
-import { CATEGORIES } from "@features/submit/constants/project-creation.constant";
+} from "@shared/components/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { CheckCircle } from "lucide-react";
 import { Link } from "react-router";

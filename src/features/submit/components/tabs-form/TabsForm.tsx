@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
 
-import { Tabs, TabsList, TabsTrigger } from "@components/ui";
+import { Tabs, TabsList, TabsTrigger } from "@shared/components/ui";
 
 import { type IProject, ProjectSchema } from "@features/projects";
 import { FormProvider } from "@features/submit/context/FormContext";

@@ -1,4 +1,9 @@
 import {
+	EXPERIENCE_LEVEL,
+	FEEDBACK_AREAS,
+} from "@features/submit/constants/project-creation.constant";
+import { useFormContext } from "@features/submit/context/FormContext";
+import {
 	Button,
 	Label,
 	Select,
@@ -8,12 +13,7 @@ import {
 	SelectValue,
 	TabsContent,
 	Textarea,
-} from "@components/ui";
-import {
-	EXPERIENCE_LEVEL,
-	FEEDBACK_AREAS,
-} from "@features/submit/constants/project-creation.constant";
-import { useFormContext } from "@features/submit/context/FormContext";
+} from "@shared/components/ui";
 import clsx from "clsx";
 
 interface Props {
