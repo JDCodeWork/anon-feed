@@ -1,15 +1,15 @@
+import { ProjectsPagination } from "@features/projects/components/ProjectsPagination";
+import { useProjectData } from "@features/projects/hooks/useProjectData";
+import { Button } from "@shared/components/ui";
 import { ArrowUp } from "lucide-react";
 import { lazy, useEffect } from "react";
 
-import { Button } from "@shared/components/ui";
-import { ProjectsPagination } from "../components/ProjectsPagination";
-import { useProjectData } from "../hooks/useProjectData";
-
-const ProjectsList = lazy(() => import("../components/ProjectsList"));
-
+const ProjectsList = lazy(
+	() => import("@features/projects/components/ProjectsList"),
+);
 const perPage = 6;
 
-const ProjectListPage = () => {
+const ProjectsPage = () => {
 	const {
 		data: { totalPages },
 	} = useProjectData({ perPage });
@@ -49,4 +49,4 @@ const ProjectListPage = () => {
 	);
 };
 
-export default ProjectListPage;
+export default ProjectsPage;

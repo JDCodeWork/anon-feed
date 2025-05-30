@@ -1,6 +1,5 @@
-import { lazy, useEffect } from "react";
-import { Link, useNavigate } from "react-router";
-
+import { useSession } from "@clerk/react-router";
+import { Guidelines } from "@features/submit/components/Guidelines";
 import {
 	Card,
 	CardContent,
@@ -9,13 +8,14 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@shared/components/ui";
+import { lazy, useEffect } from "react";
+import { Link, useNavigate } from "react-router";
 
-import { useSession } from "@clerk/clerk-react";
-import { Guidelines } from "../components/Guidelines";
+const TabsForm = lazy(
+	() => import("@features/submit/components/tabs-form/TabsForm"),
+);
 
-const TabsForm = lazy(() => import("../components/tabs-form/TabsForm"));
-
-const SubmitPage = () => {
+const SubmitHomePage = () => {
 	const navigate = useNavigate();
 	const { isSignedIn } = useSession();
 
@@ -69,4 +69,4 @@ const SubmitPage = () => {
 	);
 };
 
-export default SubmitPage;
+export default SubmitHomePage;

@@ -1,17 +1,16 @@
+import { getProject } from "@features/project/actions/get-project";
+import { ScreenshotsSlider } from "@features/project/components/ScreenshotsSlider";
+import { ProjectHead } from "@features/project/components/project-head/ProjectHead";
+import { ProjectInfo } from "@features/project/components/project-info/ProjectInfo";
 import { useQuery } from "@tanstack/react-query";
 import { lazy, useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 
-import { getProject } from "../actions/get-project";
-import { ScreenshotsSlider } from "../components/ScreenshotsSlider";
-import { ProjectHead } from "../components/project-head/ProjectHead";
-import { ProjectInfo } from "../components/project-info/ProjectInfo";
-
 const ProjectTabs = lazy(
-	() => import("../components/project-tabs/ProjectTabs"),
+	() => import("@features/project/components/project-tabs/ProjectTabs"),
 );
 
-const ProjectDetailPage = () => {
+const ProjectPage = () => {
 	const { id = "" } = useParams();
 	const navigate = useNavigate();
 
@@ -46,4 +45,4 @@ const ProjectDetailPage = () => {
 		);
 };
 
-export default ProjectDetailPage;
+export default ProjectPage;
