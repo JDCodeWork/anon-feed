@@ -1,9 +1,10 @@
 import { Outlet } from "react-router";
 import { Toaster } from "sonner";
-import { Footer } from "./components/Footer";
-import { Header } from "./components/Header";
 
-export const AppLayout = () => {
+import { Footer } from "@shared/components/Footer";
+import { Header } from "@shared/components/Header";
+
+const AppLayout = () => {
 	return (
 		<div className="flex flex-col min-h-screen">
 			<Header />
@@ -15,3 +16,5 @@ export const AppLayout = () => {
 		</div>
 	);
 };
+
+export default AppLayout;

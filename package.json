@@ -12,7 +12,7 @@
 		"prepare": "husky"
 	},
 	"dependencies": {
-		"@clerk/clerk-react": "^5.31.1",
+		"@clerk/react-router": "^1.4.8",
 		"@radix-ui/react-avatar": "^1.1.9",
 		"@radix-ui/react-label": "^2.1.6",
 		"@radix-ui/react-select": "^2.2.4",

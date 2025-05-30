@@ -2,7 +2,7 @@
 	"compilerOptions": {
     "rootDirs": [
       ".",
-      "./.react-router/types"
+      ".react-router/types"
     ],
 		"baseUrl": ".",
 		"paths": {
