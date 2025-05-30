@@ -1,22 +1,23 @@
-import { useSession } from "@clerk/clerk-react";
+import { useSession } from "@clerk/react-router";
+import { OverviewsSection } from "@features/dashboard/components/OverviewsSection";
+import { RecentTabs } from "@features/dashboard/components/recent-tabs/RecentTabs";
+import { useUserData } from "@features/dashboard/hooks/useUserData";
 import { Button } from "@shared/components/ui";
 import { Plus, RefreshCcw } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { OverviewsSection } from "../components/OverviewsSection";
-import { RecentTabs } from "../components/recent-tabs/RecentTabs";
-import { useUserData } from "../hooks/useUserData";
+import type { Route } from "./+types/dashboard";
 
-export const DashboardPage = () => {
+export const meta: Route.MetaFunction = () => [
+	{ title: "Dashboard - AnonFeed" },
+];
+
+const DashboardPage = () => {
 	const navigate = useNavigate();
 	const { isSignedIn, session } = useSession();
 	const { refreshData } = useUserData();
 
 	const [isRefreshing, setIsRefreshing] = useState(false);
-
-	useEffect(() => {
-		document.title = "Dashboard | AnonFeed";
-	}, []);
 
 	useEffect(() => {
 		if (!isSignedIn) navigate("/");
@@ -66,3 +67,5 @@ export const DashboardPage = () => {
 		</div>
 	);
 };
+
+export default DashboardPage;
