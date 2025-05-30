@@ -4,7 +4,7 @@ import {
 	SignedIn,
 	SignedOut,
 	UserButton,
-} from "@clerk/clerk-react";
+} from "@clerk/react-router";
 import { Button } from "@shared/components/ui/button";
 import { Code } from "lucide-react";
 import { Link, NavLink } from "react-router";

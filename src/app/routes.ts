@@ -1,6 +1,5 @@
-import { type RouteConfig, route } from "@react-router/dev/routes";
+import { type RouteConfig, index, layout } from "@react-router/dev/routes";
 
 export default [
-	// * matches all URLs, the ? makes it optional so it will match / as well
-	route("*?", "catchall.tsx"),
+	layout("app.layout.tsx", [index("catchall.tsx")]),
 ] satisfies RouteConfig;
