@@ -13,21 +13,23 @@ import type { Route } from "./+types/home";
 
 export async function loader(args: Route.LoaderArgs) {
 	try {
-		throw new Error("This is a test error to demonstrate error handling in the loader function.");
+		throw new Error(
+			"This is a test error to demonstrate error handling in the loader function.",
+		);
 		const { projects } = await getPaginatedProjects({
 			filter: "featured",
 			page: 1,
 			limit: 6,
 		});
 
-		return { projects }
+		return { projects };
 	} catch (error) {
-		return { error: "Failed to load featured projects" }
+		return { error: "Failed to load featured projects" };
 	}
 }
 
 export default function HomePage({ loaderData }: Route.ComponentProps) {
-	if( loaderData.error ) {
+	if (loaderData.error) {
 		toast.error(loaderData.error);
 	}
 
@@ -38,4 +40,3 @@ export default function HomePage({ loaderData }: Route.ComponentProps) {
 		</>
 	);
 }
-
