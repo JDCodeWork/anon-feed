@@ -68,7 +68,9 @@ const TabsForm = () => {
 		>
 			<Tabs {...handleTabs()} className="w-full">
 				<TabsList className="grid w-full grid-cols-3">
-					<TabsTrigger value="details">Project Details</TabsTrigger>
+					<TabsTrigger disabled value="details">
+						Project Details
+					</TabsTrigger>
 					<TabsTrigger value="media">Media & Links</TabsTrigger>
 					<TabsTrigger value="feedback">Feedback Goals</TabsTrigger>
 				</TabsList>

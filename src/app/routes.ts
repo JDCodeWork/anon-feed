@@ -15,9 +15,11 @@ export default [
 		route("project/:id", "routes/project.tsx"),
 
 		...prefix("submit", [
-			index("routes/submit/catch-all.ts"),
+			layout("layouts/submit.tsx", [
+				index("routes/submit/redirect.ts"),
 
-			route(":tab", "routes/submit/home.tsx"),
+				route("details", "routes/submit/details.tsx"),
+			]),
 		]),
 	]),
 ] satisfies RouteConfig;

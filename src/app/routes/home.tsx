@@ -7,7 +7,10 @@ import type { Route } from "./+types/home";
 export const meta = () => [
 	{
 		title: "AnonFeed",
-		description: "Discover and share projects anonymously",
+	},
+	{
+		name: "description",
+		content: "Discover and share innovative projects on AnonFeed.",
 	},
 ];
 
