@@ -2,24 +2,12 @@ import { ProjectCard } from "@features/projects/components/ProjectCard";
 import { Button } from "@shared/components/ui/button";
 import { Link } from "react-router";
 
-import { getPaginatedProjects } from "@features/projects";
-import { useQuery } from "@tanstack/react-query";
-import { toast } from "sonner";
+import type { IProjectResponse } from "@features/projects";
 
-export const FeaturedProjects = () => {
-	const { data: paginatedData, error } = useQuery({
-		queryKey: ["projects", "featured"],
-		queryFn: () =>
-			getPaginatedProjects({
-				filter: "featured",
-				page: 1,
-				limit: 6,
-			}),
-		staleTime: 1000 * 2,
-	});
-
-	if (error) toast.error("An error has occurred");
-
+interface Props {
+	projects: IProjectResponse[];
+}
+export const FeaturedProjects = ({ projects }: Props) => {
 	return (
 		<section className="w-full py-12 md:py-24 lg:py-32">
 			<div className="px-4 md:px-6 lg:px-8 xl:px-12">
@@ -34,7 +22,7 @@ export const FeaturedProjects = () => {
 						</p>
 					</div>
 					<div className="grid grid-cols-1 gap-8 lg:grid-cols-2 xl:grid-cols-3 w-full max-w-7xl">
-						{paginatedData?.projects.map((project) => (
+						{projects.map((project) => (
 							<ProjectCard key={project.id} project={project} />
 						))}
 					</div>
