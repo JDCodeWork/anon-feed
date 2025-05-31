@@ -7,15 +7,20 @@ import {
 	CardFooter,
 	CardHeader,
 	CardTitle,
+	Tabs,
+	TabsList,
+	TabsTrigger,
 } from "@shared/components/ui";
-import { lazy } from "react";
-import { Link, redirect } from "react-router";
-import type { Route } from "./+types/home";
+import { Link, Outlet, redirect } from "react-router";
+import type { Route } from "./+types/submit";
 
 export const meta = () => [
 	{
 		title: "Submit | AnonFeed",
-		description: "Submit your project to AnonFeed for feedback and visibility.",
+	},
+	{
+		name: "description",
+		content: "Submit your project to AnonFeed for feedback and visibility.",
 	},
 ];
 
@@ -27,11 +32,7 @@ export async function loader(args: Route.LoaderArgs) {
 	}
 }
 
-const TabsForm = lazy(
-	() => import("@features/submit/components/tabs-form/TabsForm"),
-);
-
-const SubmitHomePage = () => {
+const SubmitLayout = () => {
 	return (
 		<div className="max-w-5xl mx-auto my-8">
 			<div className="flex flex-col gap-6">
@@ -52,7 +53,21 @@ const SubmitHomePage = () => {
 						</div>
 					</CardHeader>
 					<CardContent>
-						<TabsForm />
+						<Tabs>
+							<TabsList className="grid w-full grid-cols-3">
+								<TabsTrigger value="details" data-state="active">
+									Project Details
+								</TabsTrigger>
+								<TabsTrigger disabled value="media">
+									Media & Links
+								</TabsTrigger>
+								<TabsTrigger disabled value="feedback">
+									Feedback Goals
+								</TabsTrigger>
+							</TabsList>
+
+							<Outlet />
+						</Tabs>
 					</CardContent>
 					<CardFooter className="flex flex-col gap-2 items-start">
 						<p className="text-sm text-muted-foreground">
@@ -74,4 +89,4 @@ const SubmitHomePage = () => {
 	);
 };
 
-export default SubmitHomePage;
+export default SubmitLayout;
