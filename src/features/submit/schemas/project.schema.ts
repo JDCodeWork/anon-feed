@@ -1,3 +1,4 @@
+import type { IProject } from "@features/projects";
 import z from "zod";
 
 const githubRepoRegex = {
@@ -33,14 +34,17 @@ export const ProjectDetailSchema = z.object({
 	tags: z.array(z.string().nonempty()).min(1).max(5),
 });
 
+export const ProjectMediaSchema = z.object({
+	screenshots: z.array(ScreenshotSchema).min(1).max(5),
+	githubRepo: z.string().refine(validateGithubRepo, {
+		message: "The format '<user>/<repository>' is not met.",
+	}),
+	liveDemo: liveDemoSchema,
+});
+
 export const ProjectSchema = z
 	.object({
 		featured: z.boolean(),
-		screenshots: z.array(ScreenshotSchema).min(1).max(5),
-		githubRepo: z.string().refine(validateGithubRepo, {
-			message: "The format '<user>/<repository>' is not met.",
-		}),
-		liveDemo: liveDemoSchema,
 		feedbackArea: z.enum([
 			"ui-ux",
 			"code-quality",
@@ -52,4 +56,7 @@ export const ProjectSchema = z
 		specificQuestions: z.string().min(24).max(480),
 		experienceLevel: z.enum(["beginner", "intermediate", "advanced", "expert"]),
 	})
-	.merge(ProjectDetailSchema);
+	.merge(ProjectDetailSchema)
+	.merge(ProjectMediaSchema);
+
+export type FormErrorsType = Partial<Record<keyof IProject, string>>;

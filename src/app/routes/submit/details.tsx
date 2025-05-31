@@ -19,6 +19,10 @@ import { Form, redirect } from "react-router";
 import { toast } from "sonner";
 import type { Route } from "./+types/details";
 
+import type { FormErrors } from "@features/submit/interfaces/form-errors";
+
+type DetailsFormErrors = FormErrors<typeof ProjectDetailSchema>;
+
 // This clientLoader function retrieves the initial values for the form
 export function clientLoader() {
 	const projectData = JSON.parse(
@@ -61,15 +65,13 @@ export async function clientAction({ request }: Route.ActionArgs) {
 
 	// If the data is invalid, return the errors to be displayed in the form
 	return {
-		errors: parsedData.error.flatten().fieldErrors as FormErrorsType,
+		errors: parsedData.error.flatten().fieldErrors,
 		message: "Please fix the errors in the form.",
 	};
 }
 
-type FormErrorsType = Partial<Record<keyof IProject, string>>;
-
-const details = ({ actionData, loaderData }: Route.ComponentProps) => {
-	const [errors, setErrors] = useState<FormErrorsType | null>(null);
+const DetailsTab = ({ actionData, loaderData }: Route.ComponentProps) => {
+	const [errors, setErrors] = useState<DetailsFormErrors | null>(null);
 	const { initialValues } = loaderData;
 
 	useEffect(() => {
@@ -83,7 +85,7 @@ const details = ({ actionData, loaderData }: Route.ComponentProps) => {
 		setErrors((prev) => {
 			if (!prev) return null;
 			const updated = { ...prev };
-			delete updated[name as keyof IProject];
+			delete updated[name as keyof DetailsFormErrors];
 			return updated;
 		});
 	};
@@ -189,4 +191,4 @@ const details = ({ actionData, loaderData }: Route.ComponentProps) => {
 	);
 };
 
-export default details;
+export default DetailsTab;

@@ -7,18 +7,11 @@ import { Navigation, Pagination } from "swiper/modules";
 // @ts-ignore
 import "swiper/css";
 
-export const ImageSlider = () => {
-	const {
-		formValues: { screenshots },
-		setFormValue,
-	} = useFormContext();
-
-	const onDeleteImage = (name: string) => {
-		const filteredImages = screenshots.filter((img) => img.name !== name);
-
-		setFormValue("screenshots", filteredImages);
-	};
-
+interface Props {
+	screenshots: File[];
+	onDelete: (name: string) => void;
+}
+export const ImageSlider = ({ onDelete, screenshots }: Props) => {
 	if (screenshots.length > 0)
 		return (
 			<div className="relative rounded-lg overflow-hidden group/slider">
@@ -54,7 +47,7 @@ export const ImageSlider = () => {
 							/>
 							<button
 								className="transition-opacity opacity-0 group-hover:opacity-75 hover:opacity-100 absolute top-4 right-4 bg-gray-600 cursor-pointer p-1 rounded-full"
-								onClick={() => onDeleteImage(name)}
+								onClick={() => onDelete(name)}
 							>
 								<X className="text-gray-100 size-6" />
 							</button>

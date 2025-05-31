@@ -19,6 +19,8 @@ export default [
 				index("routes/submit/redirect.ts"),
 
 				route("details", "routes/submit/details.tsx"),
+				route("media", "routes/submit/media.tsx"),
+				route("feedback", "routes/submit/feedback.tsx"),
 			]),
 		]),
 	]),

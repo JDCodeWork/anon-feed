@@ -27,12 +27,23 @@ export const meta = () => [
 export async function loader(args: Route.LoaderArgs) {
 	const { userId } = await getAuth(args);
 
+	const {
+		request: { url },
+	} = args;
+	const activeTab = url.split("/")[4];
+
 	if (!userId) {
 		return redirect("/");
 	}
+
+	return {
+		activeTab: activeTab || "details",
+	};
 }
 
-const SubmitLayout = () => {
+const SubmitLayout = ({ loaderData }: Route.ComponentProps) => {
+	const { activeTab } = loaderData;
+
 	return (
 		<div className="max-w-5xl mx-auto my-8">
 			<div className="flex flex-col gap-6">
@@ -53,17 +64,11 @@ const SubmitLayout = () => {
 						</div>
 					</CardHeader>
 					<CardContent>
-						<Tabs>
+						<Tabs value={activeTab}>
 							<TabsList className="grid w-full grid-cols-3">
-								<TabsTrigger value="details" data-state="active">
-									Project Details
-								</TabsTrigger>
-								<TabsTrigger disabled value="media">
-									Media & Links
-								</TabsTrigger>
-								<TabsTrigger disabled value="feedback">
-									Feedback Goals
-								</TabsTrigger>
+								<TabsTrigger value="details">Project Details</TabsTrigger>
+								<TabsTrigger value="media">Media & Links</TabsTrigger>
+								<TabsTrigger value="feedback">Feedback Goals</TabsTrigger>
 							</TabsList>
 
 							<Outlet />

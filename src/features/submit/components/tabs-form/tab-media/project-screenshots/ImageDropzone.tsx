@@ -11,13 +11,12 @@ const dropzoneOptions: DropzoneOptions = {
 	maxSize: 1048576, // 1 mb
 };
 
-export const ImageDropzone = () => {
-	const {
-		setFormValue,
-		formValues: { screenshots },
-		formErrors,
-		removeFormError,
-	} = useFormContext();
+interface Props {
+	errors: string[];
+	screenshots: File[];
+	onAdd: (files: File[]) => void;
+}
+export const ImageDropzone = ({ errors, screenshots, onAdd }: Props) => {
 	const [isErrorImages, setIsErrorImages] = useState(false);
 
 	const {
@@ -45,8 +44,7 @@ export const ImageDropzone = () => {
 				}
 			}
 
-			setFormValue("screenshots", [...screenshots, ...images]);
-			removeFormError("screenshots");
+			onAdd(images);
 		}
 	}, [acceptedFiles]);
 
@@ -55,9 +53,9 @@ export const ImageDropzone = () => {
 	}, [fileRejections.length]);
 
 	useEffect(() => {
-		if (formErrors.screenshots) setIsErrorImages(true);
+		if (errors.length > 0) setIsErrorImages(true);
 		else if (fileRejections.length == 0) setIsErrorImages(false);
-	}, [formErrors.screenshots]);
+	}, [errors.length, fileRejections.length]);
 
 	return (
 		<div
