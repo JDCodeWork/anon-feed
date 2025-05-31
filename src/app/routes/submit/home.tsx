@@ -1,4 +1,4 @@
-import { useSession } from "@clerk/react-router";
+import { getAuth } from "@clerk/react-router/ssr.server";
 import { Guidelines } from "@features/submit/components/Guidelines";
 import {
 	Card,
@@ -8,25 +8,30 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@shared/components/ui";
-import { lazy, useEffect } from "react";
-import { Link, useNavigate } from "react-router";
+import { lazy } from "react";
+import { Link, redirect } from "react-router";
+import type { Route } from "./+types/home";
+
+export const meta = () => [
+	{
+		title: "Submit | AnonFeed",
+		description: "Submit your project to AnonFeed for feedback and visibility.",
+	},
+];
+
+export async function loader(args: Route.LoaderArgs) {
+	const { userId } = await getAuth(args);
+
+	if (!userId) {
+		return redirect("/");
+	}
+}
 
 const TabsForm = lazy(
 	() => import("@features/submit/components/tabs-form/TabsForm"),
 );
 
 const SubmitHomePage = () => {
-	const navigate = useNavigate();
-	const { isSignedIn } = useSession();
-
-	useEffect(() => {
-		document.title = "Submit | AnonFeed";
-	}, []);
-
-	useEffect(() => {
-		if (!isSignedIn) navigate("/");
-	}, [isSignedIn]);
-
 	return (
 		<div className="max-w-5xl mx-auto my-8">
 			<div className="flex flex-col gap-6">
