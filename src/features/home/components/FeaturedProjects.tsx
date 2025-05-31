@@ -1,5 +1,5 @@
 import { ProjectCard } from "@features/projects/components/ProjectCard";
-import { Button } from "@shared/components/ui/button";
+import { Button } from "@shared/components/ui";
 import { Link } from "react-router";
 
 import type { IProjectResponse } from "@features/projects";
