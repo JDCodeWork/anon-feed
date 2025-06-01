@@ -40,7 +40,14 @@ export const ImageDropzone = ({ errors, screenshots, onChange }: Props) => {
 		if (screenshots.length <= 5 && fetcher?.data?.screenshots) {
 			onChange(fetcher?.data?.screenshots);
 		}
-	}, [screenshots, fetcher]);
+
+		if (fetcher.data?.errors?.screenshots) {
+			setIsErrorImages(true);
+			setTimeout(() => {
+				setIsErrorImages(false);
+			}, 1000);
+		}
+	}, [fetcher.data]);
 
 	return (
 		<div
@@ -82,12 +89,13 @@ export const ImageDropzone = ({ errors, screenshots, onChange }: Props) => {
 				</p>
 				<fetcher.Form
 					method="post"
-					action="/submit/media/preview-image/create"
+					action="/submit/actions/preview-image/create"
 					encType="multipart/form-data"
 				>
 					<Input
 						type="file"
 						{...getInputProps()}
+						multiple={false}
 						name="screenshots"
 						onChange={(e) => fetcher.submit(e.currentTarget.form)}
 					/>

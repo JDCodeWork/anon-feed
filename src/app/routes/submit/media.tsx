@@ -2,12 +2,15 @@ import { Button, Input, Label } from "@shared/components/ui";
 import clsx from "clsx";
 import { Github, Globe } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Form, redirect, useNavigate } from "react-router";
+import { Form, redirect, useFetcher, useNavigate } from "react-router";
 import type { Route } from "./+types/media";
 
-import type { IProject } from "@features/projects";
-import { ImageDropzone } from "@features/submit/components/tabs-form/tab-media/project-screenshots/ImageDropzone";
-import { ImageSlider } from "@features/submit/components/tabs-form/tab-media/project-screenshots/ImageSlider";
+import type { loader } from "@app/actions/submit/get-preview-images";
+import {
+	ImageDropzone,
+	ImageSlider,
+	type Screenshot,
+} from "@features/submit/components/";
 import type { FormErrors } from "@features/submit/interfaces/form-errors";
 import { ProjectMediaSchema } from "@features/submit/schemas/project.schema";
 import { toast } from "sonner";
@@ -61,11 +64,27 @@ type MediaFormErrors = FormErrors<typeof ProjectMediaSchema>;
 
 const MediaTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 	const navigate = useNavigate();
+	const fetcher = useFetcher<typeof loader>();
+
+	const { initialValues } = loaderData;
+	const [images, setImages] = useState<Screenshot[]>(
+		initialValues?.screenshots || [],
+	);
+
+	useEffect(() => {
+		fetcher.submit(
+			{},
+			{ action: "/submit/actions/preview-image/get", method: "get" },
+		);
+	}, []);
+
+	useEffect(() => {
+		if (fetcher.data?.screenshots && images.length === 0) {
+			setImages(fetcher.data.screenshots);
+		}
+	}, [fetcher.data]);
 
 	const [errors, setErrors] = useState<MediaFormErrors | null>(null);
-	const { initialValues } = loaderData;
-
-	const [images, setImages] = useState<string[]>([]);
 
 	useEffect(() => {
 		if (actionData?.errors) {
@@ -83,10 +102,16 @@ const MediaTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 		});
 	};
 
-	const changeImages = (images: string[]) => {
+	const changeImages = (images: Screenshot[]) => {
+		console.log("1");
 		setImages(images);
+
 		handleErrorChange("screenshots");
 	};
+
+	useEffect(() => {
+		console.log("images", images);
+	}, [images]);
 
 	return (
 		<Form className="mt-6 space-y-6" method="post">
@@ -95,13 +120,12 @@ const MediaTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 					Project Screenshots
 					{errors?.screenshots && <span className="text-red-600">*</span>}
 				</Label>
-				{/* TODO: Send image to clientAction */}
 				<ImageDropzone
 					errors={errors?.screenshots || []}
 					screenshots={images}
 					onChange={changeImages}
 				/>
-				<ImageSlider screenshots={images} onDelete={() => {}} />
+				<ImageSlider screenshots={images} onChange={changeImages} />
 			</div>
 
 			<div className="grid gap-3">
@@ -123,7 +147,7 @@ const MediaTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 					<Input
 						name="githubRepo"
 						placeholder="username/repository"
-						defaultValue={initialValues.githubRepo || ""}
+						defaultValue={initialValues?.githubRepo || ""}
 						onChange={(e) => handleErrorChange("githubRepo")}
 						className={clsx(
 							"rounded-l-none",
@@ -153,7 +177,7 @@ const MediaTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 					<Input
 						name="liveDemo"
 						placeholder="your-project-demo.com"
-						defaultValue={initialValues.liveDemo || ""}
+						defaultValue={initialValues?.liveDemo || ""}
 						onChange={(e) => handleErrorChange("liveDemo")}
 						className={clsx(
 							"rounded-l-none",

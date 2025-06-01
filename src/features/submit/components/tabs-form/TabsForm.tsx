@@ -11,9 +11,9 @@ import { useSession } from "@clerk/clerk-react";
 import { createProject } from "@features/submit/actions/create-project";
 import { transformClerkUser } from "@shared/lib/transform-clerk-user";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { TabMedia } from "../media-screenshots/TabMedia";
 import { TabFeedback } from "./TabFeedback";
 import { TabDetails } from "./tab-details/TabDetails";
-import { TabMedia } from "./tab-media/TabMedia";
 
 const TabsForm = () => {
 	const navigate = useNavigate();

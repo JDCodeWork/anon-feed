@@ -6,13 +6,26 @@ import { Navigation, Pagination } from "swiper/modules";
 
 // @ts-ignore
 import "swiper/css";
-import type { Screenshot } from "./ImageDropzone";
+import type { action } from "@app/actions/submit/delete-preview-image";
+import { useFetcher } from "react-router";
+import type { Screenshot } from "../ImageDropzone";
 
 interface Props {
 	screenshots: Screenshot[];
-	onDelete: (name: string) => void;
+	onChange: (screenshots: Screenshot[]) => void;
 }
-export const ImageSlider = ({ onDelete, screenshots }: Props) => {
+export const ImageSlider = ({ onChange, screenshots }: Props) => {
+	const fetcher = useFetcher<typeof action>();
+
+	const onDelete = (name: string) => {
+		fetcher.submit(
+			{ imageName: name },
+			{ action: "/submit/actions/preview-image/delete", method: "delete" },
+		);
+
+		onChange(screenshots.filter((screenshot) => screenshot.name !== name));
+	};
+
 	if (screenshots.length > 0)
 		return (
 			<div className="relative rounded-lg overflow-hidden group/slider">
@@ -52,6 +65,11 @@ export const ImageSlider = ({ onDelete, screenshots }: Props) => {
 							>
 								<X className="text-gray-100 size-6" />
 							</button>
+							{name.startsWith("preview") && (
+								<span className="absolute bottom-2 left-2 transition-colors bg-gray-600/50 group-hover:bg-gray-800/75 text-gray-200 text-xs px-2 py-1 rounded select-none">
+									preview
+								</span>
+							)}
 						</SwiperSlide>
 					))}
 				</Swiper>

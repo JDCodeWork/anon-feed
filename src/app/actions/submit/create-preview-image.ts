@@ -4,6 +4,7 @@ import { createSupabase } from "@shared/lib/supabase";
 import { redirect } from "react-router";
 import type { Route } from "./+types/create-preview-image";
 
+// Action to handle the upload of a preview image for a project submission
 export const action = async (args: Route.ActionArgs) => {
 	const { userId, getToken } = await getAuth(args);
 	if (!userId) return redirect("/");
@@ -60,13 +61,14 @@ export const action = async (args: Route.ActionArgs) => {
 			},
 		};
 
+	const fileName = !(data || []).some((f) => f.name.startsWith("preview"))
+		? `preview-${crypto.randomUUID()}.${uploadedFile.type.split("/")[1]}`
+		: `${crypto.randomUUID()}-${uploadedFile.name}`;
+
 	// Upload the file to Supabase storage
 	const { data: uploadData, error: screenshotError } = await supabase.storage
 		.from("screenshots")
-		.upload(
-			`${userId}/${tempProjectId}/${Math.random()}_${uploadedFile.name}`,
-			fileBlob,
-		);
+		.upload(`${userId}/${tempProjectId}/${fileName}`, fileBlob);
 
 	if (screenshotError) {
 		return {
