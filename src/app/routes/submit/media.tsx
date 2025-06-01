@@ -33,8 +33,6 @@ export async function clientAction({ request }: Route.ActionArgs) {
 		string
 	>;
 
-	console.log("rawData", rawData);
-
 	const parsedData = ProjectMediaSchema.safeParse(rawData);
 
 	// If the data is valid, save it to localStorage and redirect to the next step
@@ -67,7 +65,7 @@ const MediaTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 	const [errors, setErrors] = useState<MediaFormErrors | null>(null);
 	const { initialValues } = loaderData;
 
-	const [images, setImages] = useState<File[]>([]);
+	const [images, setImages] = useState<string[]>([]);
 
 	useEffect(() => {
 		if (actionData?.errors) {
@@ -85,12 +83,8 @@ const MediaTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 		});
 	};
 
-	const handleAddImage = (files: File[]) => {
-		setImages((prev) => [...prev, ...files]);
-		handleErrorChange("screenshots");
-	};
-	const handleDeleteImage = (name: string) => {
-		setImages((prev) => prev.filter((file) => file.name !== name));
+	const changeImages = (images: string[]) => {
+		setImages(images);
 		handleErrorChange("screenshots");
 	};
 
@@ -105,9 +99,9 @@ const MediaTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 				<ImageDropzone
 					errors={errors?.screenshots || []}
 					screenshots={images}
-					onAdd={handleAddImage}
+					onChange={changeImages}
 				/>
-				<ImageSlider screenshots={images} onDelete={handleDeleteImage} />
+				<ImageSlider screenshots={images} onDelete={() => {}} />
 			</div>
 
 			<div className="grid gap-3">

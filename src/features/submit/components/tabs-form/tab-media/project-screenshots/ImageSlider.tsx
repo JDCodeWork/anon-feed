@@ -6,9 +6,10 @@ import { Navigation, Pagination } from "swiper/modules";
 
 // @ts-ignore
 import "swiper/css";
+import type { Screenshot } from "./ImageDropzone";
 
 interface Props {
-	screenshots: File[];
+	screenshots: Screenshot[];
 	onDelete: (name: string) => void;
 }
 export const ImageSlider = ({ onDelete, screenshots }: Props) => {
@@ -39,10 +40,10 @@ export const ImageSlider = ({ onDelete, screenshots }: Props) => {
 					slidesPerView={2}
 					className="w-full h-[280px] relative"
 				>
-					{screenshots.map(({ name, preview }: any) => (
-						<SwiperSlide key={name} className="flex group">
+					{screenshots.map(({ url, name }) => (
+						<SwiperSlide key={url} className="flex group">
 							<img
-								src={preview}
+								src={url}
 								className="block size-full object-cover rounded-lg object-left select-none"
 							/>
 							<button

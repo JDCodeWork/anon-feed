@@ -21,6 +21,12 @@ export default [
 				route("details", "routes/submit/details.tsx"),
 				route("media", "routes/submit/media.tsx"),
 				route("feedback", "routes/submit/feedback.tsx"),
+
+				// actions
+				route(
+					"media/preview-image/create",
+					"actions/submit/create-preview-image.ts",
+				),
 			]),
 		]),
 	]),

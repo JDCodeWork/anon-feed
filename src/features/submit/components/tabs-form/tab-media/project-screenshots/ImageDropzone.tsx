@@ -1,52 +1,31 @@
+import type { action } from "@app/actions/submit/create-preview-image";
 import { useFormContext } from "@features/submit/context/FormContext";
 import { Input } from "@shared/components/ui";
 import clsx from "clsx";
 import { Upload } from "lucide-react";
 import { useEffect, useState } from "react";
 import { type DropzoneOptions, useDropzone } from "react-dropzone";
+import { useFetcher } from "react-router";
 
 const dropzoneOptions: DropzoneOptions = {
 	accept: { "image/png": [], "image/jpeg": [], "image/webp": [] },
-	maxFiles: 5,
+	maxFiles: 1,
 	maxSize: 1048576, // 1 mb
 };
 
+export type Screenshot = { url: string; name: string };
+
 interface Props {
 	errors: string[];
-	screenshots: File[];
-	onAdd: (files: File[]) => void;
+	screenshots: Screenshot[];
+	onChange: (screenshots: Screenshot[]) => void;
 }
-export const ImageDropzone = ({ errors, screenshots, onAdd }: Props) => {
+export const ImageDropzone = ({ errors, screenshots, onChange }: Props) => {
+	const fetcher = useFetcher<typeof action>();
 	const [isErrorImages, setIsErrorImages] = useState(false);
 
-	const {
-		getRootProps,
-		getInputProps,
-		isDragActive,
-		acceptedFiles,
-		fileRejections,
-	} = useDropzone(dropzoneOptions);
-
-	useEffect(() => {
-		if (acceptedFiles.length > 0) {
-			let images = [];
-
-			for (const file of acceptedFiles) {
-				if (images.length + screenshots.length < 5) {
-					(file as any).preview = URL.createObjectURL(file);
-
-					images.push(file);
-				} else {
-					setIsErrorImages(true);
-					setTimeout(() => {
-						setIsErrorImages(false);
-					}, 3000);
-				}
-			}
-
-			onAdd(images);
-		}
-	}, [acceptedFiles]);
+	const { getRootProps, getInputProps, isDragActive, fileRejections } =
+		useDropzone(dropzoneOptions);
 
 	useEffect(() => {
 		setIsErrorImages(fileRejections.length != 0);
@@ -56,6 +35,12 @@ export const ImageDropzone = ({ errors, screenshots, onAdd }: Props) => {
 		if (errors.length > 0) setIsErrorImages(true);
 		else if (fileRejections.length == 0) setIsErrorImages(false);
 	}, [errors.length, fileRejections.length]);
+
+	useEffect(() => {
+		if (screenshots.length <= 5 && fetcher?.data?.screenshots) {
+			onChange(fetcher?.data?.screenshots);
+		}
+	}, [screenshots, fetcher]);
 
 	return (
 		<div
@@ -95,7 +80,18 @@ export const ImageDropzone = ({ errors, screenshots, onAdd }: Props) => {
 				>
 					Upload up to 5 images (PNG, JPG, WebP)
 				</p>
-				<Input type="file" {...getInputProps()} />
+				<fetcher.Form
+					method="post"
+					action="/submit/media/preview-image/create"
+					encType="multipart/form-data"
+				>
+					<Input
+						type="file"
+						{...getInputProps()}
+						name="screenshots"
+						onChange={(e) => fetcher.submit(e.currentTarget.form)}
+					/>
+				</fetcher.Form>
 			</div>
 		</div>
 	);
