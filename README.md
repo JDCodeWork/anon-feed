@@ -30,7 +30,7 @@ Recibir comentarios útiles sobre un proyecto puede ser lento, sesgado o poco co
 
 ## 🔗 Deploy
 
-> https://anon-feed.netlify.app
+> Trabajando en ello...
 
 ---
 
