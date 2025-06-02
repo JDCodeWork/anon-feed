@@ -46,7 +46,9 @@ export const ImageSlider = ({ screenshots }: Props) => {
 							/>
 							<button
 								type="submit"
-								formAction="?intent=delete/img-preview"
+								formAction="/submit/media?intent=delete/img-preview"
+								name="imageName"
+								value={name}
 								className="transition-opacity opacity-0 group-hover:opacity-75 hover:opacity-100 absolute top-4 right-4 bg-gray-600 cursor-pointer p-1 rounded-full"
 							>
 								<X className="text-gray-100 size-6" />

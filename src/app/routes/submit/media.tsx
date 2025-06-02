@@ -23,7 +23,7 @@ import { checkForm } from "@features/submit/utils/check-form";
 import { saveToLocalStorage } from "@features/submit/utils/save-to-local-storage";
 import { toast } from "sonner";
 
-export const loader = async (args: Route.LoaderArgs) => {
+export async function loader(args: Route.LoaderArgs) {
 	const { userId, getToken } = await getAuth(args);
 	if (!userId) return redirect("/");
 
@@ -31,30 +31,9 @@ export const loader = async (args: Route.LoaderArgs) => {
 	const res = await getAllImgPreviews({ token, userId });
 
 	return { screenshots: res.screenshots || [] };
-};
+}
 
-export const clientLoader = async ({
-	serverLoader,
-}: Route.ClientLoaderArgs) => {
-	const projectData = JSON.parse(
-		localStorage.getItem("submit-project") || "{}",
-	);
-
-	const media = projectData.media || {};
-
-	const res = await serverLoader();
-
-	if (res.screenshots && res.screenshots.length > 0) {
-		media.screenshots = res.screenshots;
-	}
-
-	return {
-		initialValues: media,
-	};
-};
-type ClientLoaderData = Awaited<ReturnType<typeof clientLoader>>;
-
-export const action = async (args: Route.ActionArgs) => {
+export async function action(args: Route.ActionArgs) {
 	const clonedRequest = args.request.clone();
 
 	const { userId, getToken } = await getAuth(args);
@@ -74,8 +53,13 @@ export const action = async (args: Route.ActionArgs) => {
 					token,
 				});
 
+			console.log("createError", createError);
+
 			if (createError) {
+				console.log("a");
+
 				return {
+					success: false,
 					errors: {
 						screenshots: createError,
 					},
@@ -84,21 +68,6 @@ export const action = async (args: Route.ActionArgs) => {
 			}
 
 			return { success: createSuccess };
-		case "next":
-			formData = await args.request.formData();
-			const check = checkForm(formData, ProjectMediaSchema);
-
-			if (!check.success) {
-				return {
-					errors: check.errors,
-					message: check.message,
-				};
-			}
-
-			return {
-				success: true,
-				data: check.data,
-			};
 		case "delete/img-preview":
 			formData = await args.request.formData();
 
@@ -119,6 +88,21 @@ export const action = async (args: Route.ActionArgs) => {
 			}
 
 			return { success: deleteSuccess };
+		case "next":
+			formData = await args.request.formData();
+			const check = checkForm(formData, ProjectMediaSchema);
+
+			if (!check.success) {
+				return {
+					errors: check.errors,
+					message: check.message,
+				};
+			}
+
+			return {
+				success: true,
+				data: check.data,
+			};
 		default:
 			return {
 				errors: {
@@ -126,7 +110,7 @@ export const action = async (args: Route.ActionArgs) => {
 				},
 			};
 	}
-};
+}
 
 type MediaFormErrors = FormErrors<typeof ProjectMediaSchema>;
 
@@ -134,17 +118,19 @@ type MediaFormErrors = FormErrors<typeof ProjectMediaSchema>;
 const MediaTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 	const navigate = useNavigate();
 
-	const { initialValues } = loaderData as ClientLoaderData;
+	const { screenshots } = loaderData;
 
 	const [errors, setErrors] = useState<MediaFormErrors | null>(null);
 
 	useEffect(() => {
-		if (actionData?.errors) {
+		if (!actionData?.success && actionData?.errors) {
 			setErrors(actionData.errors as any);
 			toast.error(actionData.message);
 		}
+	}, [actionData]);
 
-		if (actionData?.success) {
+	useEffect(() => {
+		if (actionData?.success && actionData?.data) {
 			saveToLocalStorage("submit-project", {
 				media: actionData.data,
 			});
@@ -175,9 +161,9 @@ const MediaTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 				</Label>
 				<ImageDropzone
 					error={errors?.screenshots || []}
-					screenshots={initialValues?.images || []}
+					screenshots={screenshots}
 				/>
-				<ImageSlider screenshots={initialValues?.images || []} />
+				<ImageSlider screenshots={screenshots} />
 			</div>
 
 			<div className="grid gap-3">
@@ -199,7 +185,7 @@ const MediaTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 					<Input
 						name="githubRepo"
 						placeholder="username/repository"
-						defaultValue={initialValues?.githubRepo || ""}
+						/* 						defaultValue={initialValues?.githubRepo || ""} */
 						onChange={(e) => handleErrorChange("githubRepo")}
 						className={clsx(
 							"rounded-l-none",
@@ -229,7 +215,7 @@ const MediaTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 					<Input
 						name="liveDemo"
 						placeholder="your-project-demo.com"
-						defaultValue={initialValues?.liveDemo || ""}
+						/* 						defaultValue={initialValues?.liveDemo || ""} */
 						onChange={(e) => handleErrorChange("liveDemo")}
 						className={clsx(
 							"rounded-l-none",
@@ -248,7 +234,7 @@ const MediaTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 				>
 					Previous: Details
 				</Button>
-				<Button formAction="?intent=next" type="submit">
+				<Button formAction="/submit/media?intent=next" type="submit">
 					Next: Feedback Goals
 				</Button>
 			</div>

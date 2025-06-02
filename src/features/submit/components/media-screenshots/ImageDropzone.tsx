@@ -17,13 +17,19 @@ interface Props {
 	error: string[];
 	screenshots: Screenshot[];
 }
-export const ImageDropzone = ({ error }: Props) => {
+export const ImageDropzone = ({ error, screenshots }: Props) => {
 	const [isErrorImages, setIsErrorImages] = useState(false);
 
 	const fetcher = useFetcher();
 
-	const { getRootProps, getInputProps, isDragActive, fileRejections } =
-		useDropzone(dropzoneOptions);
+	const {
+		getRootProps,
+		getInputProps,
+		isDragActive,
+		fileRejections,
+		acceptedFiles,
+		inputRef,
+	} = useDropzone(dropzoneOptions);
 
 	useEffect(() => {
 		setIsErrorImages(fileRejections.length != 0);
@@ -35,13 +41,39 @@ export const ImageDropzone = ({ error }: Props) => {
 	}, [error.length, fileRejections.length]);
 
 	useEffect(() => {
-		if (error) {
+		if (error.length > 0) {
 			setIsErrorImages(true);
 			setTimeout(() => {
 				setIsErrorImages(false);
 			}, 1000);
 		}
 	}, [error]);
+
+	useEffect(() => {
+		if (acceptedFiles.length > 0) {
+			let images = [];
+
+			for (const file of acceptedFiles) {
+				if (images.length + screenshots.length < 5) {
+					(file as any).preview = URL.createObjectURL(file);
+
+					images.push(file);
+				} else {
+					setIsErrorImages(true);
+					setTimeout(() => {
+						setIsErrorImages(false);
+					}, 3000);
+				}
+			}
+
+			setTimeout(() => {
+				fetcher.submit(inputRef.current?.form, {
+					method: "post",
+					action: "/submit/media?intent=create/img-preview",
+				});
+			}, 100);
+		}
+	}, [acceptedFiles]);
 
 	return (
 		<div
@@ -62,11 +94,15 @@ export const ImageDropzone = ({ error }: Props) => {
 					className={clsx(
 						"size-8",
 						isDragActive && "text-sky-500",
-						isErrorImages && "text-red-400",
+						!isDragActive && isErrorImages && "text-red-400",
 						!isDragActive && !isErrorImages && "text-muted-foreground",
 					)}
 				/>
-				<h3 className={isErrorImages ? "text-red-600" : "font-medium"}>
+				<h3
+					className={
+						!isDragActive && isErrorImages ? "text-red-600" : "font-medium"
+					}
+				>
 					{isErrorImages
 						? "Only 5 images smaller than 1 MB are allowed"
 						: isDragActive
@@ -76,7 +112,9 @@ export const ImageDropzone = ({ error }: Props) => {
 				<p
 					className={clsx(
 						"text-sm",
-						isErrorImages ? "text-red-300" : "text-muted-foreground",
+						!isDragActive && isErrorImages
+							? "text-red-300"
+							: "text-muted-foreground",
 					)}
 				>
 					Upload up to 5 images (PNG, JPG, WebP)
@@ -84,13 +122,12 @@ export const ImageDropzone = ({ error }: Props) => {
 				<Input
 					type="file"
 					{...getInputProps()}
-					multiple={false}
 					accept="image/png, image/jpeg, image/webp"
 					name="screenshots"
 					onChange={(e) =>
 						fetcher.submit(e.currentTarget.form, {
 							method: "post",
-							action: "?intent=create/img-preview",
+							action: "/submit/media?intent=create/img-preview",
 						})
 					}
 				/>
