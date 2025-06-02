@@ -1,25 +1,20 @@
-import { getAuth } from "@clerk/react-router/ssr.server";
 import { createSupabase } from "@shared/lib/supabase";
-import { redirect } from "react-router";
-import type { Route } from "./+types/get-preview-images";
 
-// Loader to get preview images for a project submission
-export const loader = async (args: Route.ActionArgs) => {
-	const { userId, getToken } = await getAuth(args);
-	if (!userId) return redirect("/");
-
+interface Args {
+	userId: string;
+	token: string;
+}
+export const getAllImgPreviews = async ({ token, userId }: Args) => {
 	const projectId = `temp-${userId}`;
 
-	const supabase = createSupabase(await getToken());
+	const supabase = createSupabase(token);
 	const { data, error } = await supabase.storage
 		.from("screenshots")
 		.list(`${userId}/${projectId}`, { limit: 5 });
 
 	if (error) {
 		return {
-			errors: {
-				screenshots: "Failed to retrieve screenshots.",
-			},
+			error: "Failed to retrieve screenshots.",
 		};
 	}
 

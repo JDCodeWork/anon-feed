@@ -1,16 +1,12 @@
-import { getAuth } from "@clerk/react-router/ssr.server";
 import { type FileUpload, parseFormData } from "@mjackson/form-data-parser";
 import { createSupabase } from "@shared/lib/supabase";
-import { redirect } from "react-router";
-import type { Route } from "./+types/create-preview-image";
 
-// Action to handle the upload of a preview image for a project submission
-export const action = async (args: Route.ActionArgs) => {
-	const { userId, getToken } = await getAuth(args);
-	if (!userId) return redirect("/");
-
-	const { request } = args;
-
+interface Args {
+	request: Request;
+	userId: string;
+	token: string;
+}
+export const createImgPreview = async ({ request, userId, token }: Args) => {
 	let uploadedFile: FileUpload | undefined;
 	let uploadedBytes;
 
@@ -37,9 +33,7 @@ export const action = async (args: Route.ActionArgs) => {
 
 	if (!uploadedFile || !uploadedBytes) {
 		return {
-			errors: {
-				screenshots: "No valid screenshot file uploaded.",
-			},
+			error: "No valid screenshot file uploaded.",
 		};
 	}
 
@@ -47,7 +41,7 @@ export const action = async (args: Route.ActionArgs) => {
 	const fileBlob = new Blob([uploadedBytes], { type: uploadedFile.type });
 	const tempProjectId = `temp-${userId}`;
 
-	const supabase = createSupabase(await getToken());
+	const supabase = createSupabase(token);
 
 	// Check if the user already has 5 screenshots
 	const { data } = await supabase.storage
@@ -56,9 +50,7 @@ export const action = async (args: Route.ActionArgs) => {
 
 	if (data && data.length >= 5)
 		return {
-			errors: {
-				screenshots: "You can only upload up to 5 screenshots.",
-			},
+			error: "You can only upload up to 5 screenshots.",
 		};
 
 	const fileName = !(data || []).some((f) => f.name.startsWith("preview"))
@@ -66,34 +58,18 @@ export const action = async (args: Route.ActionArgs) => {
 		: `${crypto.randomUUID()}-${uploadedFile.name}`;
 
 	// Upload the file to Supabase storage
-	const { data: uploadData, error: screenshotError } = await supabase.storage
+	const { error: screenshotError } = await supabase.storage
 		.from("screenshots")
 		.upload(`${userId}/${tempProjectId}/${fileName}`, fileBlob);
 
 	if (screenshotError) {
 		return {
-			errors: {
-				screenshots: screenshotError.message,
-			},
+			success: false,
+			error: screenshotError.message,
 		};
 	}
 
-	// Format the list of screenshots to include the newly uploaded one
-	const screenshots =
-		data?.map((file) => ({
-			name: file.name,
-			url: supabase.storage
-				.from("screenshots")
-				.getPublicUrl(`${userId}/${tempProjectId}/${file.name}`).data.publicUrl,
-		})) || [];
-
-	screenshots.push({
-		name: uploadData.path.split("/").pop() || "screenshot.png",
-		url: supabase.storage.from("screenshots").getPublicUrl(uploadData.path).data
-			.publicUrl,
-	});
-
 	return {
-		screenshots,
+		success: true,
 	};
 };

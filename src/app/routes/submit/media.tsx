@@ -2,94 +2,154 @@ import { Button, Input, Label } from "@shared/components/ui";
 import clsx from "clsx";
 import { Github, Globe } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Form, redirect, useFetcher, useNavigate } from "react-router";
+import {
+	Form,
+	redirect,
+	useActionData,
+	useFetcher,
+	useLoaderData,
+	useNavigate,
+} from "react-router";
 import type { Route } from "./+types/media";
 
-import type { loader } from "@app/actions/submit/get-preview-images";
-import {
-	ImageDropzone,
-	ImageSlider,
-	type Screenshot,
-} from "@features/submit/components/";
+import { getAuth } from "@clerk/react-router/ssr.server";
+import { createImgPreview } from "@features/submit/actions/media/create-img-preview";
+import { deleteImgPreview } from "@features/submit/actions/media/delete-img-preview";
+import { getAllImgPreviews } from "@features/submit/actions/media/get-all-img-previews";
+import { ImageDropzone, ImageSlider } from "@features/submit/components/";
 import type { FormErrors } from "@features/submit/interfaces/form-errors";
 import { ProjectMediaSchema } from "@features/submit/schemas/project.schema";
+import { checkForm } from "@features/submit/utils/check-form";
+import { saveToLocalStorage } from "@features/submit/utils/save-to-local-storage";
 import { toast } from "sonner";
 
-// This clientLoader function retrieves the initial values for the form
-export function clientLoader() {
+export const loader = async (args: Route.LoaderArgs) => {
+	const { userId, getToken } = await getAuth(args);
+	if (!userId) return redirect("/");
+
+	const token = (await getToken()) || "";
+	const res = await getAllImgPreviews({ token, userId });
+
+	return { screenshots: res.screenshots || [] };
+};
+
+export const clientLoader = async ({
+	serverLoader,
+}: Route.ClientLoaderArgs) => {
 	const projectData = JSON.parse(
 		localStorage.getItem("submit-project") || "{}",
 	);
 
 	const media = projectData.media || {};
 
+	const res = await serverLoader();
+
+	if (res.screenshots && res.screenshots.length > 0) {
+		media.screenshots = res.screenshots;
+	}
+
 	return {
 		initialValues: media,
 	};
-}
+};
+type ClientLoaderData = Awaited<ReturnType<typeof clientLoader>>;
 
-// This clientAction function handles the form submission
-export async function clientAction({ request }: Route.ActionArgs) {
-	const formData = await request.formData();
-	const rawData = Object.fromEntries(formData.entries()) as Record<
-		string,
-		string
-	>;
+export const action = async (args: Route.ActionArgs) => {
+	const clonedRequest = args.request.clone();
 
-	const parsedData = ProjectMediaSchema.safeParse(rawData);
+	const { userId, getToken } = await getAuth(args);
+	if (!userId) return;
 
-	// If the data is valid, save it to localStorage and redirect to the next step
-	if (parsedData.success) {
-		const projectData = JSON.parse(
-			localStorage.getItem("submit-project") || "{}",
-		);
+	const intent = new URL(args.request.url).searchParams.get("intent");
+	let formData: FormData;
 
-		const projectDataSections = {
-			...projectData,
-			media: parsedData.data,
-		};
+	const token = (await getToken()) || "";
 
-		localStorage.setItem("submit-project", JSON.stringify(projectDataSections));
-		return redirect("/submit/feedback");
+	switch (intent) {
+		case "create/img-preview":
+			const { error: createError, success: createSuccess } =
+				await createImgPreview({
+					request: clonedRequest,
+					userId,
+					token,
+				});
+
+			if (createError) {
+				return {
+					errors: {
+						screenshots: createError,
+					},
+					message: "Failed to create image preview",
+				};
+			}
+
+			return { success: createSuccess };
+		case "next":
+			formData = await args.request.formData();
+			const check = checkForm(formData, ProjectMediaSchema);
+
+			if (!check.success) {
+				return {
+					errors: check.errors,
+					message: check.message,
+				};
+			}
+
+			return {
+				success: true,
+				data: check.data,
+			};
+		case "delete/img-preview":
+			formData = await args.request.formData();
+
+			const { success: deleteSuccess, error: deleteError } =
+				await deleteImgPreview({
+					imageName: formData.get("imageName") as string,
+					userId,
+					token,
+				});
+
+			if (deleteError) {
+				return {
+					errors: {
+						screenshots: deleteError,
+					},
+					message: "Failed to delete image preview",
+				};
+			}
+
+			return { success: deleteSuccess };
+		default:
+			return {
+				errors: {
+					intent: "Invalid form submission intent",
+				},
+			};
 	}
-
-	// If the data is invalid, return the errors to be displayed in the form
-	return {
-		errors: parsedData.error.flatten().fieldErrors,
-		message: "Please fix the errors in the form.",
-	};
-}
+};
 
 type MediaFormErrors = FormErrors<typeof ProjectMediaSchema>;
 
+// TODO: loaderData and actionData not found
 const MediaTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 	const navigate = useNavigate();
-	const fetcher = useFetcher<typeof loader>();
 
-	const { initialValues } = loaderData;
-	const [images, setImages] = useState<Screenshot[]>(
-		initialValues?.screenshots || [],
-	);
-
-	useEffect(() => {
-		fetcher.submit(
-			{},
-			{ action: "/submit/actions/preview-image/get", method: "get" },
-		);
-	}, []);
-
-	useEffect(() => {
-		if (fetcher.data?.screenshots && images.length === 0) {
-			setImages(fetcher.data.screenshots);
-		}
-	}, [fetcher.data]);
+	const { initialValues } = loaderData as ClientLoaderData;
 
 	const [errors, setErrors] = useState<MediaFormErrors | null>(null);
 
 	useEffect(() => {
 		if (actionData?.errors) {
-			setErrors(actionData.errors);
+			setErrors(actionData.errors as any);
 			toast.error(actionData.message);
+		}
+
+		if (actionData?.success) {
+			saveToLocalStorage("submit-project", {
+				media: actionData.data,
+			});
+			toast.success("Media details saved successfully!");
+			navigate("/submit/feedback");
 		}
 	}, [actionData]);
 
@@ -102,30 +162,22 @@ const MediaTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 		});
 	};
 
-	const changeImages = (images: Screenshot[]) => {
-		console.log("1");
-		setImages(images);
-
-		handleErrorChange("screenshots");
-	};
-
-	useEffect(() => {
-		console.log("images", images);
-	}, [images]);
-
 	return (
-		<Form className="mt-6 space-y-6" method="post">
+		<Form
+			className="mt-6 space-y-6"
+			method="post"
+			encType="multipart/form-data"
+		>
 			<div className="grid gap-3">
 				<Label>
 					Project Screenshots
 					{errors?.screenshots && <span className="text-red-600">*</span>}
 				</Label>
 				<ImageDropzone
-					errors={errors?.screenshots || []}
-					screenshots={images}
-					onChange={changeImages}
+					error={errors?.screenshots || []}
+					screenshots={initialValues?.images || []}
 				/>
-				<ImageSlider screenshots={images} onChange={changeImages} />
+				<ImageSlider screenshots={initialValues?.images || []} />
 			</div>
 
 			<div className="grid gap-3">
@@ -196,7 +248,9 @@ const MediaTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 				>
 					Previous: Details
 				</Button>
-				<Button type="submit">Next: Feedback Goals</Button>
+				<Button formAction="?intent=next" type="submit">
+					Next: Feedback Goals
+				</Button>
 			</div>
 		</Form>
 	);

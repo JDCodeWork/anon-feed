@@ -1,31 +1,16 @@
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 
-import { useFormContext } from "@features/submit/context/FormContext";
 import { Navigation, Pagination } from "swiper/modules";
 
 // @ts-ignore
 import "swiper/css";
-import type { action } from "@app/actions/submit/delete-preview-image";
-import { useFetcher } from "react-router";
-import type { Screenshot } from "../ImageDropzone";
 
+type Screenshot = { url: string; name: string };
 interface Props {
 	screenshots: Screenshot[];
-	onChange: (screenshots: Screenshot[]) => void;
 }
-export const ImageSlider = ({ onChange, screenshots }: Props) => {
-	const fetcher = useFetcher<typeof action>();
-
-	const onDelete = (name: string) => {
-		fetcher.submit(
-			{ imageName: name },
-			{ action: "/submit/actions/preview-image/delete", method: "delete" },
-		);
-
-		onChange(screenshots.filter((screenshot) => screenshot.name !== name));
-	};
-
+export const ImageSlider = ({ screenshots }: Props) => {
 	if (screenshots.length > 0)
 		return (
 			<div className="relative rounded-lg overflow-hidden group/slider">
@@ -60,8 +45,9 @@ export const ImageSlider = ({ onChange, screenshots }: Props) => {
 								className="block size-full object-cover rounded-lg object-left select-none"
 							/>
 							<button
+								type="submit"
+								formAction="?intent=delete/img-preview"
 								className="transition-opacity opacity-0 group-hover:opacity-75 hover:opacity-100 absolute top-4 right-4 bg-gray-600 cursor-pointer p-1 rounded-full"
-								onClick={() => onDelete(name)}
 							>
 								<X className="text-gray-100 size-6" />
 							</button>
