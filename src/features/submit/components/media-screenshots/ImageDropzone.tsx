@@ -1,137 +1,156 @@
 import { Input } from "@shared/components/ui";
 import clsx from "clsx";
 import { Upload } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { type DropzoneOptions, useDropzone } from "react-dropzone";
-import { useFetcher, useSubmit } from "react-router";
+import { useNavigation, useSubmit } from "react-router";
+
+const styles = {
+	uploadIcon: {
+		base: "size-8",
+		default: "text-muted-foreground",
+		active: "text-sky-500",
+		error: "text-red-400",
+	},
+	dropzone: {
+		base: "border-2 border-dashed rounded-lg p-8 text-center transition-colors",
+		default:
+			"border-gray-300 bg-gray-50 hover:border-gray-400 hover:bg-gray-100",
+		active: "border-sky-400 bg-sky-50",
+		uploading: "border-sky-200 bg-sky-50/25",
+		error: "border-red-400 bg-red-50",
+	},
+	title: {},
+};
+
+const MAX_FILES = 5;
+const MAX_SIZE = 1048576; // 1 MB
+const UPLOAD_ACTION_URL = "/submit/media?intent=create/img-preview";
 
 const dropzoneOptions: DropzoneOptions = {
 	accept: { "image/png": [], "image/jpeg": [], "image/webp": [] },
-	maxFiles: 1,
-	maxSize: 1048576, // 1 mb
+	maxFiles: MAX_FILES,
+	maxSize: MAX_SIZE,
 };
-
 export type Screenshot = { url: string; name: string };
 
 interface Props {
-	error: string[];
+	error: string;
 	screenshots: Screenshot[];
 }
 export const ImageDropzone = ({ error, screenshots }: Props) => {
-	const [isErrorImages, setIsErrorImages] = useState(false);
+	const [showError, setShowError] = useState(false);
 
-	const fetcher = useFetcher();
+	const submit = useSubmit();
+	const navigation = useNavigation();
+	const isUploading = navigation.formAction === UPLOAD_ACTION_URL;
 
-	const {
-		getRootProps,
-		getInputProps,
-		isDragActive,
-		fileRejections,
-		acceptedFiles,
-		inputRef,
-	} = useDropzone(dropzoneOptions);
+	const onDropAccepted = (acceptedFiles: File[]) => {
+		if (acceptedFiles.length + screenshots.length > MAX_FILES) {
+			setShowError(true);
+			return;
+		}
+		setShowError(false);
 
-	useEffect(() => {
-		setIsErrorImages(fileRejections.length != 0);
-	}, [fileRejections.length]);
+		const formData = new FormData();
+		acceptedFiles.forEach((file) => {
+			if (file.size > MAX_SIZE) {
+				setShowError(true);
+				return;
+			}
+			formData.append("screenshots", file);
+		});
+		submit(formData, {
+			method: "post",
+			action: UPLOAD_ACTION_URL,
+			encType: "multipart/form-data",
+		});
+	};
+	const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (e.currentTarget.files?.length === 0) return;
 
-	useEffect(() => {
-		if (error.length > 0) setIsErrorImages(true);
-		else if (fileRejections.length == 0) setIsErrorImages(false);
-	}, [error.length, fileRejections.length]);
+		if ((e.currentTarget.files?.length || 0) + screenshots.length > MAX_FILES) {
+			setShowError(true);
+			return;
+		}
 
+		setShowError(false);
+		submit(e.currentTarget.form, {
+			method: "post",
+			action: UPLOAD_ACTION_URL,
+		});
+	};
+
+	const { getRootProps, getInputProps, isDragActive, fileRejections } =
+		useDropzone({ ...dropzoneOptions, onDropAccepted });
+
+	// Error handling from the backend
 	useEffect(() => {
 		if (error.length > 0) {
-			setIsErrorImages(true);
-			setTimeout(() => {
-				setIsErrorImages(false);
-			}, 1000);
+			setShowError(true);
+			const timeout = setTimeout(() => setShowError(false), 3000);
+			return () => clearTimeout(timeout);
 		}
 	}, [error]);
 
+	// Error handling for rejected files
 	useEffect(() => {
-		if (acceptedFiles.length > 0) {
-			let images = [];
-
-			for (const file of acceptedFiles) {
-				if (images.length + screenshots.length < 5) {
-					(file as any).preview = URL.createObjectURL(file);
-
-					images.push(file);
-				} else {
-					setIsErrorImages(true);
-					setTimeout(() => {
-						setIsErrorImages(false);
-					}, 3000);
-				}
-			}
-
-			setTimeout(() => {
-				fetcher.submit(inputRef.current?.form, {
-					method: "post",
-					action: "/submit/media?intent=create/img-preview",
-				});
-			}, 100);
-		}
-	}, [acceptedFiles]);
+		setShowError(fileRejections.length > 0);
+	}, [fileRejections.length]);
 
 	return (
 		<div
-			className={clsx(
-				"border-2 border-dashed rounded-lg p-8 text-center transition-colors ",
-				isDragActive && "border-sky-400 bg-sky-50",
-				isErrorImages && "border-red-400 bg-red-50",
-				!isDragActive &&
-					!isErrorImages &&
-					"hover:border-gray-300 hover:bg-gray-50",
-			)}
+			className={clsx(styles.dropzone.base, {
+				[styles.dropzone.uploading]: isUploading,
+				[styles.dropzone.error]: showError,
+				[styles.dropzone.active]: isDragActive && !isUploading,
+				[styles.dropzone.default]: !isUploading && !isDragActive && !showError,
+			})}
 		>
-			<div
-				className="flex flex-col items-center gap-2 cursor-pointer"
-				{...getRootProps()}
-			>
-				<Upload
-					className={clsx(
-						"size-8",
-						isDragActive && "text-sky-500",
-						!isDragActive && isErrorImages && "text-red-400",
-						!isDragActive && !isErrorImages && "text-muted-foreground",
-					)}
-				/>
-				<h3
-					className={
-						!isDragActive && isErrorImages ? "text-red-600" : "font-medium"
-					}
+			{isUploading ? (
+				<div className="flex flex-col items-center gap-2">
+					<div className="animate-spin rounded-full size-8 border-3 border-sky-500 border-l-transparent" />
+					<h3 className="font-medium text-sky-500">Uploading...</h3>
+					<p className="text-sm text-muted-foreground">
+						Please wait while your images are being uploaded.
+					</p>
+				</div>
+			) : (
+				<div
+					className="flex flex-col items-center gap-2 cursor-pointer"
+					{...getRootProps()}
 				>
-					{isErrorImages
-						? "Only 5 images smaller than 1 MB are allowed"
-						: isDragActive
-							? "Drop the files here..."
-							: "Drag & drop files or click to upload"}
-				</h3>
-				<p
-					className={clsx(
-						"text-sm",
-						!isDragActive && isErrorImages
-							? "text-red-300"
-							: "text-muted-foreground",
-					)}
-				>
-					Upload up to 5 images (PNG, JPG, WebP)
-				</p>
-				<Input
-					type="file"
-					{...getInputProps()}
-					accept="image/png, image/jpeg, image/webp"
-					name="screenshots"
-					onChange={(e) =>
-						fetcher.submit(e.currentTarget.form, {
-							method: "post",
-							action: "/submit/media?intent=create/img-preview",
-						})
-					}
-				/>
-			</div>
+					<Upload
+						className={clsx(styles.uploadIcon.base, {
+							[styles.uploadIcon.active]: isDragActive && !showError,
+							[styles.uploadIcon.error]: showError,
+							[styles.uploadIcon.default]: !isDragActive && !showError,
+						})}
+					/>
+					<h3 className={clsx(showError ? "text-red-600" : "font-medium")}>
+						{showError
+							? `Only ${MAX_FILES} images smaller than 1 MB are allowed`
+							: isDragActive
+								? "Drop the files here..."
+								: "Drag & drop files or click to upload"}
+					</h3>
+					<p
+						className={clsx(
+							"text-sm",
+							showError ? "text-red-300" : "text-muted-foreground",
+						)}
+					>
+						Upload up to {MAX_FILES} images (PNG, JPG, WebP)
+					</p>
+					<Input
+						type="file"
+						{...getInputProps()}
+						name="screenshots"
+						multiple
+						onChange={onInputChange}
+					/>
+				</div>
+			)}
 		</div>
 	);
 };

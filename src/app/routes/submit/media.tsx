@@ -2,14 +2,7 @@ import { Button, Input, Label } from "@shared/components/ui";
 import clsx from "clsx";
 import { Github, Globe } from "lucide-react";
 import { useEffect, useState } from "react";
-import {
-	Form,
-	redirect,
-	useActionData,
-	useFetcher,
-	useLoaderData,
-	useNavigate,
-} from "react-router";
+import { Form, redirect, useNavigate } from "react-router";
 import type { Route } from "./+types/media";
 
 import { getAuth } from "@clerk/react-router/ssr.server";
@@ -53,11 +46,7 @@ export async function action(args: Route.ActionArgs) {
 					token,
 				});
 
-			console.log("createError", createError);
-
 			if (createError) {
-				console.log("a");
-
 				return {
 					success: false,
 					errors: {
@@ -114,7 +103,6 @@ export async function action(args: Route.ActionArgs) {
 
 type MediaFormErrors = FormErrors<typeof ProjectMediaSchema>;
 
-// TODO: loaderData and actionData not found
 const MediaTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 	const navigate = useNavigate();
 
@@ -160,7 +148,7 @@ const MediaTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 					{errors?.screenshots && <span className="text-red-600">*</span>}
 				</Label>
 				<ImageDropzone
-					error={errors?.screenshots || []}
+					error={(errors?.screenshots as unknown as string) || ""}
 					screenshots={screenshots}
 				/>
 				<ImageSlider screenshots={screenshots} />
