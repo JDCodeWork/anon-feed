@@ -11,7 +11,6 @@ export const createImgPreview = async ({ request, userId, token }: Args) => {
 	const uploadedBytes: Array<Uint8Array> = [];
 
 	const uploadHandler = async (fileUpload: FileUpload) => {
-		console.log("fileUpload", fileUpload);
 		if (fileUpload.fieldName === "screenshots") {
 			if (["image/png", "image/jpeg", "image/webp"].includes(fileUpload.type)) {
 				const bytes = await fileUpload.bytes();
@@ -66,9 +65,11 @@ export const createImgPreview = async ({ request, userId, token }: Args) => {
 		const bytes = uploadedBytes[i] as BlobPart;
 		const fileBlob = new Blob([bytes], { type: file.type });
 
-		const fileName = !(data || []).some((f) => f.name.startsWith("preview"))
-			? `preview-${crypto.randomUUID()}.${file.type.split("/")[1]}`
-			: `${crypto.randomUUID()}-${file.name}`;
+		const fileName =
+			!(data || []).some((f) => f.name.startsWith("preview")) &&
+			((uploadedFiles.length > 1 && i === 0) || uploadedFiles.length === 1)
+				? `preview-${crypto.randomUUID()}.${file.type.split("/")[1]}`
+				: `${crypto.randomUUID()}-${file.name}`;
 
 		const { error: screenshotError } = await supabase.storage
 			.from("screenshots")
