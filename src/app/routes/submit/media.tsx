@@ -3,6 +3,7 @@ import clsx from "clsx";
 import { Github, Globe } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Form, redirect, useNavigate } from "react-router";
+import z from "zod";
 import type { Route } from "./+types/media";
 
 import { getAuth } from "@clerk/react-router/ssr.server";
@@ -79,6 +80,7 @@ export async function action(args: Route.ActionArgs) {
 			return { success: deleteSuccess };
 		case "next":
 			formData = await args.request.formData();
+
 			const check = checkForm(formData, ProjectMediaSchema);
 
 			if (!check.success) {
@@ -91,6 +93,7 @@ export async function action(args: Route.ActionArgs) {
 			return {
 				success: true,
 				data: check.data,
+				intent: "next",
 			};
 		default:
 			return {
@@ -102,13 +105,30 @@ export async function action(args: Route.ActionArgs) {
 }
 
 type MediaFormErrors = FormErrors<typeof ProjectMediaSchema>;
+type MediaFormData = z.infer<typeof ProjectMediaSchema>;
 
 const MediaTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 	const navigate = useNavigate();
 
 	const { screenshots } = loaderData;
+	const [initialData, setInitialData] = useState<Partial<MediaFormData>>({});
 
 	const [errors, setErrors] = useState<MediaFormErrors | null>(null);
+
+	useEffect(() => {
+		const savedData = JSON.parse(
+			localStorage.getItem("submit-project") || "{}",
+		);
+
+		if (savedData.media) {
+			setInitialData(savedData.media);
+		} else {
+			setInitialData({
+				githubRepo: "",
+				liveDemo: "",
+			});
+		}
+	}, []);
 
 	useEffect(() => {
 		if (!actionData?.success && actionData?.errors) {
@@ -118,11 +138,11 @@ const MediaTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 	}, [actionData]);
 
 	useEffect(() => {
-		if (actionData?.success && actionData?.data) {
+		if (actionData?.success && actionData?.intent === "next") {
 			saveToLocalStorage("submit-project", {
 				media: actionData.data,
 			});
-			toast.success("Media details saved successfully!");
+
 			navigate("/submit/feedback");
 		}
 	}, [actionData]);
@@ -149,9 +169,9 @@ const MediaTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 				</Label>
 				<ImageDropzone
 					error={(errors?.screenshots as unknown as string) || ""}
-					screenshots={screenshots}
+					screenshots={screenshots || []}
 				/>
-				<ImageSlider screenshots={screenshots} />
+				<ImageSlider screenshots={screenshots || []} />
 			</div>
 
 			<div className="grid gap-3">
@@ -173,7 +193,7 @@ const MediaTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 					<Input
 						name="githubRepo"
 						placeholder="username/repository"
-						/* 						defaultValue={initialValues?.githubRepo || ""} */
+						defaultValue={initialData?.githubRepo || ""}
 						onChange={(e) => handleErrorChange("githubRepo")}
 						className={clsx(
 							"rounded-l-none",
@@ -203,7 +223,7 @@ const MediaTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 					<Input
 						name="liveDemo"
 						placeholder="your-project-demo.com"
-						/* 						defaultValue={initialValues?.liveDemo || ""} */
+						defaultValue={initialData?.liveDemo || ""}
 						onChange={(e) => handleErrorChange("liveDemo")}
 						className={clsx(
 							"rounded-l-none",

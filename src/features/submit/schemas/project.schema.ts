@@ -12,10 +12,16 @@ const validateGithubRepo = (val: string) => {
 	return githubRepoRegex.user.test(user) && githubRepoRegex.repo.test(repo);
 };
 
-export const ScreenshotSchema = z
-	.instanceof(File)
-	.refine((file) => file.type.startsWith("image/"), {
-		message: "The file must be an image",
+export const ScreenshotsSchema = z
+	.string()
+	.transform((val) =>
+		val
+			.split(",")
+			.map((s) => s.trim())
+			.filter(Boolean),
+	)
+	.refine((arr) => Array.isArray(arr) && arr.length >= 1 && arr.length <= 5, {
+		message: "You must provide between 1 and 5 screenshots.",
 	});
 
 const liveDemoSchema = z.preprocess((val) => {
@@ -35,8 +41,8 @@ export const ProjectDetailSchema = z.object({
 });
 
 export const ProjectMediaSchema = z.object({
-	screenshots: z.array(ScreenshotSchema).min(1).max(5),
-	githubRepo: z.string().refine(validateGithubRepo, {
+	screenshots: ScreenshotsSchema,
+	githubRepo: z.string().min(1).refine(validateGithubRepo, {
 		message: "The format '<user>/<repository>' is not met.",
 	}),
 	liveDemo: liveDemoSchema,

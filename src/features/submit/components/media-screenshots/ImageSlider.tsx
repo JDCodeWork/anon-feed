@@ -73,6 +73,11 @@ export const ImageSlider = ({ screenshots }: Props) => {
 							),
 					)}
 				</Swiper>
+				<input
+					type="hidden"
+					name="screenshots"
+					value={screenshots.map((s) => s.name).join(",")}
+				/>
 			</div>
 		);
 	else

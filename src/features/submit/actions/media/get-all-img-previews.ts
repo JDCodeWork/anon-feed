@@ -20,12 +20,18 @@ export const getAllImgPreviews = async ({ token, userId }: Args) => {
 
 	// Map the file data to the expected screenshot format
 	const screenshots =
-		data?.map((file) => ({
-			url: supabase.storage
-				.from("screenshots")
-				.getPublicUrl(`${userId}/${projectId}/${file.name}`).data.publicUrl,
-			name: file.name,
-		})) || [];
+		data
+			?.sort((a, b) =>
+				b.created_at && a.created_at
+					? new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+					: 0,
+			)
+			.map((file) => ({
+				url: supabase.storage
+					.from("screenshots")
+					.getPublicUrl(`${userId}/${projectId}/${file.name}`).data.publicUrl,
+				name: file.name,
+			})) || [];
 
 	return {
 		screenshots,

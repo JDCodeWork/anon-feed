@@ -58,7 +58,7 @@ export const ImageDropzone = ({ error, screenshots }: Props) => {
 				setShowError(true);
 				return;
 			}
-			formData.append("screenshots", file);
+			formData.append("images", file);
 		});
 		submit(formData, {
 			method: "post",
@@ -145,7 +145,7 @@ export const ImageDropzone = ({ error, screenshots }: Props) => {
 					<Input
 						type="file"
 						{...getInputProps()}
-						name="screenshots"
+						name="images"
 						multiple
 						onChange={onInputChange}
 					/>

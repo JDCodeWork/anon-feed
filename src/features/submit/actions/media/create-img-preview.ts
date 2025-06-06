@@ -11,7 +11,7 @@ export const createImgPreview = async ({ request, userId, token }: Args) => {
 	const uploadedBytes: Array<Uint8Array> = [];
 
 	const uploadHandler = async (fileUpload: FileUpload) => {
-		if (fileUpload.fieldName === "screenshots") {
+		if (fileUpload.fieldName === "images") {
 			if (["image/png", "image/jpeg", "image/webp"].includes(fileUpload.type)) {
 				const bytes = await fileUpload.bytes();
 				const size = bytes.byteLength;
