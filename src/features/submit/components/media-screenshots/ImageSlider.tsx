@@ -1,10 +1,15 @@
-import { ChevronLeft, ChevronRight, X } from "lucide-react";
-import { Swiper, SwiperSlide } from "swiper/react";
+import { X } from "lucide-react";
 
-import { Navigation, Pagination } from "swiper/modules";
+import Autoplay from "embla-carousel-autoplay";
 
-// @ts-ignore
-import "swiper/css";
+import {
+	Carousel,
+	CarouselContent,
+	CarouselItem,
+	CarouselNext,
+	CarouselPrevious,
+} from "@shared/components/ui";
+import { useState } from "react";
 import { useNavigation } from "react-router";
 
 type Screenshot = { url: string; name: string };
@@ -13,6 +18,8 @@ interface Props {
 }
 export const ImageSlider = ({ screenshots }: Props) => {
 	const navigation = useNavigation();
+	const [isMouseEnter, setIsMouseEnter] = useState(false);
+
 	const isLoading = navigation.formAction?.includes(
 		"intent=delete/img-preview",
 	);
@@ -22,57 +29,53 @@ export const ImageSlider = ({ screenshots }: Props) => {
 	if (screenshots.length > 0)
 		return (
 			<div className="relative rounded-lg overflow-hidden group/slider">
-				{/* Custom buttons */}
-				<button
-					id="swiper-button-prev-custom"
-					className="absolute size-12 top-1/2 left-4 z-20 -translate-y-3 transition-opacity opacity-25 group-hover/slider:opacity-50 hover:opacity-100 bg-gray-600 rounded-full pr-1 cursor-pointer"
+				<Carousel
+					className="w-full  relative"
+					plugins={[Autoplay({ delay: 3000, active: !isMouseEnter })]}
+					onMouseEnter={() => setIsMouseEnter(true)}
+					onMouseLeave={() => setIsMouseEnter(false)}
 				>
-					<ChevronLeft className="text-gray-200 size-full" />
-				</button>
-				<button
-					id="swiper-button-next-custom"
-					className="absolute size-12 top-1/2 right-4 z-20 -translate-y-3 transition-opacity opacity-25 group-hover/slider:opacity-50 hover:opacity-100 bg-gray-600 rounded-full pl-0.5 cursor-pointer"
-				>
-					<ChevronRight className="text-gray-200 size-full" />
-				</button>
-
-				<Swiper
-					modules={[Navigation, Pagination]}
-					navigation={{
-						prevEl: "#swiper-button-prev-custom",
-						nextEl: "#swiper-button-next-custom",
-					}}
-					spaceBetween={25}
-					slidesPerView={2}
-					className="w-full h-[280px] relative"
-				>
-					{screenshots.map(
-						({ url, name }) =>
-							!isDeleting(name) && (
-								<SwiperSlide key={url} className="flex group">
-									<img
-										src={url}
-										className="block size-full object-cover rounded-lg object-left select-none"
-									/>
-									<button
-										type="submit"
-										formAction={`/submit/media?intent=delete/img-preview&imgName=${name}`}
-										name="imageName"
-										disabled={isLoading}
-										value={name}
-										className="transition-opacity opacity-0 group-hover:opacity-75 hover:opacity-100 absolute top-4 right-4 bg-gray-600 cursor-pointer p-1 rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
+					<CarouselContent>
+						{screenshots.map(
+							({ url, name }) =>
+								!isDeleting(name) && (
+									<CarouselItem
+										key={url}
+										className="group relative h-[280px] md:basis-1/2"
 									>
-										<X className="text-gray-100 size-6" />
-									</button>
-									{name.startsWith("preview") && (
-										<span className="absolute bottom-2 left-2 transition-colors bg-gray-600/50 group-hover:bg-gray-800/75 text-gray-200 text-xs px-2 py-1 rounded select-none">
-											preview
-										</span>
-									)}
-								</SwiperSlide>
-							),
-					)}
-				</Swiper>
+										<img
+											src={url}
+											className="block size-full object-cover rounded-lg object-left select-none"
+										/>
+										<button
+											type="submit"
+											formAction={`/submit/media?intent=delete/img-preview&imgName=${name}`}
+											name="imageName"
+											disabled={isLoading}
+											value={name}
+											className="transition-opacity opacity-0 group-hover:opacity-85 hover:opacity-100 absolute top-4 right-4 bg-gray-50 cursor-pointer p-1 rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
+										>
+											<X className="text-gray-800 size-5" />
+										</button>
+										{name.startsWith("preview") && (
+											<span className="absolute bottom-2 left-2 transition-colors bg-gray-600/50 group-hover:bg-gray-800/75 text-gray-200 text-xs px-2 py-1 rounded select-none">
+												preview
+											</span>
+										)}
+									</CarouselItem>
+								),
+						)}
+					</CarouselContent>
+					<CarouselPrevious
+						type="button"
+						className="left-4 cursor-pointer disabled:cursor-default"
+					/>
+					<CarouselNext
+						type="button"
+						className="right-4 cursor-pointer disabled:cursor-default"
+					/>
+				</Carousel>
+
 				<input
 					type="hidden"
 					name="screenshots"
