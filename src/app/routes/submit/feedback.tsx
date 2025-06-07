@@ -1,9 +1,11 @@
 import { ProjectFeedbackSchema } from "@features/projects";
+import { SaveDataAlert } from "@features/submit/components/SaveDataAlert";
 import {
 	EXPERIENCE_LEVEL,
 	FEEDBACK_AREAS,
 } from "@features/submit/constants/project-creation.constant";
 import type { FormErrors } from "@features/submit/interfaces/form-errors";
+import { saveToLocalStorage } from "@features/submit/utils/save-to-local-storage";
 import {
 	Button,
 	Label,
@@ -16,7 +18,7 @@ import {
 } from "@shared/components/ui";
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
-import { Form, useNavigate } from "react-router";
+import { Form, useNavigate, useSubmit } from "react-router";
 import { toast } from "sonner";
 import z from "zod";
 import type { Route } from "./+types/feedback";
@@ -38,7 +40,6 @@ export function clientLoader() {
 
 export async function action({ request }: Route.ActionArgs) {
 	const formData = await request.formData();
-
 	const data = Object.fromEntries(formData.entries()) as FeedbackFormData;
 	const parsedData = ProjectFeedbackSchema.safeParse(data);
 
@@ -51,16 +52,22 @@ export async function action({ request }: Route.ActionArgs) {
 		};
 	}
 
-	return {
-		success: true,
-		data: parsedData.data,
-	};
+	if (formData.get("intent") == "save-draft") {
+		return {
+			success: true,
+			data: parsedData.data,
+			intent: "save-draft",
+		};
+	}
 }
 
 const FeedbackTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 	const { initialValues } = loaderData;
 
+	const [isOpenAlert, setIsOpenAlert] = useState(false);
+
 	const navigate = useNavigate();
+	const submit = useSubmit();
 	const formRef = useRef<HTMLFormElement>(null);
 	const [errors, setErrors] = useState<FeedbackFormErrors | null>(null);
 
@@ -83,11 +90,31 @@ const FeedbackTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 	}, [actionData]);
 
 	useEffect(() => {
-		if (actionData?.success) {
-			toast.success("Project submitted successfully!");
-			/* 			localStorage.removeItem("submit-project"); */
+		if (actionData?.success && actionData?.intent === "save-draft") {
+			saveToLocalStorage("submit-project", {
+				feedback: actionData.data,
+			});
+
+			toast.success("Draft saved successfully!");
+			navigate("/submit/media");
 		}
 	}, [actionData]);
+
+	const onExitWithoutSaving = () => {
+		navigate("/submit/media");
+		setIsOpenAlert(false);
+	};
+	const onSaveDraft = () => {
+		if (!formRef.current) return;
+
+		const formData = new FormData(formRef.current);
+		formData.append("intent", "save-draft");
+
+		submit(formData, {
+			method: "post",
+		});
+		setIsOpenAlert(false);
+	};
 
 	return (
 		<Form className="mt-6 space-y-6" ref={formRef} method="post">
@@ -198,13 +225,18 @@ const FeedbackTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 				<Button
 					type="button"
 					variant="outline"
-					onClick={() => navigate("/submit/media")}
+					onClick={() => setIsOpenAlert(true)}
 				>
 					Previous: Media & Links
 				</Button>
 
 				<Button type="submit">Submit Project</Button>
 			</div>
+			<SaveDataAlert
+				isOpen={isOpenAlert}
+				onExitWithoutSaving={onExitWithoutSaving}
+				onSaveDraft={onSaveDraft}
+			/>
 		</Form>
 	);
 };
