@@ -48,21 +48,25 @@ export const ProjectMediaSchema = z.object({
 	liveDemo: liveDemoSchema,
 });
 
+export const ProjectFeedbackSchema = z.object({
+	feedbackArea: z.enum([
+		"ui-ux",
+		"code-quality",
+		"performance",
+		"architecture",
+		"accessibility",
+		"security",
+	]),
+	specificQuestions: z.string().min(24).max(480),
+	experienceLevel: z.enum(["beginner", "intermediate", "advanced", "expert"]),
+});
+
 export const ProjectSchema = z
 	.object({
 		featured: z.boolean(),
-		feedbackArea: z.enum([
-			"ui-ux",
-			"code-quality",
-			"performance",
-			"architecture",
-			"accessibility",
-			"security",
-		]),
-		specificQuestions: z.string().min(24).max(480),
-		experienceLevel: z.enum(["beginner", "intermediate", "advanced", "expert"]),
 	})
 	.merge(ProjectDetailSchema)
-	.merge(ProjectMediaSchema);
+	.merge(ProjectMediaSchema)
+	.merge(ProjectFeedbackSchema);
 
 export type FormErrorsType = Partial<Record<keyof IProject, string>>;

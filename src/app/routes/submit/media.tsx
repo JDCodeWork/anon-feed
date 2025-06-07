@@ -194,7 +194,7 @@ const MediaTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 						name="githubRepo"
 						placeholder="username/repository"
 						defaultValue={initialData?.githubRepo || ""}
-						onChange={(e) => handleErrorChange("githubRepo")}
+						onChange={() => handleErrorChange("githubRepo")}
 						className={clsx(
 							"rounded-l-none",
 							errors?.githubRepo &&
@@ -223,7 +223,7 @@ const MediaTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 					<Input
 						name="liveDemo"
 						placeholder="your-project-demo.com"
-						defaultValue={initialData?.liveDemo || ""}
+						defaultValue={initialData?.liveDemo?.slice(8) || ""}
 						onChange={(e) => handleErrorChange("liveDemo")}
 						className={clsx(
 							"rounded-l-none",
