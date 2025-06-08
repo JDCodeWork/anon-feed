@@ -1,10 +1,20 @@
-import type { IProject, IProjectResponse } from "@features/projects";
+import type { ProjectFormData } from "@app/routes/submit/feedback";
+import type { IProjectResponse } from "@features/projects";
 import type { UserWithToken } from "@shared/interfaces";
 import { createSupabase } from "@shared/lib/supabase";
 
+interface IProjectData
+	extends Omit<
+		ProjectFormData,
+		"feedbackArea" | "experienceLevel" | "screenshots"
+	> {
+	feedbackArea: string;
+	experienceLevel: string;
+}
+
 type Args = {
 	user: UserWithToken;
-	projectData: IProject;
+	projectData: IProjectData;
 };
 
 export const createProject = async ({
@@ -30,31 +40,19 @@ export const createProject = async ({
 		if (createUserError) throw new Error(createUserError.message);
 	}
 
-	// upload all screenshots and store links
-	let formattedScreenshots: string[] = [];
-	for (const screenshot of projectData.screenshots) {
-		const { data: resScreenshot, error: screenshotError } =
-			await supabase.storage
-				.from("screenshots")
-				.upload(`${user.id}/${Math.random()}_${screenshot.name}`, screenshot);
-
-		if (screenshotError) throw new Error(screenshotError.message);
-
-		const { data } = supabase.storage
-			.from("screenshots")
-			.getPublicUrl(resScreenshot?.path!);
-
-		formattedScreenshots.push(data.publicUrl);
-	}
-
 	// creates the project with the user's id
+	const formattedTags: string[] = projectData.tags
+		.split(",")
+		.map((tag) => tag.trim())
+		.filter(Boolean);
 	const { data, error } = await supabase
 		.from("projects")
 		.insert([
 			{
 				...projectData,
-				screenshots: formattedScreenshots,
+				screenshots: [],
 				user_id: user.id,
+				tags: formattedTags,
 			},
 		])
 		.select();

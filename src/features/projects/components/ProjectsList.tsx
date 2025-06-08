@@ -29,7 +29,9 @@ const ProjectsList = ({ perPage }: Props) => {
 			<TabsContent value="all" className="mt-0">
 				<div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 ">
 					{isLoading
-						? Array.from({ length: 3 }).map(() => <ProjectCardSkeleton />)
+						? Array.from({ length: 3 }).map((_, i) => (
+								<ProjectCardSkeleton key={i} />
+							))
 						: projects.map((project) => (
 								<ProjectCard project={project} key={project.id} />
 							))}

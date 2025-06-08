@@ -3,9 +3,10 @@ import { createSupabase } from "@shared/lib/supabase";
 interface Args {
 	userId: string;
 	token: string;
+	projectId?: string;
 }
-export const getAllImgPreviews = async ({ token, userId }: Args) => {
-	const projectId = `temp-${userId}`;
+export const getAllImgs = async ({ token, userId, projectId }: Args) => {
+	projectId = projectId || `temp-${userId}`;
 
 	const supabase = createSupabase(token);
 	const { data, error } = await supabase.storage

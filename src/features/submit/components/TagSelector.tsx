@@ -1,6 +1,7 @@
-import { Badge, Input, Label } from "@shared/components/ui";
 import { X } from "lucide-react";
 import { useState } from "react";
+
+import { Badge, Input, Label } from "@shared/components/ui";
 import { sanitizeTag } from "../utils/sanitize-tag";
 
 interface Props {

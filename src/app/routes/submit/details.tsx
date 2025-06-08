@@ -1,7 +1,13 @@
-import { type IProject, ProjectDetailSchema } from "@features/projects";
+import { useEffect, useState } from "react";
+import { Form, redirect } from "react-router";
+import type { Route } from "./+types/details";
 
-import { TagSelector } from "@features/submit/components/TagSelector";
-import { CATEGORIES } from "@features/submit/constants/project-creation.constant";
+import clsx from "clsx";
+import { toast } from "sonner";
+
+import { type FormErrors, ProjectDetailSchema } from "@features/submit";
+import { TagSelector } from "@features/submit/components";
+import { CATEGORIES } from "@features/submit/constants";
 import {
 	Button,
 	Input,
@@ -13,17 +19,9 @@ import {
 	SelectValue,
 	Textarea,
 } from "@shared/components/ui";
-import clsx from "clsx";
-import { useEffect, useState } from "react";
-import { Form, redirect } from "react-router";
-import { toast } from "sonner";
-import type { Route } from "./+types/details";
-
-import type { FormErrors } from "@features/submit/interfaces/form-errors";
 
 type DetailsFormErrors = FormErrors<typeof ProjectDetailSchema>;
 
-// This clientLoader function retrieves the initial values for the form
 export function clientLoader() {
 	const projectData = JSON.parse(
 		localStorage.getItem("submit-project") || "{}",
@@ -36,7 +34,6 @@ export function clientLoader() {
 	};
 }
 
-// This clientAction function handles the form submission
 export async function clientAction({ request }: Route.ActionArgs) {
 	const formData = await request.formData();
 	const rawData = Object.fromEntries(formData.entries()) as Record<
@@ -44,9 +41,7 @@ export async function clientAction({ request }: Route.ActionArgs) {
 		string
 	>;
 
-	// Convert tags from a comma-separated string to an array
-	const tags = rawData.tags.split(",");
-	const parsedData = ProjectDetailSchema.safeParse({ ...rawData, tags });
+	const parsedData = ProjectDetailSchema.safeParse(rawData);
 
 	// If the data is valid, save it to localStorage and redirect to the next step
 	if (parsedData.success) {

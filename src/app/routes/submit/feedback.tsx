@@ -1,11 +1,22 @@
-import { ProjectFeedbackSchema } from "@features/projects";
-import { SaveDataAlert } from "@features/submit/components/SaveDataAlert";
+import { useEffect, useRef, useState } from "react";
+import { Form, useNavigate, useNavigation, useSubmit } from "react-router";
+import type { Route } from "./+types/feedback";
+
+import { getAuth } from "@clerk/react-router/ssr.server";
+import clsx from "clsx";
+import { toast } from "sonner";
+import z from "zod";
+
 import {
-	EXPERIENCE_LEVEL,
-	FEEDBACK_AREAS,
-} from "@features/submit/constants/project-creation.constant";
-import type { FormErrors } from "@features/submit/interfaces/form-errors";
-import { saveToLocalStorage } from "@features/submit/utils/save-to-local-storage";
+	type FormErrors,
+	ProjectFeedbackSchema,
+	ProjectSchema,
+} from "@features/submit";
+import { createProject, renameTempImages } from "@features/submit/actions";
+import { SaveDataAlert } from "@features/submit/components";
+import { EXPERIENCE_LEVEL, FEEDBACK_AREAS } from "@features/submit/constants";
+import { checkForm, saveToLocalStorage } from "@features/submit/utils";
+import { getUserFromDb } from "@shared/actions";
 import {
 	Button,
 	Label,
@@ -16,15 +27,9 @@ import {
 	SelectValue,
 	Textarea,
 } from "@shared/components/ui";
-import clsx from "clsx";
-import { useEffect, useRef, useState } from "react";
-import { Form, useNavigate, useSubmit } from "react-router";
-import { toast } from "sonner";
-import z from "zod";
-import type { Route } from "./+types/feedback";
 
 type FeedbackFormErrors = FormErrors<typeof ProjectFeedbackSchema>;
-type FeedbackFormData = z.infer<typeof ProjectFeedbackSchema>;
+export type ProjectFormData = z.infer<typeof ProjectSchema>;
 
 export function clientLoader() {
 	const projectData = JSON.parse(
@@ -38,25 +43,75 @@ export function clientLoader() {
 	};
 }
 
-export async function action({ request }: Route.ActionArgs) {
-	const formData = await request.formData();
-	const data = Object.fromEntries(formData.entries()) as FeedbackFormData;
-	const parsedData = ProjectFeedbackSchema.safeParse(data);
-
-	if (!parsedData.success) {
-		const errors: FeedbackFormErrors = parsedData.error.flatten().fieldErrors;
-		return {
-			success: false,
-			errors,
-			message: "Please review the form fields and try again.",
-		};
-	}
+export async function action(args: Route.ActionArgs) {
+	const { userId, getToken } = await getAuth(args);
+	const token = await getToken();
+	const formData = await args.request.formData();
 
 	if (formData.get("intent") == "save-draft") {
+		const parsedData = checkForm(formData, ProjectFeedbackSchema);
+
+		if (!parsedData.success) {
+			return {
+				errors: parsedData.errors,
+				message: parsedData.message,
+			};
+		}
+
 		return {
 			success: true,
 			data: parsedData.data,
 			intent: "save-draft",
+		};
+	}
+
+	formData.delete("intent");
+	if (!userId || !token) return;
+	const { data: userDb } = await getUserFromDb(userId, token);
+
+	const projectFormData = checkForm(formData, ProjectSchema);
+	if (!projectFormData.success) {
+		return {
+			errors: projectFormData.errors,
+			message: projectFormData.message,
+		};
+	}
+
+	if (!userDb) {
+		return {
+			success: false,
+			errors: { submit: "User not found. Please log in again." },
+			message: "User not found. Please log in again.",
+		};
+	}
+
+	try {
+		const user = { ...userDb, token };
+
+		const projectRes = await createProject({
+			projectData: projectFormData.data,
+			user,
+		});
+
+		const imagesNames = projectFormData.data.screenshots
+			.split(",")
+			.map((s) => s.trim())
+			.filter(Boolean);
+		await renameTempImages({ projectId: projectRes.id, user, imagesNames });
+
+		return {
+			success: true,
+			intent: "submit",
+			data: {
+				projectId: projectRes.id,
+			},
+		};
+	} catch (error) {
+		console.log("error", error);
+		return {
+			success: false,
+			errors: { submit: "An unexpected error occurred. Please try again." },
+			message: "An unexpected error occurred. Please try again.",
 		};
 	}
 }
@@ -67,11 +122,13 @@ const FeedbackTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 	const [isOpenAlert, setIsOpenAlert] = useState(false);
 
 	const navigate = useNavigate();
+	const navigation = useNavigation();
 	const submit = useSubmit();
 	const formRef = useRef<HTMLFormElement>(null);
 	const [errors, setErrors] = useState<FeedbackFormErrors | null>(null);
 
 	const feedbackAreas = FEEDBACK_AREAS;
+	const isUploadingProject = navigation.formAction !== undefined;
 
 	const handleErrorChange = (name: keyof FeedbackFormErrors) => {
 		setErrors((prev) => {
@@ -82,6 +139,7 @@ const FeedbackTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 		});
 	};
 
+	// Handle errors from the action
 	useEffect(() => {
 		if (!actionData?.success && actionData?.errors) {
 			setErrors(actionData.errors as any);
@@ -89,6 +147,7 @@ const FeedbackTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 		}
 	}, [actionData]);
 
+	// Handle successful draft saving
 	useEffect(() => {
 		if (actionData?.success && actionData?.intent === "save-draft") {
 			saveToLocalStorage("submit-project", {
@@ -100,10 +159,22 @@ const FeedbackTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 		}
 	}, [actionData]);
 
+	// Handle successful project submission
+	useEffect(() => {
+		if (actionData?.success && actionData?.intent === "submit") {
+			localStorage.removeItem("submit-project");
+
+			toast.success("Project submitted successfully!");
+			navigate(`/project/${(actionData.data as any)?.projectId}`);
+		}
+	}, [actionData]);
+
 	const onExitWithoutSaving = () => {
 		navigate("/submit/media");
 		setIsOpenAlert(false);
 	};
+
+	// Function to handle saving the draft
 	const onSaveDraft = () => {
 		if (!formRef.current) return;
 
@@ -116,14 +187,73 @@ const FeedbackTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 		setIsOpenAlert(false);
 	};
 
+	// Function to handle form submission
+	const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+
+		// Check if the form is valid
+		const feedbackFormData = new FormData(e.currentTarget);
+		const feedbackForm = checkForm(feedbackFormData, ProjectFeedbackSchema);
+
+		if (!feedbackForm.success) {
+			setErrors(feedbackForm.errors);
+			toast.error(feedbackForm.message);
+			return;
+		}
+
+		// Combine local storage data with form data
+		const projectLocalStorageRawForm = JSON.parse(
+			localStorage.getItem("submit-project") || "{}",
+		) as Record<string, Record<string, any>>;
+		const projectLocalStorageForm = Object.values(
+			projectLocalStorageRawForm,
+		).reduce(
+			(acc, curr) => {
+				for (const [key, value] of Object.entries(curr)) {
+					if (value !== undefined) {
+						acc[key] = value;
+					}
+				}
+				return acc;
+			},
+			{} as Record<string, any>,
+		);
+
+		const formattedProjectData = {
+			...projectLocalStorageForm,
+			...feedbackForm.data,
+		};
+
+		// Validate the combined data
+		const parsedData = ProjectSchema.safeParse(formattedProjectData);
+
+		if (!parsedData.success) {
+			toast.error("Please review the form fields and try again.");
+			return;
+		}
+
+		// Prepare the form data for submission
+		const formData = new FormData();
+		Object.entries(parsedData.data).forEach(([key, value]) => {
+			if (value !== undefined) {
+				formData.append(key, value as string);
+			}
+		});
+		formData.append("intent", "submit");
+
+		submit(formData, {
+			method: "post",
+		});
+	};
+
 	return (
-		<Form className="mt-6 space-y-6" ref={formRef} method="post">
+		<Form className="mt-6 space-y-6" ref={formRef} onSubmit={onSubmit}>
 			<div className="grid gap-3">
 				<Label>
 					Areas for Feedback
 					{errors?.feedbackArea && <span className="text-red-600">*</span>}
 				</Label>
-				<div className="">
+				<div>
 					<Select
 						name="feedbackArea"
 						defaultValue={initialValues?.feedbackArea}
@@ -230,7 +360,9 @@ const FeedbackTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 					Previous: Media & Links
 				</Button>
 
-				<Button type="submit">Submit Project</Button>
+				<Button type="submit" disabled={isUploadingProject}>
+					{isUploadingProject ? "Submitting..." : "Submit Project"}
+				</Button>
 			</div>
 			<SaveDataAlert
 				isOpen={isOpenAlert}

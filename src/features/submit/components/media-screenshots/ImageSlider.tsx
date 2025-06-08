@@ -1,6 +1,8 @@
-import { X } from "lucide-react";
+import { useState } from "react";
+import { useNavigation } from "react-router";
 
 import Autoplay from "embla-carousel-autoplay";
+import { X } from "lucide-react";
 
 import {
 	Carousel,
@@ -9,8 +11,6 @@ import {
 	CarouselNext,
 	CarouselPrevious,
 } from "@shared/components/ui";
-import { useState } from "react";
-import { useNavigation } from "react-router";
 
 type Screenshot = { url: string; name: string };
 interface Props {

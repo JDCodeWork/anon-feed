@@ -1,28 +1,29 @@
-import { Button, Input, Label } from "@shared/components/ui";
-import clsx from "clsx";
-import { Github, Globe } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Form, redirect, useNavigate } from "react-router";
-import z from "zod";
 import type { Route } from "./+types/media";
 
 import { getAuth } from "@clerk/react-router/ssr.server";
-import { createImgPreview } from "@features/submit/actions/media/create-img-preview";
-import { deleteImgPreview } from "@features/submit/actions/media/delete-img-preview";
-import { getAllImgPreviews } from "@features/submit/actions/media/get-all-img-previews";
-import { ImageDropzone, ImageSlider } from "@features/submit/components/";
-import type { FormErrors } from "@features/submit/interfaces/form-errors";
-import { ProjectMediaSchema } from "@features/submit/schemas/project.schema";
-import { checkForm } from "@features/submit/utils/check-form";
-import { saveToLocalStorage } from "@features/submit/utils/save-to-local-storage";
+import clsx from "clsx";
+import { Github, Globe } from "lucide-react";
 import { toast } from "sonner";
+import z from "zod";
+
+import { type FormErrors, ProjectMediaSchema } from "@features/submit";
+import {
+	createImgPreview,
+	deleteImgPreview,
+	getAllImgs,
+} from "@features/submit/actions";
+import { ImageDropzone, ImageSlider } from "@features/submit/components";
+import { checkForm, saveToLocalStorage } from "@features/submit/utils";
+import { Button, Input, Label } from "@shared/components/ui";
 
 export async function loader(args: Route.LoaderArgs) {
 	const { userId, getToken } = await getAuth(args);
 	if (!userId) return redirect("/");
 
 	const token = (await getToken()) || "";
-	const res = await getAllImgPreviews({ token, userId });
+	const res = await getAllImgs({ token, userId });
 
 	return { screenshots: res.screenshots || [] };
 }
@@ -115,6 +116,7 @@ const MediaTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 
 	const [errors, setErrors] = useState<MediaFormErrors | null>(null);
 
+	// Load initial data from localStorage or set default values
 	useEffect(() => {
 		const savedData = JSON.parse(
 			localStorage.getItem("submit-project") || "{}",
@@ -130,6 +132,7 @@ const MediaTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 		}
 	}, []);
 
+	// Handle errors from the action data
 	useEffect(() => {
 		if (!actionData?.success && actionData?.errors) {
 			setErrors(actionData.errors as any);
@@ -137,6 +140,7 @@ const MediaTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 		}
 	}, [actionData]);
 
+	// Handle successful form submission
 	useEffect(() => {
 		if (actionData?.success && actionData?.intent === "next") {
 			saveToLocalStorage("submit-project", {

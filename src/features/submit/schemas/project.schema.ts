@@ -1,5 +1,5 @@
 import type { IProject } from "@features/projects";
-import z from "zod";
+import z, { type ZodTypeAny } from "zod";
 
 const githubRepoRegex = {
 	user: /^(?!-)(?!.*--)[a-zA-Z0-9-]{1,39}(?<!-)$/,
@@ -12,17 +12,30 @@ const validateGithubRepo = (val: string) => {
 	return githubRepoRegex.user.test(user) && githubRepoRegex.repo.test(repo);
 };
 
-export const ScreenshotsSchema = z
-	.string()
-	.transform((val) =>
-		val
+export const ScreenshotsSchema = z.string().refine(
+	(val) => {
+		const arr = val
 			.split(",")
 			.map((s) => s.trim())
-			.filter(Boolean),
-	)
-	.refine((arr) => Array.isArray(arr) && arr.length >= 1 && arr.length <= 5, {
+			.filter(Boolean);
+		return arr.length >= 1 && arr.length <= 5;
+	},
+	{
 		message: "You must provide between 1 and 5 screenshots.",
-	});
+	},
+);
+export const TagsSchema = z.string().refine(
+	(val) => {
+		const arr = val
+			.split(",")
+			.map((s) => s.trim())
+			.filter(Boolean);
+		return arr.length >= 1 && arr.length <= 5;
+	},
+	{
+		message: "You must provide between 1 and 5 tags.",
+	},
+);
 
 const liveDemoSchema = z.preprocess((val) => {
 	if (typeof val === "string") {
@@ -37,7 +50,7 @@ export const ProjectDetailSchema = z.object({
 	title: z.string().min(6).max(36),
 	category: z.string().nonempty({ message: "You must select a category" }),
 	description: z.string().min(24).max(480),
-	tags: z.array(z.string().nonempty()).min(1).max(5),
+	tags: TagsSchema,
 });
 
 export const ProjectMediaSchema = z.object({
@@ -61,12 +74,9 @@ export const ProjectFeedbackSchema = z.object({
 	experienceLevel: z.enum(["beginner", "intermediate", "advanced", "expert"]),
 });
 
-export const ProjectSchema = z
-	.object({
-		featured: z.boolean(),
-	})
-	.merge(ProjectDetailSchema)
-	.merge(ProjectMediaSchema)
-	.merge(ProjectFeedbackSchema);
+export const ProjectSchema = ProjectDetailSchema.merge(
+	ProjectMediaSchema,
+).merge(ProjectFeedbackSchema);
 
-export type FormErrorsType = Partial<Record<keyof IProject, string>>;
+export type FormErrors<T extends ZodTypeAny> =
+	z.inferFlattenedErrors<T>["fieldErrors"];

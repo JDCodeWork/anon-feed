@@ -1,9 +1,11 @@
-import { Input } from "@shared/components/ui";
-import clsx from "clsx";
-import { Upload } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { type DropzoneOptions, useDropzone } from "react-dropzone";
 import { useNavigation, useSubmit } from "react-router";
+
+import clsx from "clsx";
+import { Upload } from "lucide-react";
+
+import { Input } from "@shared/components/ui";
 
 const styles = {
 	uploadIcon: {
@@ -45,6 +47,7 @@ export const ImageDropzone = ({ error, screenshots }: Props) => {
 	const navigation = useNavigation();
 	const isUploading = navigation.formAction === UPLOAD_ACTION_URL;
 
+	// Handle uploading files
 	const onDropAccepted = (acceptedFiles: File[]) => {
 		if (acceptedFiles.length + screenshots.length > MAX_FILES) {
 			setShowError(true);
@@ -66,6 +69,8 @@ export const ImageDropzone = ({ error, screenshots }: Props) => {
 			encType: "multipart/form-data",
 		});
 	};
+
+	// Handle file input change
 	const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (e.currentTarget.files?.length === 0) return;
 
