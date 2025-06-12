@@ -7,22 +7,26 @@ import {
 	PaginationNext,
 	PaginationPrevious,
 } from "@shared/components/ui";
-import { usePagination } from "../hooks/usePagination";
+import { generatePagination } from "../lib/generate-pagination";
 
 interface Props {
 	totalPages: number;
+	currentPage: number;
+	onPageChange: (page: number) => void;
 }
-export const ProjectsPagination = ({ totalPages }: Props) => {
-	const { updatePagination, currentPage, paginationNumbers } = usePagination({
-		totalPages,
-	});
+export const ProjectsPagination = ({
+	totalPages,
+	currentPage,
+	onPageChange,
+}: Props) => {
+	const paginationNumbers = generatePagination(currentPage, totalPages);
 
 	return (
 		<Pagination>
 			<PaginationContent>
 				<PaginationItem>
 					<PaginationPrevious
-						onClick={() => updatePagination(currentPage - 1)}
+						onClick={() => onPageChange(currentPage - 1)}
 						disabled={currentPage - 1 < 1}
 					/>
 				</PaginationItem>
@@ -32,7 +36,7 @@ export const ProjectsPagination = ({ totalPages }: Props) => {
 							<PaginationEllipsis />
 						) : (
 							<PaginationLink
-								onClick={() => updatePagination(page)}
+								onClick={() => onPageChange(page)}
 								isActive={page == currentPage}
 							>
 								{page}
@@ -42,7 +46,7 @@ export const ProjectsPagination = ({ totalPages }: Props) => {
 				))}
 				<PaginationItem>
 					<PaginationNext
-						onClick={() => updatePagination(currentPage + 1)}
+						onClick={() => onPageChange(currentPage + 1)}
 						disabled={currentPage + 1 > totalPages}
 					/>
 				</PaginationItem>
