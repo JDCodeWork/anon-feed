@@ -11,7 +11,7 @@ const filters: TabElement[] = [
 	{ label: "All", value: "all", to: "/projects/all" },
 	{ label: "New", value: "new", to: "/projects/new" },
 	/*   { label: "Popular", value: "popular", to: "/projects/popular" },
-    { label: "Archived", value: "archived", to: "/projects/archived" }, */
+		{ label: "Archived", value: "archived", to: "/projects/archived" }, */
 ];
 
 export function meta() {
@@ -68,6 +68,11 @@ export default function ProjectsLayout({ loaderData }: Route.ComponentProps) {
 		window.scrollTo({ top: 100, behavior: "smooth" });
 	};
 
+	const onPageChange = (page: number) => {
+		if (page < 1 || page > totalPages) return;
+		navigate(`/projects/${activeTab}?page=${page}`);
+	};
+
 	return (
 		<div className="max-w-5xl w-full mx-auto my-8">
 			<div className="flex flex-col gap-6 relative">
@@ -89,9 +94,7 @@ export default function ProjectsLayout({ loaderData }: Route.ComponentProps) {
 				<ProjectsPagination
 					totalPages={totalPages}
 					currentPage={currentPage}
-					onPageChange={(page) => {
-						// Handle page change
-					}}
+					onPageChange={onPageChange}
 				/>
 
 				<Button

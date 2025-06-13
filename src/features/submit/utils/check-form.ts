@@ -1,4 +1,4 @@
-import { ZodError, type ZodTypeAny } from "zod";
+import type { ZodError, ZodTypeAny } from "zod";
 
 interface SuccessReturnType<T> {
 	success: true;

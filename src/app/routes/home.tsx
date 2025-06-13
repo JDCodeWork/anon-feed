@@ -1,6 +1,6 @@
 import { FeaturedProjects } from "@features/home/components/FeaturedProjects";
 import { HeroSection } from "@features/home/components/HeroSection";
-import { getPaginatedProjects } from "@features/projects";
+import { getFilteredProjects } from "@features/projects/actions/get-filtered-projects";
 import { toast } from "sonner";
 import type { Route } from "./+types/home";
 
@@ -16,10 +16,10 @@ export const meta = () => [
 
 export async function loader(args: Route.LoaderArgs) {
 	try {
-		const { projects } = await getPaginatedProjects({
+		const { data: projects } = await getFilteredProjects({
+			limit: 6,
 			filter: "featured",
 			page: 1,
-			limit: 6,
 		});
 
 		return { projects };

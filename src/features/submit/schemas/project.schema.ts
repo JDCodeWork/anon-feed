@@ -1,4 +1,3 @@
-import type { IProject } from "@features/projects";
 import z, { type ZodTypeAny } from "zod";
 
 const githubRepoRegex = {

@@ -17,6 +17,8 @@ export const getFilteredProjects = async ({ filter, limit, page }: Args) => {
 	);
 
 	if (filter === "new") query.eq("featured", false);
+	else if (filter === "featured") query.eq("featured", true);
+	// TODO: refactor this to use a more generic filter system
 
 	const { data, error } = await query.range(offset, offset + limit - 1);
 
