@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@clerk/react-router": "^1.4.8",
+    "@clerk/themes": "^2.2.50",
     "@mjackson/form-data-parser": "^0.7.0",
     "@radix-ui/react-alert-dialog": "^1.1.14",
     "@radix-ui/react-avatar": "^1.1.9",

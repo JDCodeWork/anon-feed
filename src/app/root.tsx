@@ -1,5 +1,6 @@
 import { ClerkProvider } from "@clerk/react-router";
 import { rootAuthLoader } from "@clerk/react-router/ssr.server";
+import { dark } from "@clerk/themes";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
@@ -12,6 +13,7 @@ import {
 } from "react-router";
 import type { Route } from "./+types/root";
 
+import { ThemeProvider, useTheme } from "@shared/context/ThemeContext";
 import stylesheet from "./index.css?url";
 
 export async function loader(args: Route.LoaderArgs) {
@@ -44,7 +46,7 @@ export function Layout({
 				<Links />
 			</head>
 			<body>
-				{children}
+				<ThemeProvider>{children}</ThemeProvider>
 				<ScrollRestoration />
 				<Scripts />
 			</body>
@@ -54,12 +56,16 @@ export function Layout({
 
 export default function Root({ loaderData }: Route.ComponentProps) {
 	const queryClient = new QueryClient();
+	const { theme } = useTheme();
 
 	return (
 		<ClerkProvider
 			loaderData={loaderData}
 			signUpFallbackRedirectUrl="/"
 			signInFallbackRedirectUrl="/"
+			appearance={{
+				baseTheme: theme === "dark" ? dark : undefined,
+			}}
 		>
 			<QueryClientProvider client={queryClient}>
 				<Outlet />

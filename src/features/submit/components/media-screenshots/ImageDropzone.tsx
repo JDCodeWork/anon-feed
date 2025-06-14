@@ -17,12 +17,12 @@ const styles = {
 	dropzone: {
 		base: "border-2 border-dashed rounded-lg p-8 text-center transition-colors",
 		default:
-			"border-gray-300 bg-gray-50 hover:border-gray-400 hover:bg-gray-100",
-		active: "border-sky-400 bg-sky-50",
-		uploading: "border-sky-200 bg-sky-50/25",
-		error: "border-red-400 bg-red-50",
+			"border-foreground/25 bg-background/75 hover:border-foreground/35 hover:bg-background/5",
+		active: "border-sky-400 bg-sky-50 dark:border-sky-600 dark:bg-sky-600/15",
+		uploading:
+			"border-sky-200 bg-sky-50/25 dark:border-sky-600 dark:bg-sky-600/5",
+		error: "border-red-400 bg-red-50 dark:border-red-600 dark:bg-red-600/5",
 	},
-	title: {},
 };
 
 const MAX_FILES = 5;
@@ -114,7 +114,7 @@ export const ImageDropzone = ({ error, screenshots }: Props) => {
 		>
 			{isUploading ? (
 				<div className="flex flex-col items-center gap-2">
-					<div className="animate-spin rounded-full size-8 border-3 border-sky-500 border-l-transparent" />
+					<div className="animate-spin rounded-full size-8 border-3 border-sky-600 border-l-transparent" />
 					<h3 className="font-medium text-sky-500">Uploading...</h3>
 					<p className="text-sm text-muted-foreground">
 						Please wait while your images are being uploaded.

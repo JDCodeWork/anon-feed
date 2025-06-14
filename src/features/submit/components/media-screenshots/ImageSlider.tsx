@@ -85,8 +85,8 @@ export const ImageSlider = ({ screenshots }: Props) => {
 		);
 	else
 		return (
-			<div className="w-full h-[280px] bg-gray-100 rounded-lg flex justify-center items-center">
-				<p className="text-2xl text-gray-400 font-medium">
+			<div className="w-full h-[280px] bg-muted/50 dark:bg-muted/75 rounded-lg flex justify-center items-center">
+				<p className="text-2xl text-muted-foreground/50 font-medium">
 					Upload images to preview
 				</p>
 			</div>

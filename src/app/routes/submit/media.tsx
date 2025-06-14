@@ -188,7 +188,7 @@ const MediaTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 						className={clsx(
 							"flex items-center gap-2 bg-muted px-3 rounded-l-md border-y border-l",
 							errors?.githubRepo &&
-								"border-red-400 border-r bg-red-50 text-red-600 group-focus-within:bg-muted group-focus-within:borde-r-0 group-focus-within:border-gray-200 group-focus-within:text-black",
+								"border-r border-red-400 bg-red-600/5 text-red-400 group-focus-within:bg-muted group-focus-within:border-r-0 group-focus-within:border-accent group-focus-within:text-accent-foreground",
 						)}
 					>
 						<Github className="h-4 w-4" />
@@ -218,7 +218,7 @@ const MediaTab = ({ loaderData, actionData }: Route.ComponentProps) => {
 						className={clsx(
 							"flex items-center gap-2 bg-muted px-3 rounded-l-md border-y border-l",
 							errors?.liveDemo &&
-								"border-red-400 border-r bg-red-50 text-red-600 group-focus-within:bg-muted group-focus-within:borde-r-0 group-focus-within:border-gray-200 group-focus-within:text-black",
+								"border-r border-red-400 bg-red-600/5 text-red-400 group-focus-within:bg-muted group-focus-within:border-r-0 group-focus-within:border-accent group-focus-within:text-accent-foreground",
 						)}
 					>
 						<Globe className="h-4 w-4" />

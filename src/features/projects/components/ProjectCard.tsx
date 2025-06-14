@@ -28,6 +28,11 @@ export const ProjectCard = ({ project }: Props) => {
 			queryKey: ["project", project.id],
 		});
 
+	const formattedDescription =
+		project.description.length > 124
+			? `${project.description.slice(0, 124)}...`
+			: project.description;
+
 	return (
 		<Card className="shadow-xs">
 			<CardHeader className="pt-2 px-6">
@@ -52,7 +57,7 @@ export const ProjectCard = ({ project }: Props) => {
 						className="object-cover w-full h-full"
 					/>
 				</div>
-				<p className="px-1 text-sm text-start">{project.description}</p>
+				<p className="px-1 text-sm text-start">{formattedDescription}</p>
 			</CardContent>
 			<CardFooter className="py-2 px-4 flex flex-col gap-4">
 				<div className="flex items-center justify-between w-full">

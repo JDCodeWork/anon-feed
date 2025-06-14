@@ -73,14 +73,14 @@ Construir un MVP funcional para la hackatón que permita subir proyectos y recib
 
 **Objetivo:** Listar proyectos subidos con info básica y filtros mínimos.
 
-* [ ] Página `/`
-  * [ ] Cards por proyecto
+* [x] Página `/dashboard`
+  * [x] Cards por proyecto
   * [ ] Filtro por tags / categoría (local)
   * [ ] Badge de “comentado por mí” si aplica
 ---
 
 ### 🎨 Fase 6 — **Pulido UI/UX**
-* [ ] Estados de carga con Skeletons o spinners
+* [x] Estados de carga con Skeletons o spinners
 * [x] Manejo de errores global
 * [ ] Animaciones suaves (tailwind + framer-motion si hay tiempo)
 * [ ] Responsive full en móviles y desktop

@@ -46,7 +46,9 @@ export default function ProjectsList({ loaderData }: Route.ComponentProps) {
 	const { projects = [] } = loaderData;
 
 	const navigation = useNavigation();
-	const isLoading = navigation.state === "loading";
+	const isLoading =
+		navigation.state === "loading" &&
+		navigation.location.pathname.includes("/projects");
 
 	return isLoading ? (
 		<HydrateFallback />

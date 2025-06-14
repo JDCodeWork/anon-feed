@@ -8,6 +8,7 @@ import {
 import { Button } from "@shared/components/ui/button";
 import { Code } from "lucide-react";
 import { Link, NavLink } from "react-router";
+import { ThemeToggleBtn } from "./ThemeToggleBtn";
 
 export const Header = () => (
 	<header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -38,20 +39,23 @@ export const Header = () => (
 					</NavLink>
 				</SignedIn>
 			</nav>
-			<div className="flex items-center gap-2">
-				<SignedOut>
-					<SignInButton mode="modal">
-						<Button variant="secondary" className="cursor-pointer">
-							Sign In
-						</Button>
-					</SignInButton>
-					<SignUpButton mode="modal">
-						<Button className="cursor-pointer">Sign Up</Button>
-					</SignUpButton>
-				</SignedOut>
-				<SignedIn>
-					<UserButton />
-				</SignedIn>
+			<div className="flex gap-4">
+				<ThemeToggleBtn />
+				<div className="flex items-center gap-2">
+					<SignedOut>
+						<SignInButton mode="modal">
+							<Button variant="secondary" className="cursor-pointer">
+								Sign In
+							</Button>
+						</SignInButton>
+						<SignUpButton mode="modal">
+							<Button className="cursor-pointer">Sign Up</Button>
+						</SignUpButton>
+					</SignedOut>
+					<SignedIn>
+						<UserButton />
+					</SignedIn>
+				</div>
 			</div>
 		</div>
 	</header>

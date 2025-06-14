@@ -14,7 +14,7 @@ export const meta = () => [
 	},
 ];
 
-export async function loader(args: Route.LoaderArgs) {
+export async function loader() {
 	try {
 		const { data: projects } = await getFilteredProjects({
 			limit: 6,
