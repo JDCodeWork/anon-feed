@@ -6,11 +6,11 @@ import { sanitizeTag } from "../utils/sanitize-tag";
 
 interface Props {
 	hasError?: boolean;
-	initialValues?: string[];
+	initialValues?: string;
 }
 export const TagSelector = ({ hasError, initialValues }: Props) => {
 	const [selectedTags, setSelectedTags] = useState<string[]>(
-		initialValues || [],
+		initialValues ? initialValues.split(",") : [],
 	);
 	const [inputValue, setInputValue] = useState("");
 
@@ -63,7 +63,7 @@ export const TagSelector = ({ hasError, initialValues }: Props) => {
 					}
 				}}
 			/>
-			<input type="hidden" name="tags" value={selectedTags.join(",")} />
+			<input type="hidden" name="tags" value={selectedTags?.join(",")} />
 			<div className="flex flex-wrap gap-2 mb-1">
 				{selectedTags?.map((tag: string) => (
 					<Badge

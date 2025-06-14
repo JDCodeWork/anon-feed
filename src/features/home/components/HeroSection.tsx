@@ -7,7 +7,10 @@ export const HeroSection = () => {
 
 	return (
 		<section className="w-full py-12 md:py-24 lg:py-32  relative overflow-hidden">
-			<div className="absolute inset-0 -z-10 h-full w-full bg-background bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]"></div>
+			<div
+				className="absolute inset-0 -z-10 h-full w-full bg-[linear-gradient(to_right,#8080800f_1px,transparent_1px),linear-gradient(to_bottom,#8080800f_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#ffffff0f_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0f_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:linear-gradient(to_bottom,transparent_0%,black_30%,black_70%,transparent_100%)] mask-type:luminance"
+			></div>
+
 			<div className="px-4 md:px-6 lg:px-8 xl:px-12">
 				<div className="flex flex-col items-center justify-center space-y-4 text-center">
 					<div className="space-y-2">
