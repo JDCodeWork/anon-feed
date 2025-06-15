@@ -14,9 +14,10 @@ export const Header = () => (
 	<header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
 		<div className="mx-4 md:mx-6 lg:mx-8 xl:mx-12 flex justify-between h-16 items-center">
 			<Link to="/" className="flex items-center gap-2 font-bold text-xl">
-				<Code className="size-6 mt-1.5" />
+				<Code className="size-6 mt-1 text-primary stroke-3" />
 				<span>
-					AnonFeed <span className="text-muted-foreground">light</span>
+					Anon
+					<span className="font-black tracking-wide text-primary">Feed</span>
 				</span>
 			</Link>
 			<nav className="flex gap-4 sm:gap-6 ml-8 mr-auto">

@@ -45,7 +45,7 @@ const SubmitLayout = ({ loaderData }: Route.ComponentProps) => {
 	const { activeTab } = loaderData;
 
 	return (
-		<div className="max-w-5xl mx-auto my-8">
+		<div className="w-full max-w-5xl mx-auto my-8">
 			<div className="flex flex-col gap-6">
 				<div>
 					<h1 className="text-3xl font-bold">Submit Your Project</h1>

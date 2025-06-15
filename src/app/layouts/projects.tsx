@@ -57,11 +57,6 @@ export async function loader(args: Route.LoaderArgs) {
 export default function ProjectsLayout({ loaderData }: Route.ComponentProps) {
 	const { activeTab, totalPages, currentPage, page } = loaderData;
 	const navigate = useNavigate();
-	const navigation = useNavigation();
-
-	const isNavigating =
-		navigation.state === "loading" &&
-		!navigation.location.pathname.includes("/projects");
 
 	useEffect(() => {
 		if (page !== currentPage) {
@@ -78,36 +73,7 @@ export default function ProjectsLayout({ loaderData }: Route.ComponentProps) {
 		navigate(`/projects/${activeTab}?page=${page}`);
 	};
 
-	return isNavigating ? (
-		<div className="flex flex-col justify-center items-center h-96 gap-4">
-			<span className="text-lg text-muted-foreground flex items-center gap-2">
-				<svg
-					className="animate-spin h-5 w-5 text-muted-foreground"
-					xmlns="http://www.w3.org/2000/svg"
-					fill="none"
-					viewBox="0 0 24 24"
-				>
-					<circle
-						className="opacity-25"
-						cx="12"
-						cy="12"
-						r="10"
-						stroke="currentColor"
-						strokeWidth="4"
-					></circle>
-					<path
-						className="opacity-75"
-						fill="currentColor"
-						d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-					></path>
-				</svg>
-				Navigating to another section...
-			</span>
-			<p className="text-sm text-muted-foreground">
-				You are being redirected outside of Projects. Please wait.
-			</p>
-		</div>
-	) : (
+	return (
 		<div className="max-w-5xl w-full mx-auto my-8">
 			<div className="flex flex-col gap-6 relative">
 				<div className="flex flex-col gap-2">
