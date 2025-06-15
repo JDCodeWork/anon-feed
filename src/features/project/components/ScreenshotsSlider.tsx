@@ -1,46 +1,46 @@
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Navigation, Pagination } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
+import {
+	Carousel,
+	CarouselContent,
+	CarouselItem,
+	CarouselNext,
+	CarouselPrevious,
+} from "@shared/components/ui";
+import Autoplay from "embla-carousel-autoplay";
+import { useState } from "react";
 
 interface Props {
 	screenshots: string[];
 }
 export const ScreenshotsSlider = ({ screenshots }: Props) => {
+	const [isMouseEnter, setIsMouseEnter] = useState(false);
+
 	return (
 		<div className="relative rounded-lg overflow-hidden group/slider">
-			{/* Custom buttons */}
-			<button
-				id="swiper-button-prev-custom"
-				className="absolute size-12 top-1/2 left-4 z-20 -translate-y-3 transition-opacity opacity-25 group-hover/slider:opacity-50 hover:opacity-100 bg-gray-600/50 rounded-full pr-1 cursor-pointer"
+			<Carousel
+				className="w-full  relative"
+				plugins={[Autoplay({ delay: 3000, active: !isMouseEnter })]}
+				onMouseEnter={() => setIsMouseEnter(true)}
+				onMouseLeave={() => setIsMouseEnter(false)}
 			>
-				<ChevronLeft className="text-gray-50 size-full" />
-			</button>
-			<button
-				id="swiper-button-next-custom"
-				className="absolute size-12 top-1/2 right-4 z-20 -translate-y-3 transition-opacity opacity-25 group-hover/slider:opacity-50 hover:opacity-100 bg-gray-600/50 rounded-full pl-0.5 cursor-pointer"
-			>
-				<ChevronRight className="text-gray-50 size-full" />
-			</button>
-
-			<Swiper
-				modules={[Navigation, Pagination]}
-				navigation={{
-					prevEl: "#swiper-button-prev-custom",
-					nextEl: "#swiper-button-next-custom",
-				}}
-				spaceBetween={25}
-				slidesPerView={1}
-				className="w-full h-[380px] relative"
-			>
-				{screenshots.map((url) => (
-					<SwiperSlide key={url} className="flex group">
-						<img
-							src={url}
-							className="block size-full object-cover rounded-lg object-left select-none"
-						/>
-					</SwiperSlide>
-				))}
-			</Swiper>
+				<CarouselContent>
+					{screenshots.map((url) => (
+						<CarouselItem key={url} className="group relative h-[380px]">
+							<img
+								src={url}
+								className="block size-full object-cover rounded-lg object-left select-none"
+							/>
+						</CarouselItem>
+					))}
+				</CarouselContent>
+				<CarouselPrevious
+					type="button"
+					className="left-4 cursor-pointer disabled:cursor-default"
+				/>
+				<CarouselNext
+					type="button"
+					className="right-4 cursor-pointer disabled:cursor-default"
+				/>
+			</Carousel>
 		</div>
 	);
 };

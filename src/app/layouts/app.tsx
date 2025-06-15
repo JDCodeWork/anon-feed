@@ -3,8 +3,11 @@ import { Toaster } from "sonner";
 
 import { Footer } from "@shared/components/Footer";
 import { Header } from "@shared/components/Header";
+import { useTheme } from "@shared/context/ThemeContext";
 
 const AppLayout = () => {
+	const { theme } = useTheme();
+
 	return (
 		<div className="flex flex-col min-h-screen">
 			<Header />
@@ -12,7 +15,7 @@ const AppLayout = () => {
 				<Outlet />
 			</main>
 			<Footer />
-			<Toaster richColors />
+			<Toaster richColors theme={theme} />
 		</div>
 	);
 };
